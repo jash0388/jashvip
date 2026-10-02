@@ -3,41 +3,68 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
-    <title>JASHVIP - AI PREDICTOR & BOT</title>
-    <link href="https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@400;600;700;800&family=Rajdhani:wght@600;700;800;900&display=swap" rel="stylesheet">
+    <title>JASHVIP - VIP PREDICTOR</title>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800;900&family=Roboto+Mono:wght@500;700&display=swap" rel="stylesheet">
     <style>
         :root {
-            --bg-primary: #060b09;
-            --bg-card: rgba(10, 24, 18, 0.88);
-            --border-green: rgba(0, 230, 118, 0.45);
-            --green-glow: #00e676;
-            --neon-mint: #00ff88;
-            --emerald-dark: #004d26;
-            --gold-accent: #ffd700;
-            --cyan-accent: #00e5ff;
-            --red-loss: #ff3b56;
-            --text-main: #e8f5e9;
-            --text-muted: #81c784;
+            --bg-page: #f4f6fa;
+            --bg-card: #ffffff;
+            --bg-card-subtle: #f8fafc;
+            --border-subtle: #e2e8f0;
+            --border-active: #cbd5e1;
+            
+            --text-heading: #0f172a;
+            --text-body: #334155;
+            --text-muted: #64748b;
+            --text-light: #94a3b8;
+
+            --primary: #2563eb;
+            --primary-hover: #1d4ed8;
+            --primary-light: #eff6ff;
+
+            --gold-big: #d97706;
+            --gold-bg: #fffbeb;
+            --gold-border: #fde68a;
+
+            --blue-small: #2563eb;
+            --blue-bg: #eff6ff;
+            --blue-border: #bfdbfe;
+
+            --win-green: #059669;
+            --win-bg: #ecfdf5;
+            --win-border: #a7f3d0;
+
+            --loss-red: #dc2626;
+            --loss-bg: #fef2f2;
+            --loss-border: #fecaca;
+
+            --shadow-sm: 0 1px 3px rgba(15, 23, 42, 0.05);
+            --shadow-md: 0 4px 12px -2px rgba(15, 23, 42, 0.06), 0 2px 6px -1px rgba(15, 23, 42, 0.03);
+            --shadow-lg: 0 16px 32px -4px rgba(15, 23, 42, 0.08), 0 4px 12px -2px rgba(15, 23, 42, 0.03);
         }
 
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            font-family: 'Rajdhani', sans-serif;
+            font-family: 'Outfit', sans-serif;
+            -webkit-tap-highlight-color: transparent;
         }
 
         body {
-            background: radial-gradient(circle at 50% 0%, #0d2919 0%, #060d09 60%, #020504 100%);
-            color: var(--text-main);
-            padding: 12px;
+            background-color: var(--bg-page);
+            background-image: 
+                radial-gradient(circle at 10% 10%, rgba(37, 99, 235, 0.05) 0%, transparent 40%),
+                radial-gradient(circle at 90% 20%, rgba(217, 119, 6, 0.04) 0%, transparent 40%),
+                radial-gradient(circle at 50% 90%, rgba(5, 150, 105, 0.04) 0%, transparent 50%);
+            color: var(--text-body);
+            padding: 14px 12px;
             font-size: 14px;
             min-height: 100vh;
             position: relative;
             overflow-x: hidden;
         }
 
-        /* Party Popper Canvas */
         #party-canvas {
             position: fixed;
             top: 0;
@@ -48,755 +75,685 @@
             z-index: 99999;
         }
 
-        /* Ambient Glow Circles */
-        .ambient-glow {
-            position: fixed;
-            border-radius: 50%;
-            filter: blur(100px);
-            pointer-events: none;
-            z-index: 0;
-            opacity: 0.25;
-        }
-        .glow-1 { top: -100px; left: 10%; width: 350px; height: 350px; background: #00e676; }
-        .glow-2 { bottom: -100px; right: 10%; width: 350px; height: 350px; background: #00b0ff; }
-
-        /* General Modal Container */
+        /* Modal Overlay Screens */
         .modal-screen {
             position: fixed;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            background: rgba(3, 8, 6, 0.94);
-            backdrop-filter: blur(14px);
+            background: rgba(15, 23, 42, 0.45);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
             z-index: 2000;
             display: flex;
             align-items: center;
             justify-content: center;
-            padding: 20px;
+            padding: 18px;
         }
 
-        .cyber-card {
-            background: linear-gradient(145deg, rgba(13, 33, 24, 0.9), rgba(5, 15, 10, 0.95));
-            border: 2px solid var(--border-green);
-            border-radius: 36px;
-            padding: 34px 26px;
+        .auth-card {
+            background: #ffffff;
+            border: 1px solid var(--border-subtle);
+            border-radius: 28px;
+            padding: 36px 28px;
             width: 100%;
-            max-width: 420px;
-            box-shadow: 0 0 50px rgba(0, 230, 118, 0.25), inset 0 0 25px rgba(0, 255, 136, 0.1);
-            animation: cyberPulse 3s infinite alternate;
+            max-width: 410px;
+            box-shadow: var(--shadow-lg);
+            animation: modalFade 0.3s cubic-bezier(0.16, 1, 0.3, 1);
             position: relative;
-            z-index: 2;
         }
 
-        @keyframes cyberPulse {
-            0% { box-shadow: 0 0 35px rgba(0, 230, 118, 0.25), inset 0 0 15px rgba(0, 255, 136, 0.1); }
-            100% { box-shadow: 0 0 65px rgba(0, 230, 118, 0.45), 0 0 90px rgba(0, 229, 255, 0.25), inset 0 0 30px rgba(0, 255, 136, 0.2); }
+        @keyframes modalFade {
+            from { opacity: 0; transform: translateY(12px) scale(0.97); }
+            to { opacity: 1; transform: translateY(0) scale(1); }
         }
 
         .brand-badge {
-            display: inline-block;
-            background: rgba(0, 230, 118, 0.15);
-            border: 1px solid var(--green-glow);
-            color: var(--neon-mint);
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            background: var(--primary-light);
+            color: var(--primary);
+            border: 1px solid var(--blue-border);
+            padding: 5px 14px;
+            border-radius: 30px;
             font-size: 11px;
-            font-weight: 800;
-            letter-spacing: 2px;
-            padding: 5px 16px;
-            border-radius: 50px;
+            font-weight: 700;
+            letter-spacing: 0.8px;
             text-transform: uppercase;
             margin-bottom: 12px;
-            text-shadow: 0 0 10px var(--green-glow);
         }
 
         .screen-header {
-            font-size: 32px;
+            font-size: 26px;
             font-weight: 900;
-            text-align: center;
-            margin-bottom: 6px;
-            background: linear-gradient(135deg, #ffffff, #00ff88, #00e5ff);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            text-shadow: 0 0 25px rgba(0, 230, 118, 0.5);
-            letter-spacing: 1.5px;
+            color: var(--text-heading);
+            margin-bottom: 4px;
+            letter-spacing: -0.5px;
         }
 
         .screen-sub {
-            text-align: center;
             font-size: 13px;
-            color: #8fa0be;
+            color: var(--text-muted);
             margin-bottom: 24px;
-            text-transform: uppercase;
-            letter-spacing: 1.5px;
-            font-weight: 600;
+            font-weight: 500;
         }
 
         .input-group {
             width: 100%;
             margin-bottom: 20px;
+            text-align: left;
         }
 
         .input-group label {
             display: block;
-            color: var(--neon-mint);
-            font-size: 14px;
-            margin-bottom: 8px;
+            color: var(--text-body);
+            font-size: 12px;
             font-weight: 700;
-            letter-spacing: 1px;
-            text-shadow: 0 0 6px rgba(0, 230, 118, 0.5);
+            margin-bottom: 7px;
+            letter-spacing: 0.5px;
+            text-transform: uppercase;
         }
 
         .input-group input, .input-group select {
-            padding: 15px 18px;
             width: 100%;
-            background: rgba(4, 12, 8, 0.9);
-            border: 2px solid var(--border-green);
-            color: #ffffff;
-            border-radius: 40px;
-            font-size: 18px;
-            font-weight: 700;
-            font-family: 'Roboto Mono', monospace;
-            text-align: center;
+            padding: 14px 16px;
+            background: var(--bg-card-subtle);
+            border: 1.5px solid var(--border-subtle);
+            border-radius: 14px;
+            color: var(--text-heading);
+            font-size: 16px;
+            font-weight: 600;
             outline: none;
-            box-shadow: 0 0 20px rgba(0, 230, 118, 0.2);
-            transition: all 0.25s ease;
+            transition: all 0.2s ease;
         }
 
         .input-group input:focus, .input-group select:focus {
-            border-color: var(--neon-mint);
-            box-shadow: 0 0 35px rgba(0, 255, 136, 0.6);
+            background: #ffffff;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.12);
         }
 
         .cyber-btn {
-            padding: 16px;
-            background: linear-gradient(135deg, #00e676, #00b0ff);
-            border: none;
-            font-weight: 900;
-            border-radius: 40px;
-            font-size: 20px;
             width: 100%;
-            cursor: pointer;
-            color: #040e09;
+            padding: 15px;
+            background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%);
+            border: none;
+            border-radius: 14px;
+            color: #ffffff;
+            font-size: 15px;
+            font-weight: 800;
+            letter-spacing: 0.8px;
             text-transform: uppercase;
-            letter-spacing: 2px;
-            box-shadow: 0 0 30px rgba(0, 230, 118, 0.5);
-            transition: all 0.25s ease;
-            margin-top: 10px;
+            cursor: pointer;
+            box-shadow: 0 4px 14px rgba(37, 99, 235, 0.3);
+            transition: all 0.2s ease;
         }
 
         .cyber-btn:hover {
-            transform: scale(1.02);
-            box-shadow: 0 0 50px rgba(0, 255, 136, 0.8), 0 0 70px rgba(0, 176, 255, 0.4);
+            transform: translateY(-1px);
+            box-shadow: 0 6px 20px rgba(37, 99, 235, 0.4);
+        }
+
+        .cyber-btn:active {
+            transform: translateY(1px);
         }
 
         /* Mode Selection Cards */
         .mode-selection-grid {
-            display: grid;
-            grid-template-columns: 1fr;
-            gap: 16px;
-            margin-bottom: 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            margin-bottom: 22px;
         }
 
         .mode-card {
-            background: rgba(5, 18, 12, 0.85);
-            border: 2px solid rgba(0, 230, 118, 0.3);
-            border-radius: 24px;
-            padding: 18px 16px;
+            background: var(--bg-card-subtle);
+            border: 1.5px solid var(--border-subtle);
+            border-radius: 18px;
+            padding: 16px 18px;
             cursor: pointer;
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
             text-align: left;
-            position: relative;
-            overflow: hidden;
+            transition: all 0.2s ease;
         }
 
         .mode-card:hover {
-            border-color: var(--neon-mint);
-            transform: translateY(-3px);
-            box-shadow: 0 10px 30px rgba(0, 230, 118, 0.35);
+            background: #ffffff;
+            border-color: var(--primary);
         }
 
         .mode-card.active {
-            border-color: var(--neon-mint);
-            background: linear-gradient(135deg, rgba(0, 230, 118, 0.2), rgba(0, 176, 255, 0.15));
-            box-shadow: 0 0 35px rgba(0, 255, 136, 0.4);
+            background: #ffffff;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 2px var(--primary), var(--shadow-md);
         }
 
         .mode-card-header {
             display: flex;
-            align-items: center;
             justify-content: space-between;
-            margin-bottom: 6px;
+            align-items: center;
+            margin-bottom: 4px;
         }
 
         .mode-title {
-            font-size: 20px;
+            font-size: 15px;
             font-weight: 800;
-            color: #ffffff;
-            letter-spacing: 1px;
+            color: var(--text-heading);
         }
 
         .mode-tag {
             font-size: 10px;
             font-weight: 700;
-            padding: 3px 10px;
-            border-radius: 30px;
-            background: rgba(0, 230, 118, 0.2);
-            color: var(--neon-mint);
-            border: 1px solid var(--green-glow);
+            padding: 3px 8px;
+            border-radius: 20px;
+            background: var(--blue-bg);
+            color: var(--primary);
+            border: 1px solid var(--blue-border);
         }
 
         .mode-desc {
             font-size: 12px;
-            color: #8fa0be;
-            font-family: 'Roboto Mono', monospace;
+            color: var(--text-muted);
+            line-height: 1.4;
         }
 
-        /* MAIN APP UI */
+        /* MAIN APP LAYOUT */
         #app {
             display: none;
-            max-width: 820px;
+            max-width: 780px;
             margin: 0 auto;
             padding-bottom: 50px;
             position: relative;
             z-index: 10;
         }
 
+        /* Modern App Header */
         .app-header {
             display: flex;
             justify-content: space-between;
             align-items: center;
             margin-bottom: 12px;
-            background: linear-gradient(145deg, rgba(10, 28, 19, 0.95), rgba(4, 15, 10, 0.95));
-            padding: 14px 20px;
-            border-radius: 28px;
-            border: 1px solid var(--border-green);
-            box-shadow: 0 0 30px rgba(0, 230, 118, 0.25);
+            background: #ffffff;
+            padding: 12px 18px;
+            border-radius: 20px;
+            border: 1px solid var(--border-subtle);
+            box-shadow: var(--shadow-sm);
         }
 
         .logo-wrap {
             display: flex;
             align-items: center;
-            gap: 10px;
+            gap: 8px;
         }
 
         .app-logo {
-            font-size: 24px;
+            font-size: 20px;
             font-weight: 900;
-            background: linear-gradient(45deg, #ffffff, #00ff88, #00e5ff);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            text-shadow: 0 0 20px rgba(0, 230, 118, 0.5);
-            letter-spacing: 1px;
+            color: var(--text-heading);
+            letter-spacing: -0.5px;
+            display: flex;
+            align-items: center;
+            gap: 4px;
         }
 
         .mode-badge-live {
             font-size: 11px;
-            background: rgba(0, 230, 118, 0.15);
-            border: 1px solid var(--green-glow);
-            color: var(--neon-mint);
-            padding: 4px 12px;
+            background: var(--bg-card-subtle);
+            border: 1px solid var(--border-subtle);
+            color: var(--text-body);
+            padding: 4px 10px;
             border-radius: 30px;
             font-weight: 700;
-            letter-spacing: 1px;
             cursor: pointer;
             transition: all 0.2s;
         }
 
         .mode-badge-live:hover {
-            background: var(--green-glow);
-            color: #000;
+            border-color: var(--primary);
+            color: var(--primary);
+        }
+
+        .header-actions {
+            display: flex;
+            align-items: center;
+            gap: 8px;
         }
 
         .status-pill {
             font-size: 11px;
-            background: rgba(0, 0, 0, 0.7);
-            padding: 6px 14px;
+            background: #f0fdf4;
+            padding: 5px 12px;
             border-radius: 40px;
-            color: var(--neon-mint);
-            border: 1px solid rgba(0, 230, 118, 0.4);
-            box-shadow: 0 0 15px rgba(0, 230, 118, 0.3);
+            color: #15803d;
+            border: 1px solid #bbf7d0;
             font-weight: 700;
-            letter-spacing: 1px;
-            transition: all 0.3s;
+            letter-spacing: 0.5px;
         }
 
         .status-paused {
-            border-color: #ffaa00 !important;
-            color: #ffd966 !important;
-            box-shadow: 0 0 20px rgba(255, 170, 0, 0.5) !important;
-            animation: pauseGlow 1.5s infinite alternate;
-        }
-
-        @keyframes pauseGlow {
-            0% { box-shadow: 0 0 10px rgba(255, 170, 0, 0.3); }
-            100% { box-shadow: 0 0 25px rgba(255, 170, 0, 0.8); }
-        }
-
-        /* Bot Start / Stop & Balance Sync Control Bar */
-        .bot-control-bar {
-            display: flex;
-            gap: 10px;
-            margin-bottom: 16px;
-        }
-
-        .ctrl-btn {
-            flex: 1;
-            padding: 12px 14px;
-            border-radius: 20px;
-            font-size: 13px;
-            font-weight: 800;
-            letter-spacing: 0.8px;
-            cursor: pointer;
-            border: 1.5px solid;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 6px;
-            transition: all 0.25s ease;
-            text-transform: uppercase;
-        }
-
-        .btn-pause {
-            background: rgba(255, 170, 0, 0.15);
-            border-color: #ffaa00;
-            color: #ffd966;
-            box-shadow: 0 0 18px rgba(255, 170, 0, 0.3);
-        }
-
-        .btn-pause:hover {
-            background: #ffaa00;
-            color: #040e09;
-            box-shadow: 0 0 30px rgba(255, 170, 0, 0.7);
-            transform: translateY(-2px);
-        }
-
-        .btn-resume {
-            background: rgba(0, 230, 118, 0.25);
-            border-color: #00ff88;
-            color: #00ff88;
-            box-shadow: 0 0 20px rgba(0, 255, 136, 0.4);
-            animation: resumePulse 1.4s infinite alternate;
-        }
-
-        @keyframes resumePulse {
-            0% { box-shadow: 0 0 15px rgba(0, 255, 136, 0.3); transform: scale(1); }
-            100% { box-shadow: 0 0 35px rgba(0, 255, 136, 0.8); transform: scale(1.02); }
-        }
-
-        .btn-resume:hover {
-            background: #00ff88;
-            color: #040e09;
-            box-shadow: 0 0 45px rgba(0, 255, 136, 0.9);
-        }
-
-        .btn-edit-bal {
-            background: rgba(0, 229, 255, 0.12);
-            border-color: #00e5ff;
-            color: #00e5ff;
-            box-shadow: 0 0 15px rgba(0, 229, 255, 0.2);
-        }
-
-        .btn-edit-bal:hover {
-            background: #00e5ff;
-            color: #040e09;
-            box-shadow: 0 0 25px rgba(0, 229, 255, 0.6);
-            transform: translateY(-2px);
+            background: #fffbeb !important;
+            border-color: #fde68a !important;
+            color: #b45309 !important;
         }
 
         .header-logout-btn {
             font-size: 11px;
-            font-weight: 800;
-            background: rgba(255, 59, 86, 0.16);
-            border: 1px solid #ff3b56;
-            color: #ff4d6d;
-            padding: 6px 12px;
+            font-weight: 700;
+            background: #fef2f2;
+            border: 1px solid #fecaca;
+            color: #b91c1c;
+            padding: 5px 12px;
             border-radius: 40px;
             cursor: pointer;
-            letter-spacing: 0.8px;
-            transition: all 0.25s ease;
-            box-shadow: 0 0 10px rgba(255, 59, 86, 0.2);
-            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            transition: all 0.2s ease;
         }
 
         .header-logout-btn:hover {
-            background: #ff3b56;
-            color: #ffffff;
-            box-shadow: 0 0 20px rgba(255, 59, 86, 0.6);
-            transform: translateY(-1px);
+            background: #fee2e2;
+            color: #991b1b;
+        }
+
+        /* Action Control Bar */
+        .bot-control-bar {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 14px;
+        }
+
+        .ctrl-btn {
+            flex: 1;
+            padding: 10px 12px;
+            border-radius: 14px;
+            font-size: 12px;
+            font-weight: 800;
+            letter-spacing: 0.5px;
+            cursor: pointer;
+            border: 1px solid;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+            transition: all 0.2s ease;
+            text-transform: uppercase;
+        }
+
+        .btn-pause {
+            background: #fffbeb;
+            border-color: #fde68a;
+            color: #92400e;
+        }
+
+        .btn-pause:hover {
+            background: #fef3c7;
+        }
+
+        .btn-resume {
+            background: #eff6ff;
+            border-color: #bfdbfe;
+            color: #1e40af;
+        }
+
+        .btn-edit-bal {
+            background: #f0fdfa;
+            border-color: #99f6e4;
+            color: #0f766e;
+        }
+
+        .btn-edit-bal:hover {
+            background: #ccfbf1;
         }
 
         .btn-logout {
-            background: rgba(255, 59, 86, 0.15);
-            border-color: #ff3b56;
-            color: #ff4d6d;
-            box-shadow: 0 0 16px rgba(255, 59, 86, 0.25);
-            max-width: 120px;
+            background: #fef2f2;
+            border-color: #fecaca;
+            color: #b91c1c;
+            max-width: 110px;
         }
 
         .btn-logout:hover {
-            background: #ff3b56;
-            color: #ffffff;
-            box-shadow: 0 0 30px rgba(255, 59, 86, 0.8);
-            transform: translateY(-2px);
+            background: #fee2e2;
         }
 
-        /* Stats Grid */
+        /* Real-Time Stats Grid */
         .stats-grid {
             display: grid;
             grid-template-columns: 1fr 1fr 1fr;
             gap: 10px;
-            margin-bottom: 18px;
+            margin-bottom: 14px;
         }
 
         .stat-card {
-            background: linear-gradient(145deg, rgba(8, 24, 16, 0.85), rgba(4, 14, 9, 0.9));
-            padding: 14px 8px;
-            border-radius: 22px;
+            background: #ffffff;
+            border: 1px solid var(--border-subtle);
+            padding: 14px 10px;
+            border-radius: 18px;
             text-align: center;
-            border: 1px solid rgba(0, 230, 118, 0.25);
-            box-shadow: 0 0 20px rgba(0, 230, 118, 0.15);
+            box-shadow: var(--shadow-sm);
         }
 
         .stat-val {
-            font-size: 22px;
-            font-weight: 800;
-            color: #ffffff;
+            font-size: 20px;
+            font-weight: 900;
+            color: var(--text-heading);
             font-family: 'Roboto Mono', monospace;
-            text-shadow: 0 0 12px var(--green-glow);
+            letter-spacing: -0.5px;
         }
 
         .stat-lbl {
-            font-size: 10px;
+            font-size: 11px;
             color: var(--text-muted);
+            font-weight: 600;
             text-transform: uppercase;
-            letter-spacing: 0.6px;
-            margin-top: 4px;
-            font-weight: 700;
+            letter-spacing: 0.5px;
+            margin-top: 2px;
         }
 
-        /* Live Prediction Card */
+        /* Live Signal Card */
         .live-box {
-            background: linear-gradient(145deg, rgba(9, 28, 18, 0.92), rgba(3, 12, 8, 0.95));
-            border: 1.5px solid var(--border-green);
-            padding: 24px 16px;
-            border-radius: 36px;
+            background: #ffffff;
+            border: 1px solid var(--border-subtle);
+            border-radius: 26px;
+            padding: 24px 20px 20px;
             text-align: center;
-            margin-bottom: 20px;
-            box-shadow: 0 0 45px rgba(0, 230, 118, 0.3), inset 0 0 25px rgba(0, 255, 136, 0.12);
-            animation: liveGlow 2.5s infinite alternate;
-        }
-
-        @keyframes liveGlow {
-            from { box-shadow: 0 0 35px rgba(0, 230, 118, 0.25), inset 0 0 15px rgba(0, 255, 136, 0.1); }
-            to { box-shadow: 0 0 65px rgba(0, 255, 136, 0.4), inset 0 0 30px rgba(0, 229, 255, 0.2); }
+            margin-bottom: 16px;
+            box-shadow: var(--shadow-md);
+            position: relative;
         }
 
         .period-header {
             display: flex;
+            justify-content: space-between;
             align-items: center;
-            justify-content: center;
-            gap: 10px;
-            margin-bottom: 6px;
+            margin-bottom: 8px;
         }
 
         .mode-indicator {
-            background: rgba(0, 230, 118, 0.15);
-            border: 1px solid var(--green-glow);
-            color: var(--neon-mint);
-            padding: 3px 12px;
-            border-radius: 20px;
             font-size: 11px;
             font-weight: 800;
-            letter-spacing: 1px;
+            color: var(--primary);
+            letter-spacing: 0.8px;
+            background: var(--blue-bg);
+            border: 1px solid var(--blue-border);
+            padding: 4px 10px;
+            border-radius: 20px;
         }
 
         .issue-no {
             font-family: 'Roboto Mono', monospace;
-            color: var(--gold-accent);
-            font-size: 17px;
-            font-weight: 800;
-            text-shadow: 0 0 10px rgba(255, 215, 0, 0.6);
+            font-size: 13px;
+            font-weight: 700;
+            color: var(--text-muted);
         }
 
         .timer-countdown {
-            font-size: 42px;
+            font-size: 40px;
             font-weight: 900;
             font-family: 'Roboto Mono', monospace;
-            color: var(--neon-mint);
-            text-shadow: 0 0 25px rgba(0, 255, 136, 0.8), 0 0 50px rgba(0, 230, 118, 0.5);
-            margin: 6px 0 12px;
-            letter-spacing: 2px;
-            transition: color 0.3s;
+            color: var(--text-heading);
+            margin: 4px 0 10px;
+            letter-spacing: -1px;
         }
 
+        /* 6 Logic Badges */
         .logic-status {
             display: flex;
             justify-content: center;
-            gap: 8px;
-            margin: 12px 0 16px;
-            font-size: 10px;
+            gap: 6px;
+            margin-bottom: 14px;
             flex-wrap: wrap;
         }
 
         .logic-badge {
-            padding: 5px 11px;
-            border-radius: 30px;
-            background: rgba(3, 10, 7, 0.85);
-            border: 1px solid;
-            font-weight: 800;
-            font-family: 'Roboto Mono', monospace;
-            transition: all 0.2s;
+            font-size: 11px;
+            font-weight: 700;
+            padding: 4px 9px;
+            border-radius: 20px;
+            background: var(--bg-card-subtle);
+            border: 1px solid var(--border-subtle);
+            color: var(--text-body);
         }
 
-        .l-win { border-color: #00ff88; color: #00ff88; box-shadow: 0 0 8px rgba(0, 255, 136, 0.3); }
-        .l-normal { border-color: #00e5ff; color: #00e5ff; }
-        .l-warn { border-color: #ffd700; color: #ffd700; }
+        .logic-badge.l1 { border-color: #fde68a; color: #b45309; background: #fffbeb; }
+        .logic-badge.l2 { border-color: #bfdbfe; color: #1d4ed8; background: #eff6ff; }
+        .logic-badge.l3 { border-color: #fbcfe8; color: #be185d; background: #fdf2f8; }
+        .logic-badge.l4 { border-color: #a7f3d0; color: #047857; background: #ecfdf5; }
+        .logic-badge.l5 { border-color: #fecaca; color: #b91c1c; background: #fef2f2; }
+        .logic-badge.l6 { border-color: #ddd6fe; color: #6d28d9; background: #f5f3ff; }
 
+        /* Main Big / Small Prediction */
         .pred-result {
-            font-size: 68px;
+            font-size: 60px;
             font-weight: 900;
-            margin: 6px 0 14px;
+            margin: 6px 0;
             line-height: 1.1;
             display: flex;
             align-items: center;
             justify-content: center;
-            gap: 18px;
+            gap: 14px;
             flex-wrap: wrap;
+            letter-spacing: -1px;
         }
 
-        .big { color: var(--gold-accent); text-shadow: 0 0 35px rgba(255, 215, 0, 0.8), 0 0 70px rgba(255, 170, 0, 0.5); }
-        .small { color: var(--neon-mint); text-shadow: 0 0 35px rgba(0, 255, 136, 0.8), 0 0 70px rgba(0, 230, 118, 0.5); }
+        .pred-result.big {
+            color: #d97706;
+        }
+
+        .pred-result.small {
+            color: #2563eb;
+        }
 
         .copy-btn {
-            background: linear-gradient(145deg, rgba(0, 230, 118, 0.25), rgba(0, 176, 255, 0.25));
-            border: 2px solid var(--neon-mint);
-            color: #ffffff;
-            font-size: 18px;
-            padding: 10px 26px;
-            border-radius: 50px;
+            background: var(--bg-card-subtle);
+            border: 1px solid var(--border-subtle);
+            color: var(--text-body);
+            font-size: 13px;
+            padding: 8px 18px;
+            border-radius: 30px;
             cursor: pointer;
-            font-weight: 800;
+            font-weight: 700;
             display: inline-flex;
             align-items: center;
-            gap: 10px;
-            transition: all 0.25s ease;
-            box-shadow: 0 0 25px rgba(0, 230, 118, 0.4);
-            text-transform: uppercase;
-            letter-spacing: 1.5px;
+            gap: 6px;
+            transition: all 0.2s ease;
         }
 
         .copy-btn:hover {
-            background: var(--neon-mint);
-            color: #030805;
-            box-shadow: 0 0 45px rgba(0, 255, 136, 0.8);
-            transform: scale(1.05);
+            background: #ffffff;
+            border-color: var(--primary);
+            color: var(--primary);
+            box-shadow: var(--shadow-sm);
         }
 
         .copy-btn.copied {
-            background: #ffffff;
-            color: #030805;
-            border-color: #ffffff;
-            box-shadow: 0 0 50px #ffffff;
+            background: #ecfdf5;
+            border-color: #a7f3d0;
+            color: #059669;
         }
 
         .bet-badge {
-            background: rgba(3, 10, 7, 0.85);
-            padding: 8px 24px;
-            border-radius: 50px;
-            font-size: 20px;
+            background: #0f172a;
             color: #ffffff;
-            border: 2px solid var(--green-glow);
-            box-shadow: 0 0 25px rgba(0, 230, 118, 0.4);
-            display: inline-block;
-            margin-top: 6px;
+            padding: 8px 22px;
+            border-radius: 30px;
+            font-size: 16px;
             font-weight: 800;
-            font-family: 'Roboto Mono', monospace;
+            display: inline-block;
+            margin-top: 10px;
+            letter-spacing: 0.5px;
+            box-shadow: 0 4px 10px rgba(15, 23, 42, 0.15);
         }
 
         .consensus-badge {
-            background: rgba(0, 230, 118, 0.15);
-            border: 1px solid var(--green-glow);
-            border-radius: 50px;
-            padding: 6px 20px;
-            font-size: 13px;
+            background: var(--bg-card-subtle);
+            border: 1px solid var(--border-subtle);
+            border-radius: 30px;
+            padding: 5px 16px;
+            font-size: 12px;
             display: inline-block;
-            margin-top: 14px;
-            color: var(--neon-mint);
-            text-shadow: 0 0 8px rgba(0, 255, 136, 0.6);
-            font-weight: 800;
-            letter-spacing: 1px;
+            margin-top: 10px;
+            color: var(--text-muted);
+            font-weight: 700;
         }
 
         /* History Table Panel */
         .history-panel {
-            background: linear-gradient(145deg, rgba(8, 24, 16, 0.95), rgba(4, 13, 8, 0.95));
-            border-radius: 30px;
+            background: #ffffff;
+            border-radius: 24px;
+            border: 1px solid var(--border-subtle);
             overflow: hidden;
-            border: 1.5px solid var(--border-green);
-            box-shadow: 0 0 35px rgba(0, 230, 118, 0.2);
+            box-shadow: var(--shadow-md);
         }
 
         .panel-head {
-            padding: 16px 20px;
-            background: rgba(3, 15, 9, 0.95);
+            padding: 14px 18px;
+            background: var(--bg-card-subtle);
             font-weight: 800;
-            border-bottom: 2px solid var(--border-green);
-            text-shadow: 0 0 10px rgba(0, 255, 136, 0.5);
+            border-bottom: 1px solid var(--border-subtle);
             display: flex;
             justify-content: space-between;
             align-items: center;
-            font-size: 16px;
-            color: var(--neon-mint);
+            font-size: 13px;
+            color: var(--text-heading);
+            letter-spacing: 0.5px;
         }
 
         .win-rate {
-            color: #00ff88;
-            font-size: 16px;
-            text-shadow: 0 0 10px #00ff88;
+            color: var(--win-green);
+            font-size: 13px;
             font-weight: 800;
-            font-family: 'Roboto Mono', monospace;
         }
 
         .table-container {
             overflow-x: auto;
-            max-height: 420px;
+            max-height: 440px;
             overflow-y: auto;
         }
 
         table {
             width: 100%;
             border-collapse: collapse;
-            font-size: 12px;
-            min-width: 850px;
+            font-size: 11px;
+            min-width: 750px;
         }
 
         th {
             text-align: left;
-            padding: 12px 8px;
-            background: #030a06;
-            color: var(--neon-mint);
-            font-weight: 800;
+            padding: 10px 8px;
+            background: var(--bg-card-subtle);
+            color: var(--text-muted);
+            font-weight: 700;
             position: sticky;
             top: 0;
             z-index: 10;
-            border-bottom: 1px solid rgba(0, 230, 118, 0.3);
+            border-bottom: 1px solid var(--border-subtle);
+            text-transform: uppercase;
+            font-size: 10px;
             letter-spacing: 0.5px;
         }
 
         td {
             padding: 9px 8px;
-            border-bottom: 1px solid rgba(0, 230, 118, 0.1);
+            border-bottom: 1px solid var(--border-subtle);
             font-family: 'Roboto Mono', monospace;
-            font-size: 12px;
+            font-weight: 500;
         }
 
         .win-row {
-            color: #00ff88;
-            background: rgba(0, 255, 136, 0.14);
-            text-shadow: 0 0 6px #00ff88;
+            color: #047857;
+            background: #f0fdf4;
             font-weight: 700;
         }
 
         .loss-row {
-            color: var(--red-loss);
-            background: rgba(255, 59, 86, 0.12);
-            text-shadow: 0 0 6px var(--red-loss);
+            color: #b91c1c;
+            background: #fef2f2;
             font-weight: 700;
         }
 
-        /* Footer Watermark */
-        .tg-credit {
-            position: fixed;
-            bottom: 8px;
-            right: 12px;
-            font-size: 12px;
-            color: var(--neon-mint);
-            text-shadow: 0 0 10px var(--green-glow);
-            z-index: 1200;
-            background: rgba(3, 10, 7, 0.85);
-            padding: 6px 16px;
-            border-radius: 50px;
-            backdrop-filter: blur(6px);
-            border: 1px solid var(--border-green);
-            font-family: 'Roboto Mono', monospace;
-            font-weight: 800;
-            letter-spacing: 0.5px;
-        }
-
-        /* Styled Copy Toast */
+        /* Copy Toast */
         .copy-toast {
             position: fixed;
             top: 50%;
             left: 50%;
             transform: translate(-50%, -50%);
-            background: linear-gradient(165deg, #04140b, #092817);
-            border: 3px solid var(--neon-mint);
-            border-radius: 40px;
-            padding: 28px 45px;
-            z-index: 99999;
-            backdrop-filter: blur(25px);
-            box-shadow: 0 0 100px rgba(0, 255, 136, 0.7), 0 0 200px rgba(0, 230, 118, 0.4);
-            animation: epicEntrance 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
+            background: #ffffff;
+            border: 1px solid var(--border-subtle);
+            border-radius: 24px;
+            padding: 24px 36px;
+            z-index: 100000;
+            box-shadow: var(--shadow-lg);
+            animation: epicEntrance 0.3s cubic-bezier(0.16, 1, 0.3, 1);
             text-align: center;
-            min-width: 320px;
+            min-width: 290px;
         }
 
         @keyframes epicEntrance {
-            0% { opacity: 0; transform: translate(-50%, -30%) scale(0.4); filter: blur(10px); }
-            100% { opacity: 1; transform: translate(-50%, -50%) scale(1); filter: blur(0); }
+            from { opacity: 0; transform: translate(-50%, -40%) scale(0.92); }
+            to { opacity: 1; transform: translate(-50%, -50%) scale(1); }
         }
 
-        .toast-icon { font-size: 55px; margin-bottom: 6px; }
-        .toast-title { font-size: 32px; font-weight: 900; color: #ffffff; text-shadow: 0 0 25px var(--neon-mint); letter-spacing: 2px; }
-        .toast-message { font-size: 20px; color: var(--neon-mint); font-weight: 800; margin-top: 4px; }
-        .toast-sub { font-size: 14px; color: #8fa0be; margin-top: 8px; font-weight: 700; }
+        .toast-icon { font-size: 38px; margin-bottom: 6px; }
+        .toast-title { font-size: 20px; font-weight: 900; color: var(--text-heading); }
+        .toast-message { font-size: 13px; color: var(--text-muted); font-weight: 600; margin-top: 2px; }
+
+        .tg-credit {
+            position: fixed;
+            bottom: 8px;
+            right: 12px;
+            font-size: 11px;
+            color: var(--text-muted);
+            z-index: 1200;
+            background: rgba(255, 255, 255, 0.85);
+            padding: 4px 12px;
+            border-radius: 30px;
+            backdrop-filter: blur(6px);
+            border: 1px solid var(--border-subtle);
+            font-family: 'Roboto Mono', monospace;
+            font-weight: 700;
+        }
+
+        .tg-credit span { color: var(--primary); }
 
         @media (max-width: 480px) {
-            .cyber-card { padding: 26px 18px; }
-            .screen-header { font-size: 26px; }
-            .app-logo { font-size: 20px; }
-            .stat-val { font-size: 18px; }
-            .pred-result { font-size: 50px; }
+            body { padding: 10px 8px; }
             .timer-countdown { font-size: 34px; }
-            .copy-btn { font-size: 15px; padding: 8px 18px; }
-            .copy-toast { padding: 20px 25px; min-width: 260px; }
-            .ctrl-btn { font-size: 11px; padding: 10px 8px; }
+            .pred-result { font-size: 46px; }
+            .bet-badge { font-size: 14px; padding: 6px 18px; }
+            .stat-val { font-size: 17px; }
+            .stat-lbl { font-size: 10px; }
+            .app-header { padding: 10px 14px; }
+            .app-logo { font-size: 18px; }
         }
     </style>
 </head>
 <body>
 
-    <div class="ambient-glow glow-1"></div>
-    <div class="ambient-glow glow-2"></div>
     <canvas id="party-canvas"></canvas>
-
     <div class="tg-credit">⚡ <span>@jashvip</span> ⚡</div>
 
     <!-- ================= STEP 1: PASSWORD / ACCESS SCREEN ================= -->
     <div id="auth-screen" class="modal-screen">
-        <div class="cyber-card">
-            <div style="text-align: center;">
-                <span class="brand-badge">🔐 SECURE VIP ACCESS</span>
-            </div>
+        <div class="auth-card" style="text-align: center;">
+            <span class="brand-badge">🔐 SECURE VIP ACCESS</span>
             <div class="screen-header">JASHVIP</div>
-            <div class="screen-sub">ENTER VIP ACCESS KEY</div>
+            <div class="screen-sub">ENTER YOUR ACCESS KEY TO CONTINUE</div>
             
             <div class="input-group">
-                <label>⚡ ACCESS KEY ⚡</label>
+                <label>Access Key</label>
                 <input type="password" id="access-key-input" placeholder="••••••••" autocomplete="off">
             </div>
             <button class="cyber-btn" onclick="validateKey()">UNLOCK ACCESS</button>
         </div>
     </div>
 
-    <!-- ================= STEP 2: MODE SELECTION (1 MIN OR 30 SECONDS) ================= -->
+    <!-- ================= STEP 2: MODE SELECTION (30 SECONDS VS 1 MINUTE) ================= -->
     <div id="mode-screen" class="modal-screen" style="display: none;">
-        <div class="cyber-card">
-            <div style="text-align: center;">
-                <span class="brand-badge">🎯 SELECT ENGINE MODE</span>
-            </div>
+        <div class="auth-card" style="text-align: center;">
+            <span class="brand-badge">🎯 SELECT ENGINE MODE</span>
             <div class="screen-header">CHOOSE TIMEFRAME</div>
-            <div class="screen-sub">FAST OR HIGH STABILITY ENGINE</div>
+            <div class="screen-sub">SELECT 30 SECONDS OR 1 MINUTE GAMEPLAY</div>
 
             <div class="mode-selection-grid">
                 <div class="mode-card active" id="card-30s" onclick="selectMode('30S')">
@@ -810,9 +767,9 @@
                 <div class="mode-card" id="card-1m" onclick="selectMode('1M')">
                     <div class="mode-card-header">
                         <div class="mode-title">⏱️ WINGO 1 MINUTE</div>
-                        <span class="mode-tag">STABLE</span>
+                        <span class="mode-tag">STANDARD</span>
                     </div>
-                    <div class="mode-desc">Standard 60s period • 1,440 daily rounds • Maximum trend certainty</div>
+                    <div class="mode-desc">Standard 60s period • 1,440 daily rounds • High trend stability</div>
                 </div>
             </div>
 
@@ -822,37 +779,35 @@
 
     <!-- ================= STEP 3: BALANCE & TARGET CONFIGURATION ================= -->
     <div id="config-screen" class="modal-screen" style="display: none;">
-        <div class="cyber-card">
-            <div style="text-align: center;">
-                <span class="brand-badge" id="selected-mode-tag">🎯 WINGO 30S SELECTED</span>
-            </div>
-            <div class="screen-header">CONFIG & TARGET</div>
-            <div class="screen-sub">SMART LOSS-PROTECTION SETTINGS</div>
+        <div class="auth-card" style="text-align: center;">
+            <span class="brand-badge" id="selected-mode-tag">🎯 WINGO 30S SELECTED</span>
+            <div class="screen-header">SETTINGS & TARGET</div>
+            <div class="screen-sub">PROPORTIONAL BALANCE & RISK CONFIG</div>
             
             <div class="input-group">
-                <label>💰 STARTING BALANCE (₹)</label>
+                <label>💰 Starting Balance (₹)</label>
                 <input type="number" id="setup-bal" value="1000" step="100" min="50">
             </div>
             <div class="input-group">
-                <label>🎯 TARGET BALANCE (₹)</label>
+                <label>🎯 Target Balance (₹)</label>
                 <input type="number" id="setup-target" value="2000" step="100" min="100">
             </div>
             <div class="input-group">
-                <label>⚡ RISK STRATEGY</label>
+                <label>⚡ Risk Level</label>
                 <select id="setup-mode">
                     <option value="0.01">1% (Conservative — Safe Grinding)</option>
                     <option value="0.02" selected>2% (Moderate — Balanced Growth)</option>
                     <option value="0.03">3% (Aggressive — High Speed)</option>
                 </select>
             </div>
-            <button class="cyber-btn" onclick="launchBot()">🚀 LAUNCH JASHVIP BOT</button>
+            <button class="cyber-btn" onclick="launchBot()">🚀 LAUNCH JASHVIP</button>
             <div style="text-align: center; margin-top: 14px;">
                 <a href="javascript:void(0)" onclick="backToModeSelect()" style="color: var(--text-muted); font-size: 12px; text-decoration: none; font-weight: 700;">← Change Game Mode</a>
             </div>
         </div>
     </div>
 
-    <!-- ================= STEP 4: MAIN LIVE PREDICTION DASHBOARD ================= -->
+    <!-- ================= STEP 4: MAIN DASHBOARD ================= -->
     <div id="app">
         <!-- App Header -->
         <div class="app-header">
@@ -860,13 +815,13 @@
                 <div class="app-logo">⚡ JASHVIP</div>
                 <div class="mode-badge-live" id="header-mode-badge" onclick="backToModeSelect()" title="Click to change mode">WINGO 30S ⚙️</div>
             </div>
-            <div style="display: flex; align-items: center; gap: 8px;">
-                <div id="status-txt" class="status-pill">⦿ AI ENGINE ACTIVE</div>
-                <button class="header-logout-btn" onclick="logoutSession()" title="Logout and clear session">🚪 LOGOUT</button>
+            <div class="header-actions">
+                <div id="status-txt" class="status-pill">⦿ BOT ACTIVE</div>
+                <button class="header-logout-btn" onclick="logoutSession()" title="Logout and clear session">LOGOUT</button>
             </div>
         </div>
 
-        <!-- Start / Stop & Balance Sync Controls -->
+        <!-- Controls Bar -->
         <div class="bot-control-bar">
             <button id="toggle-bot-btn" class="ctrl-btn btn-pause" onclick="toggleBetting()">
                 <span id="btn-icon">⏸️</span>
@@ -886,7 +841,7 @@
         <div class="stats-grid">
             <div class="stat-card">
                 <div class="stat-val">₹<span id="bal-display">0</span></div>
-                <div class="stat-lbl">Continuing Balance</div>
+                <div class="stat-lbl">Balance</div>
             </div>
             <div class="stat-card">
                 <div class="stat-val" id="target-display">₹0</div>
@@ -907,17 +862,17 @@
             
             <div class="timer-countdown" id="timer-display">00:30</div>
 
-            <!-- Dynamic 6-Engine Logic Badges -->
+            <!-- Original 6 Logic Badges -->
             <div class="logic-status" id="logic-badges">
-                <span class="logic-badge l-normal" id="l1-badge">L1 (DRAGON): --</span>
-                <span class="logic-badge l-normal" id="l2-badge">L2 (MARKOV): --</span>
-                <span class="logic-badge l-normal" id="l3-badge">L3 (CHOP): --</span>
-                <span class="logic-badge l-normal" id="l4-badge">L4 (EMA): --</span>
-                <span class="logic-badge l-normal" id="l5-badge">L5 (DELTA): --</span>
-                <span class="logic-badge l-normal" id="l6-badge">L6 (VECTOR): --</span>
+                <span class="logic-badge l1" id="l1-badge">L1: --</span>
+                <span class="logic-badge l2" id="l2-badge">L2: --</span>
+                <span class="logic-badge l3" id="l3-badge">L3: --</span>
+                <span class="logic-badge l4" id="l4-badge">L4: --</span>
+                <span class="logic-badge l5" id="l5-badge">L5: --</span>
+                <span class="logic-badge l6" id="l6-badge">L6: --</span>
             </div>
 
-            <!-- Prediction Result -->
+            <!-- Prediction Value -->
             <div class="pred-result" id="pred-text">
                 <span id="pred-value">ANALYZING...</span>
                 <button class="copy-btn" id="copyPredBtn" onclick="copyPrediction()">
@@ -927,10 +882,10 @@
 
             <div class="bet-badge">RECOMMENDED BET: ₹<span id="next-bet">0</span></div>
             <br>
-            <div class="consensus-badge" id="consensus-display">⚡ AI CONFIDENCE: CALIBRATING...</div>
+            <div class="consensus-badge" id="consensus-display">⚡ VOTE: --/6</div>
         </div>
 
-        <!-- Historical Win/Loss Log Table -->
+        <!-- History Table -->
         <div class="history-panel">
             <div class="panel-head">
                 <span id="table-head-title">📊 JASHVIP HISTORY (LAST 100)</span>
@@ -940,7 +895,7 @@
                 <table>
                     <thead>
                         <tr>
-                            <th>Period</th><th>L1</th><th>L2</th><th>L3</th><th>L4</th><th>L5</th><th>L6</th><th>Final</th><th>Bet</th><th>Result</th><th>Bal</th>
+                            <th>Per.</th><th>L1</th><th>L2</th><th>L3</th><th>L4</th><th>L5</th><th>L6</th><th>Final</th><th>Bet</th><th>Result</th><th>Bal</th>
                         </tr>
                     </thead>
                     <tbody id="history-body"></tbody>
@@ -951,11 +906,8 @@
 
     <script>
         (function() {
-            "use strict";
-
+            // ==================== CONFIG & ENDPOINTS ====================
             const SESSION_STORAGE_KEY = "jashvip_active_game_session";
-
-            // ==================== CONFIGURATION ====================
             const ENDPOINTS = {
                 "30S": {
                     name: "WINGO 30 SECONDS",
@@ -972,7 +924,7 @@
             let currentModeKey = "30S";
             const MAX_HISTORY = 100;
 
-            // State with full session history persistence and deep history pool
+            // State
             const state = {
                 active: false,
                 isPaused: false,
@@ -986,11 +938,7 @@
                 consecutiveLosses: 0,
                 stats: { wins: 0, losses: 0, total: 0 },
                 cachedHistory: [],
-                sessionHistory: [], // Persisted rows
-                historicalPool: [], // Deep historical rounds (up to 120 rounds)
-                logicWeights: [1.0, 1.0, 1.0, 1.0, 1.0, 1.0],
-                logicAccuracy: [0.5, 0.5, 0.5, 0.5, 0.5, 0.5],
-                logicInverted: [false, false, false, false, false, false]
+                sessionHistory: []
             };
 
             let secondsLeft = 30;
@@ -1013,8 +961,7 @@
                         riskMultiplier: state.riskMultiplier,
                         consecutiveLosses: state.consecutiveLosses,
                         stats: state.stats,
-                        sessionHistory: state.sessionHistory || [],
-                        historicalPool: (state.historicalPool || []).slice(0, 80)
+                        sessionHistory: state.sessionHistory || []
                     };
                     localStorage.setItem(SESSION_STORAGE_KEY, JSON.stringify(payload));
                 } catch(e) {}
@@ -1040,7 +987,6 @@
                     state.consecutiveLosses = data.consecutiveLosses || 0;
                     state.stats = data.stats || { wins: 0, losses: 0, total: 0 };
                     state.sessionHistory = data.sessionHistory || [];
-                    state.historicalPool = data.historicalPool || [];
 
                     // Restore UI labels
                     const modeInfo = ENDPOINTS[currentModeKey];
@@ -1057,13 +1003,13 @@
                         document.getElementById('status-txt').className = 'status-pill status-paused';
                         document.getElementById('status-txt').innerText = '⏸️ BETTING PAUSED';
                         document.getElementById('next-bet').innerText = '0 (PAUSED)';
-                        document.getElementById('consensus-display').innerText = '⏸️ BETTING PAUSED — CONTINUING BALANCE PROTECTED';
+                        document.getElementById('consensus-display').innerText = '⏸️ BETTING PAUSED';
                     } else {
                         btn.className = 'ctrl-btn btn-pause';
                         document.getElementById('btn-icon').innerText = '⏸️';
                         document.getElementById('btn-text').innerText = 'PAUSE BETTING';
                         document.getElementById('status-txt').className = 'status-pill';
-                        document.getElementById('status-txt').innerText = '⦿ AI ENGINE ACTIVE';
+                        document.getElementById('status-txt').innerText = '⦿ BOT ACTIVE';
                     }
 
                     // Restore History Table Rows
@@ -1101,7 +1047,7 @@
             }
 
             window.logoutSession = function() {
-                if (confirm("Are you sure you want to LOGOUT? This will completely wipe all saved session history, balance, and return to the login page.")) {
+                if (confirm("Are you sure you want to LOGOUT? This will completely clear all saved session history, balance, and return to the login page.")) {
                     try {
                         localStorage.removeItem(SESSION_STORAGE_KEY);
                         localStorage.clear();
@@ -1126,15 +1072,12 @@
                     state.cachedHistory = [];
                     state.sessionHistory = [];
 
-                    // Clear HTML history table
                     const tbody = document.getElementById('history-body');
                     if (tbody) tbody.innerHTML = '';
 
-                    // Clear access key input
                     const keyInput = document.getElementById('access-key-input');
                     if (keyInput) keyInput.value = '';
 
-                    // Hide app and screens, show auth-screen (login page)
                     document.getElementById('app').style.display = 'none';
                     document.getElementById('config-screen').style.display = 'none';
                     document.getElementById('mode-screen').style.display = 'none';
@@ -1159,14 +1102,14 @@
             window.addEventListener('resize', resizeCanvas);
 
             function createParticles() {
-                for (let i = 0; i < 80; i++) {
+                for (let i = 0; i < 70; i++) {
                     particles.push({
                         x: Math.random() * canvas.width,
                         y: Math.random() * canvas.height * 0.4 + canvas.height * 0.2,
-                        vx: (Math.random() - 0.5) * 14,
+                        vx: (Math.random() - 0.5) * 12,
                         vy: Math.random() * -12 - 6,
                         size: Math.random() * 7 + 4,
-                        color: `hsl(${Math.random() * 80 + 100}, 100%, 60%)`,
+                        color: `hsl(${Math.random() * 50 + 200}, 90%, 55%)`,
                         life: 1
                     });
                 }
@@ -1184,7 +1127,7 @@
                     
                     p.x += p.vx;
                     p.y += p.vy;
-                    p.vy += 0.22;
+                    p.vy += 0.2;
                     p.life -= 0.012;
                     
                     if (p.life <= 0 || p.y > canvas.height) {
@@ -1210,7 +1153,7 @@
                     document.getElementById('auth-screen').style.display = 'none';
                     document.getElementById('mode-screen').style.display = 'flex';
                 } else {
-                    alert('❌ Invalid Access Key! Enter "JASHVIP" to proceed.');
+                    alert('❌ Invalid Access Key! Enter "JASHVIP" or "TGX121" to proceed.');
                 }
             };
 
@@ -1241,7 +1184,7 @@
                 document.getElementById('mode-screen').style.display = 'flex';
             };
 
-            // ==================== START / STOP (PAUSE & RESUME) ====================
+            // ==================== START / PAUSE CONTROLS ====================
             window.toggleBetting = function() {
                 state.isPaused = !state.isPaused;
                 const btn = document.getElementById('toggle-bot-btn');
@@ -1250,33 +1193,27 @@
                 const status = document.getElementById('status-txt');
 
                 if (state.isPaused) {
-                    state.pendingBet = null;
                     btn.className = 'ctrl-btn btn-resume';
                     icon.innerText = '▶️';
                     txt.innerText = 'RESUME BETTING';
                     status.className = 'status-pill status-paused';
                     status.innerText = '⏸️ BETTING PAUSED';
                     document.getElementById('next-bet').innerText = '0 (PAUSED)';
-                    document.getElementById('consensus-display').innerText = '⏸️ BETTING PAUSED — CONTINUING BALANCE PROTECTED';
+                    document.getElementById('consensus-display').innerText = '⏸️ BETTING PAUSED — BALANCE PROTECTED';
                 } else {
                     btn.className = 'ctrl-btn btn-pause';
                     icon.innerText = '⏸️';
                     txt.innerText = 'PAUSE BETTING';
                     status.className = 'status-pill';
-                    status.innerText = '⦿ AI ENGINE ACTIVE';
-                    state.baseBet = Math.max(10, Math.floor(state.balance * state.riskMultiplier));
-                    state.currentBet = state.baseBet;
-                    state.consecutiveLosses = 0;
-                    updateDisplay();
-                    mainLoop();
+                    status.innerText = '⦿ BOT ACTIVE';
+                    document.getElementById('next-bet').innerText = state.currentBet;
                 }
                 saveActiveSession();
             };
 
-            // Manual Balance Sync / Edit
             window.editBalance = function() {
-                const cur = Math.floor(state.balance);
-                const input = prompt("Update your actual continuing balance (₹):", cur);
+                const currentBal = Math.floor(state.balance);
+                const input = prompt("Update Continuing Balance (₹):", currentBal);
                 if (input !== null) {
                     const val = parseFloat(input);
                     if (!isNaN(val) && val > 0) {
@@ -1286,222 +1223,209 @@
                         state.consecutiveLosses = 0;
                         updateDisplay();
                         saveActiveSession();
-                        alert(`✅ Continuing balance updated to ₹${Math.floor(state.balance)}.`);
+                        alert(`✅ Balance updated to ₹${Math.floor(state.balance)}.`);
                     }
                 }
             };
 
-            // ==================== ADVANCED PATTERN & HUMAN-REVERSE PREDICTION ENGINE ====================
-            
-            // 1. DRAGON / TREND SPECIALIST:
-            // Follows streaks of 2 to 6. If streak >= 7, triggers exhaustion reversal.
-            function logic1_DragonTrend(list) {
-                if (!list || list.length < 2) return "BIG";
-                const sizes = list.map(item => parseInt(item.number) >= 5 ? "BIG" : "SMALL");
-                let streak = 1;
-                for (let i = 1; i < sizes.length; i++) {
-                    if (sizes[i] === sizes[0]) streak++;
-                    else break;
-                }
-                if (streak >= 2 && streak <= 6) return sizes[0];
-                if (streak >= 7) return sizes[0] === "BIG" ? "SMALL" : "BIG";
-                return sizes[0];
-            }
-
-            // 2. CHOP / 1-1 ZIGZAG SPECIALIST:
-            // Detects rapid alternations (B S B S) and predicts the alternating outcome.
-            function logic2_ChopAlternator(list) {
-                if (!list || list.length < 3) return "SMALL";
-                const sizes = list.map(item => parseInt(item.number) >= 5 ? "BIG" : "SMALL");
-                let alts = 0;
-                for (let i = 0; i < Math.min(4, sizes.length - 1); i++) {
-                    if (sizes[i] !== sizes[i+1]) alts++;
-                }
-                if (alts >= 2) {
-                    return sizes[0] === "BIG" ? "SMALL" : "BIG"; // Reverse last result!
-                }
-                return sizes[0];
-            }
-
-            // 3. 2-2 DOUBLES PATTERN SPECIALIST:
-            // Detects pair sequences (BB SS BB). Completes 2nd of pair or switches completed pair.
-            function logic3_DoublesPattern(list) {
-                if (!list || list.length < 3) return "BIG";
-                const sizes = list.map(item => parseInt(item.number) >= 5 ? "BIG" : "SMALL");
-                // Just switched after a pair (e.g. S after BB): predict 2nd S to complete pair!
-                if (sizes[0] !== sizes[1] && sizes[1] === sizes[2]) {
-                    return sizes[0];
-                }
-                // Completed pair of 2 (e.g. SS after BB): predict switch to opposite!
-                if (sizes.length >= 4 && sizes[0] === sizes[1] && sizes[1] !== sizes[2] && sizes[2] === sizes[3]) {
-                    return sizes[0] === "BIG" ? "SMALL" : "BIG";
-                }
-                return sizes[0];
-            }
-
-            // 4. MARKOV PROBABILITY MATRIX:
-            // Scans deep history for matching 2-step sequences and computes transition probabilities.
-            function logic4_MarkovProbability(list) {
-                if (!list || list.length < 5) return "BIG";
-                const sizes = list.map(item => parseInt(item.number) >= 5 ? "BIG" : "SMALL");
-                const currentPattern = sizes[0] + (sizes[1] || "");
-                let toBig = 0, toSmall = 0;
-                for (let i = 0; i < sizes.length - 2; i++) {
-                    const pat = sizes[i+1] + sizes[i+2];
-                    if (pat === currentPattern) {
-                        if (sizes[i] === "BIG") toBig++;
-                        else toSmall++;
-                    }
-                }
-                if (toBig !== toSmall) return toBig > toSmall ? "BIG" : "SMALL";
-                return sizes[0] === "BIG" ? "SMALL" : "BIG";
-            }
-
-            // 5. HUMAN RETAIL TRAP REVERSAL:
-            // Analyzes retail psychological traps (Gambler's fallacy, chasing tops) and plays the HOUSE REVERSE!
-            function logic5_HumanTrapReverse(list) {
-                if (!list || list.length < 3) return "BIG";
-                const sizes = list.map(item => parseInt(item.number) >= 5 ? "BIG" : "SMALL");
-                let streak = 1;
-                for (let i = 1; i < sizes.length; i++) {
-                    if (sizes[i] === sizes[0]) streak++;
-                    else break;
-                }
-                // When 3+ identical appear, human thinks it must reverse. House keeps running dragon!
-                if (streak >= 3 && streak <= 6) return sizes[0];
-                // In alternating chop, human expects it to stop. House continues alternation!
-                if (sizes.length >= 3 && sizes[0] !== sizes[1] && sizes[1] !== sizes[2]) {
-                    return sizes[0] === "BIG" ? "SMALL" : "BIG";
-                }
-                return sizes[0];
-            }
-
-            // 6. ADAPTIVE MOMENTUM & DELTA:
-            // Calculates weighted rate of change and number mean reversion.
-            function logic6_AdaptiveMomentum(list) {
-                if (!list || list.length < 4) return "SMALL";
-                const n0 = parseInt(list[0].number);
-                const n1 = parseInt(list[1].number);
-                const delta = n0 - n1;
-                if (delta >= 4) return "SMALL"; // Mean reversion from high peak
-                if (delta <= -4) return "BIG";  // Mean reversion from low valley
-                return n0 % 2 === 0 ? (n0 >= 5 ? "BIG" : "SMALL") : (n1 >= 5 ? "BIG" : "SMALL");
-            }
-
-            // DYNAMIC REAL-TIME SELF-TRAINING & CONTRARIAN REVERSAL
-            function trainLogics(list) {
-                if (!list || list.length < 5) return;
-                const logics = [
-                    logic1_DragonTrend,
-                    logic2_ChopAlternator,
-                    logic3_DoublesPattern,
-                    logic4_MarkovProbability,
-                    logic5_HumanTrapReverse,
-                    logic6_AdaptiveMomentum
-                ];
-
-                for (let li = 0; li < logics.length; li++) {
-                    let hits = 0, tests = 0;
-                    const testWindow = Math.min(14, list.length - 2);
-                    for (let j = 0; j < testWindow; j++) {
-                        const subHistory = list.slice(j + 1);
-                        const actual = parseInt(list[j].number) >= 5 ? "BIG" : "SMALL";
-                        const pred = logics[li](subHistory);
-                        if (pred === actual) hits++;
-                        tests++;
-                    }
-                    const acc = tests > 0 ? hits / tests : 0.5;
-                    state.logicAccuracy[li] = acc;
-
-                    // CONTRARIAN REVERSAL:
-                    // If a model has accuracy < 48%, it is getting systematically trapped by the market.
-                    // ITS INVERSE IS WINNING! So we invert its vote and assign inverse weight!
-                    if (acc < 0.48) {
-                        state.logicInverted[li] = true;
-                        state.logicWeights[li] = (1.0 - acc) * 2.2;
-                    } else {
-                        state.logicInverted[li] = false;
-                        state.logicWeights[li] = Math.max(0.6, acc * 2.0);
-                    }
-                }
-            }
-
-            function getAdaptiveVote(list) {
-                trainLogics(list);
-
-                const rawVotes = [
-                    logic1_DragonTrend(list),
-                    logic2_ChopAlternator(list),
-                    logic3_DoublesPattern(list),
-                    logic4_MarkovProbability(list),
-                    logic5_HumanTrapReverse(list),
-                    logic6_AdaptiveMomentum(list)
-                ];
-
-                const badgeIds = ['l1-badge', 'l2-badge', 'l3-badge', 'l4-badge', 'l5-badge', 'l6-badge'];
-                const names = ['L1 (DRAGON)', 'L2 (CHOP)', 'L3 (DOUBLES)', 'L4 (MARKOV)', 'L5 (REV TRAP)', 'L6 (MOMENTUM)'];
+            // ==================== EXACT ORIGINAL 6 LOGICS (NO TRAINING) ====================
+            // 1. ORIGINAL LOGIC 1
+            function logic1(results) {
+                if (!results || results.length < 10) return "BIG";
+                const n1 = parseInt(results[0].number), n2 = parseInt(results[1].number);
+                const n9 = parseInt(results[8].number), n10 = parseInt(results[9].number);
+                let total = (n1 - n2) + (n9 - n10);
+                total = Math.abs(total) % 10;
                 
-                let scoreBig = 0, scoreSmall = 0;
-                let rawBig = 0, rawSmall = 0;
+                let bigCount = 0;
+                for (let i = 0; i < 5; i++) if (parseInt(results[i].number) >= 5) bigCount++;
+                if (bigCount >= 4) return total >= 4 ? "BIG" : "SMALL";
+                if (bigCount <= 1) return total >= 6 ? "BIG" : "SMALL";
+                
+                return total >= 5 ? "BIG" : "SMALL";
+            }
 
-                const effectiveVotes = [];
+            // 2. ORIGINAL LOGIC 2
+            function logic2(results) {
+                if (!results || results.length < 5) return "BIG";
+                let sum = 0;
+                const weights = [3, 2, 1, 1, 1];
+                for (let i = 0; i < 5; i++) {
+                    sum += parseInt(results[i].number) * weights[i];
+                }
+                sum += parseInt(results[0].number) * 2;
+                return (sum % 10) >= 5 ? "BIG" : "SMALL";
+            }
 
+            // 3. ORIGINAL LOGIC 3
+            function logic3(results) {
+                if (!results || results.length < 12) return "BIG";
+                const nums = [], sizes = [];
+                for (let i = 0; i < 12; i++) {
+                    if (!results[i]) break;
+                    const num = parseInt(results[i].number);
+                    nums.push(num);
+                    sizes.push(num >= 5 ? "BIG" : "SMALL");
+                }
+                
+                let volatility = 0;
+                for (let i = 0; i < 5; i++) {
+                    volatility += Math.abs(nums[i] - (nums[i+1] || nums[i]));
+                }
+                volatility = volatility / 5;
+                
+                let streak = 1;
+                for (let i = 1; i < 5; i++) if (sizes[i] === sizes[0]) streak++; else break;
+                let streakScore = streak >= 3 ? -25 : (streak === 2 ? -15 : (volatility > 3 ? 10 : 5));
+                
+                let bigCnt = 0; for (let i = 0; i < 8; i++) if (sizes[i] === "BIG") bigCnt++;
+                let imbalance = ((bigCnt - (8 - bigCnt)) / 8) * 100;
+                
+                let pattern = 0;
+                if (sizes[0] === sizes[1] && sizes[1] === sizes[2]) pattern = -35;
+                else if (sizes[0] === sizes[1]) pattern = -20;
+                else if (sizes[0] !== sizes[1] && sizes[1] === sizes[2]) pattern = 25;
+                else pattern = 10;
+                
+                let avg = (nums[0] + nums[1] + nums[2] + nums[3] + nums[4]) / 5;
+                let value = avg >= 6 ? 20 : (avg <= 3 ? -20 : (avg >= 5 ? 5 : -5));
+                
+                let totalBig = sizes.filter(s => s === "BIG").length;
+                let revert = totalBig > 7 ? -30 : (totalBig < 4 ? 30 : 0);
+                
+                let total = (streakScore * 0.2) + (imbalance * 0.25) + (pattern * 0.2) + (value * 0.2) + (revert * 0.15);
+                let pred = total >= 0 ? "BIG" : "SMALL";
+                
+                if (Math.abs(total) < 20) {
+                    let last3 = (sizes[0] === "BIG" ? 1 : 0) + (sizes[1] === "BIG" ? 1 : 0) + (sizes[2] === "BIG" ? 1 : 0);
+                    pred = last3 >= 2 ? "BIG" : "SMALL";
+                }
+                return pred;
+            }
+
+            // 4. ORIGINAL LOGIC 4
+            function logic4(results) {
+                if (!results || results.length < 6) return "BIG";
+                const last6 = [];
                 for (let i = 0; i < 6; i++) {
-                    let vote = rawVotes[i];
-                    // If model is inverted by market traps, DO THE REVERSE!
-                    if (state.logicInverted && state.logicInverted[i]) {
-                        vote = vote === "BIG" ? "SMALL" : "BIG";
-                    }
-                    effectiveVotes.push(vote);
-
-                    const el = document.getElementById(badgeIds[i]);
-                    if (el) {
-                        const isInverted = state.logicInverted && state.logicInverted[i];
-                        el.innerText = `${names[i]}: ${vote}${isInverted ? ' (REV)' : ''}`;
-                        el.className = `logic-badge ${state.logicWeights[i] >= 1.2 ? 'l-win' : 'l-normal'}`;
-                    }
-                    if (vote === 'BIG') {
-                        scoreBig += state.logicWeights[i];
-                        rawBig++;
-                    } else {
-                        scoreSmall += state.logicWeights[i];
-                        rawSmall++;
-                    }
+                    if (!results[i]) break;
+                    last6.push({ num: parseInt(results[i].number), size: parseInt(results[i].number) >= 5 ? "BIG" : "SMALL" });
                 }
+                
+                let gap = Math.abs(last6[0].num - (last6[1]?.num || last6[0].num));
+                
+                let streak = 1;
+                for (let i = 1; i < last6.length; i++) if (last6[i].size === last6[0].size) streak++; else break;
+                
+                if (streak >= 3) {
+                    if (gap > 4) return last6[0].size;
+                    return last6[0].size === "BIG" ? "SMALL" : "BIG";
+                }
+                
+                let changes = 0;
+                for (let i = 0; i < last6.length - 1; i++) if (last6[i].size !== last6[i+1].size) changes++;
+                
+                if (changes >= 4) return last6[0].size;
+                if (changes <= 1 && last6.length >= 4) return last6[0].size === "BIG" ? "SMALL" : "BIG";
+                
+                if (last6[0].size === last6[1].size) return last6[0].size === "BIG" ? "SMALL" : "BIG";
+                return last6[0].size;
+            }
 
-                let final;
-                // If on Level 2 (1 loss in a row), activate Level 2 Counter-Trap priority
-                if (state.consecutiveLosses === 1 && list.length >= 3) {
-                    const s0 = parseInt(list[0].number) >= 5 ? "BIG" : "SMALL";
-                    const s1 = parseInt(list[1].number) >= 5 ? "BIG" : "SMALL";
-                    // If alternating pattern caused Level 1 loss, prioritize alternating continuation
-                    if (s0 !== s1) {
-                        final = s0 === "BIG" ? "SMALL" : "BIG";
-                    } else {
-                        final = scoreBig >= scoreSmall ? "BIG" : "SMALL";
-                    }
+            // 5. ORIGINAL LOGIC 5
+            function logic5(results) {
+                if (!results || results.length < 7) return "BIG";
+                let even = 0, odd = 0, sum = 0, lastThree = 0;
+                for (let i = 0; i < 7; i++) {
+                    const n = parseInt(results[i].number);
+                    sum += n;
+                    if (i < 3) lastThree += n;
+                    if (n % 2 === 0) even++; else odd++;
+                }
+                
+                if (even >= 5) {
+                    let digit = (sum + lastThree) % 10;
+                    return digit >= 5 ? "BIG" : "SMALL";
+                }
+                if (odd >= 5) {
+                    let digit = (sum - lastThree) % 10;
+                    if (digit < 0) digit += 10;
+                    return digit >= 5 ? "SMALL" : "BIG";
+                }
+                
+                return parseInt(results[0].number) % 2 === 0 ? "SMALL" : "BIG";
+            }
+
+            // 6. ORIGINAL LOGIC 6
+            function logic6(results) {
+                if (!results || results.length < 8) return "BIG";
+                let momentum = 0, acceleration = 0;
+                for (let i = 0; i < 5; i++) {
+                    const diff = parseInt(results[i].number) - parseInt(results[i+1].number);
+                    momentum += diff;
+                    if (i < 4) acceleration += (diff - (parseInt(results[i+1].number) - parseInt(results[i+2].number)));
+                }
+                momentum = Math.abs(momentum) % 10;
+                acceleration = Math.abs(acceleration) % 5;
+                
+                const lastTwoSame = (parseInt(results[0].number) >= 5) === (parseInt(results[1].number) >= 5);
+                
+                if (lastTwoSame) {
+                    if (momentum + acceleration > 8) return parseInt(results[0].number) >= 5 ? "SMALL" : "BIG";
+                    return parseInt(results[0].number) >= 5 ? "BIG" : "SMALL";
                 } else {
-                    if (rawBig >= 4) final = "BIG";
-                    else if (rawSmall >= 4) final = "SMALL";
-                    else final = scoreBig >= scoreSmall ? "BIG" : "SMALL";
+                    if (momentum > 5) return parseInt(results[0].number) >= 5 ? "BIG" : "SMALL";
+                    return parseInt(results[1].number) >= 5 ? "BIG" : "SMALL";
                 }
+            }
 
-                const totalScore = scoreBig + scoreSmall;
-                const confidence = Math.min(98, Math.max(68, Math.round((Math.max(scoreBig, scoreSmall) / (totalScore || 1)) * 100)));
-                const matchCount = final === 'BIG' ? rawBig : rawSmall;
+            // ==================== ORIGINAL STRAIGHT VOTING ====================
+            function getVote(results) {
+                const l1 = logic1(results), l2 = logic2(results), l3 = logic3(results);
+                const l4 = logic4(results), l5 = logic5(results), l6 = logic6(results);
+
+                const b1 = document.getElementById('l1-badge');
+                const b2 = document.getElementById('l2-badge');
+                const b3 = document.getElementById('l3-badge');
+                const b4 = document.getElementById('l4-badge');
+                const b5 = document.getElementById('l5-badge');
+                const b6 = document.getElementById('l6-badge');
+
+                if (b1) b1.innerText = `L1: ${l1}`;
+                if (b2) b2.innerText = `L2: ${l2}`;
+                if (b3) b3.innerText = `L3: ${l3}`;
+                if (b4) b4.innerText = `L4: ${l4}`;
+                if (b5) b5.innerText = `L5: ${l5}`;
+                if (b6) b6.innerText = `L6: ${l6}`;
+
+                const votes = { BIG: 0, SMALL: 0 };
+                votes[l1]++; votes[l2]++; votes[l3]++; votes[l4]++; votes[l5]++; votes[l6]++;
+
+                let final, msg;
+                if (votes.BIG > votes.SMALL) {
+                    final = "BIG";
+                    msg = `⚡ VOTE: ${votes.BIG}/6 MATCH`;
+                } else if (votes.SMALL > votes.BIG) {
+                    final = "SMALL";
+                    msg = `⚡ VOTE: ${votes.SMALL}/6 MATCH`;
+                } else {
+                    final = l1;
+                    msg = `⚡ VOTE: TIE → L1`;
+                }
 
                 if (!state.isPaused) {
-                    document.getElementById('consensus-display').innerText = `⚡ AI CONFIDENCE: ${confidence}% (${matchCount}/6 MATCH) · 2-LVL SHIELD ACTIVE`;
+                    const cDisp = document.getElementById('consensus-display');
+                    if (cDisp) cDisp.innerText = msg;
                 }
 
-                return { final, l1: effectiveVotes[0], l2: effectiveVotes[1], l3: effectiveVotes[2], l4: effectiveVotes[3], l5: effectiveVotes[4], l6: effectiveVotes[5], confidence };
+                return { final, l1, l2, l3, l4, l5, l6 };
             }
 
             // ==================== COPY FUNCTION ====================
             window.copyPrediction = function() {
                 const predEl = document.getElementById('pred-value');
                 const pred = predEl.innerText;
-                if (pred === 'ANALYZING...') return;
+                if (pred === 'ANALYZING...' || pred === '--') return;
                 
                 const period = document.getElementById('next-issue').innerText.replace('PERIOD: ', '').replace('#', '');
                 const bet = document.getElementById('next-bet').innerText;
@@ -1512,7 +1436,7 @@
 ║     ✨🌈🌟 JASHVIP · ${period} 🌟🌈✨     ║
 ╠══════════════════════════════════════════╣
 ║  🎮  𝐌𝐎𝐃𝐄        :  ${modeName} ⚡    ║
-║  🎯  𝐏𝐑𝐄𝐃𝐈𝐂𝐓𝐈𝐎𝐍 :  ${pred} ${pred === 'BIG' ? '🟡✨🔥' : '🟢💎❄️'}     ║
+║  🎯  𝐏𝐑𝐄𝐃𝐈𝐂𝐓𝐈𝐎𝐍 :  ${pred} ${pred === 'BIG' ? '🟡✨🔥' : '🔵💎❄️'}     ║
 ║  💰  𝐁𝐄𝐓 𝐀𝐌𝐎𝐔𝐍𝐓 :  ₹${bet}  🪙💰💸         ║
 ║  ⚡  𝐂𝐑𝐄𝐀𝐓𝐎𝐑    : @jashvip ⚡           ║
 ╠══════════════════════════════════════════╣
@@ -1522,7 +1446,9 @@
        ✨🌟🌈  GOOD LUCK  🌈🌟✨`.replace(/^ +/gm, '');
 
                 if (navigator.clipboard && navigator.clipboard.writeText) {
-                    navigator.clipboard.writeText(text).then(showEpicCopyToast).catch(() => fallbackCopy(text));
+                    navigator.clipboard.writeText(text).then(() => {
+                        showEpicCopyToast();
+                    }).catch(() => fallbackCopy(text));
                 } else {
                     fallbackCopy(text);
                 }
@@ -1553,10 +1479,9 @@
                 const toast = document.createElement('div');
                 toast.className = 'copy-toast';
                 toast.innerHTML = `
-                    <div class="toast-icon">🎯✨📋✨🎯</div>
-                    <div class="toast-title">JASHVIP SUCCESS</div>
+                    <div class="toast-icon">🎯✨📋</div>
+                    <div class="toast-title">COPIED!</div>
                     <div class="toast-message">PREDICTION CAPTURED</div>
-                    <div class="toast-sub">⚡ @jashvip VIP ENGINE ⚡</div>
                 `;
                 document.body.appendChild(toast);
                 partyPopper();
@@ -1566,18 +1491,18 @@
                     btn.classList.remove('copied');
                     toast.style.animation = 'epicEntrance 0.3s reverse';
                     setTimeout(() => toast.remove(), 300);
-                }, 2200);
+                }, 2000);
             }
 
-            // ==================== TIMER SYNCHRONIZATION ====================
+            // ==================== TIMER ====================
             function updateTimerDisplay() {
                 const el = document.getElementById('timer-display');
                 if (!el) return;
                 const secs = Math.max(0, secondsLeft);
                 el.innerText = `00:${secs < 10 ? '0' + secs : secs}`;
-                if (secs <= 5) el.style.color = '#ff3b56';
-                else if (secs <= 10) el.style.color = '#ffd700';
-                else el.style.color = 'var(--neon-mint)';
+                if (secs <= 5) el.style.color = '#dc2626';
+                else if (secs <= 10) el.style.color = '#d97706';
+                else el.style.color = 'var(--text-heading)';
             }
 
             function resetTimerFromAPI() {
@@ -1606,7 +1531,7 @@
                 document.getElementById('target-display').innerText = '₹' + Math.floor(state.targetBalance);
                 const p = state.balance - state.startBalance;
                 document.getElementById('profit-display').innerText = (p >= 0 ? '+₹' : '-₹') + Math.abs(p).toFixed(0);
-                document.getElementById('profit-display').style.color = p >= 0 ? '#00ff88' : '#ff3b56';
+                document.getElementById('profit-display').style.color = p >= 0 ? '#059669' : '#dc2626';
                 const wr = state.stats.total ? ((state.stats.wins / state.stats.total) * 100).toFixed(1) : '0';
                 document.getElementById('winrate-display').innerText = `${wr}% (${state.stats.wins}/${state.stats.total})`;
             }
@@ -1656,7 +1581,7 @@
                 saveActiveSession();
             }
 
-            // ==================== RESULT PROCESSING & LOSS RECOVERY ====================
+            // ==================== MARTINGALE & RESULT PROCESSING ACCORDING TO BALANCE ====================
             function processResult(data) {
                 if (!state.pendingBet) return;
                 const num = parseInt(data.number);
@@ -1677,19 +1602,18 @@
                     state.balance -= state.pendingBet.amount;
                     state.consecutiveLosses++;
 
-                    // STRICT 2-LEVEL HARD CAP PROTECTION:
-                    // Level 1: baseBet (e.g. ₹10)
-                    // Level 2: 2.2x baseBet (e.g. ₹22) to recover L1 + profit
-                    // IF Level 2 loses: IMMEDIATELY RESET TO LEVEL 1! NEVER compound to Level 3, 4, 5!
-                    if (state.consecutiveLosses === 1) {
-                        let l2 = Math.floor(state.baseBet * 2.2);
-                        if (l2 > state.balance * 0.35) l2 = Math.max(state.baseBet, Math.floor(state.balance * 0.35));
-                        state.currentBet = Math.max(state.baseBet, l2);
-                    } else {
-                        // Level 2 completed: Reset back to Level 1 safe bet
-                        state.currentBet = state.baseBet;
-                        state.consecutiveLosses = 0;
+                    // True Martingale progression (3x as in original file):
+                    const multiplier = Math.pow(3, state.consecutiveLosses);
+                    let raw = state.baseBet * multiplier;
+                    
+                    // Controlled strictly according to current balance:
+                    if (raw > state.balance * 0.8) {
+                        raw = Math.max(state.baseBet, Math.floor(state.balance * 0.8));
                     }
+                    if (raw > state.balance) {
+                        raw = Math.max(1, Math.floor(state.balance));
+                    }
+                    state.currentBet = Math.max(1, raw);
 
                     updateHistoryRow(state.pendingBet.issue, `LOSS -${state.pendingBet.amount}`, state.balance, 'loss-row', actual);
                 }
@@ -1708,17 +1632,7 @@
                     const list = json?.data?.list;
                     if (!list || !list.length) return;
 
-                    // Deep history pool accumulation (stores up to 120 rounds)
-                    if (!state.historicalPool) state.historicalPool = [];
-                    list.forEach(item => {
-                        if (!state.historicalPool.some(x => x.issueNumber === item.issueNumber)) {
-                            state.historicalPool.push(item);
-                        }
-                    });
-                    state.historicalPool.sort((a, b) => (BigInt(b.issueNumber) > BigInt(a.issueNumber) ? 1 : -1));
-                    if (state.historicalPool.length > 120) state.historicalPool = state.historicalPool.slice(0, 120);
-
-                    state.cachedHistory = state.historicalPool;
+                    state.cachedHistory = list;
                     const latest = list[0];
                     const latestIssue = latest.issueNumber;
 
@@ -1741,18 +1655,18 @@
                     const nextIssue = (BigInt(latestIssue) + 1n).toString();
 
                     if (state.isPaused) {
-                        const vote = getAdaptiveVote(list);
+                        const vote = getVote(list);
                         document.getElementById('next-issue').innerText = `PERIOD: ${nextIssue.slice(-5)}`;
                         document.getElementById('pred-value').innerText = vote.final;
                         document.getElementById('pred-text').className = `pred-result ${vote.final.toLowerCase()}`;
                         document.getElementById('next-bet').innerText = '0 (PAUSED)';
-                        document.getElementById('consensus-display').innerText = '⏸️ BETTING PAUSED — CONTINUING BALANCE PROTECTED';
+                        document.getElementById('consensus-display').innerText = '⏸️ BETTING PAUSED';
                         return;
                     }
 
                     if (!state.pendingBet || state.pendingBet.issue !== nextIssue) {
-                        const vote = getAdaptiveVote(list);
-                        const betAmount = Math.min(state.currentBet, Math.floor(state.balance * 0.5));
+                        const vote = getVote(list);
+                        const betAmount = Math.max(1, Math.min(state.currentBet, Math.floor(state.balance * 0.8)));
 
                         state.pendingBet = {
                             issue: nextIssue,
@@ -1774,14 +1688,14 @@
                 }
             }
 
-            // ==================== LAUNCH BOT (STEP 3) ====================
+            // ==================== LAUNCH BOT ====================
             window.launchBot = function() {
                 const bal = parseFloat(document.getElementById('setup-bal').value);
                 const tgt = parseFloat(document.getElementById('setup-target').value);
                 const mode = parseFloat(document.getElementById('setup-mode').value);
 
                 if (isNaN(bal) || isNaN(tgt) || bal <= 0 || tgt <= bal) {
-                    alert('❌ Starting Balance must be > 0 and Target must be greater than Starting Balance!');
+                    alert('❌ Starting Balance must be > 0 and Target must be greater than Balance.');
                     return;
                 }
 
@@ -1792,25 +1706,18 @@
                 state.baseBet = Math.max(10, Math.floor(bal * mode));
                 state.currentBet = state.baseBet;
                 state.consecutiveLosses = 0;
-                state.isPaused = false;
                 state.stats = { wins: 0, losses: 0, total: 0 };
-                state.sessionHistory = [];
                 state.pendingBet = null;
+                state.sessionHistory = [];
+
+                document.getElementById('config-screen').style.display = 'none';
+                document.getElementById('app').style.display = 'block';
 
                 const modeInfo = ENDPOINTS[currentModeKey];
                 document.getElementById('header-mode-badge').innerText = `${modeInfo.name} ⚙️`;
                 document.getElementById('live-mode-name').innerText = modeInfo.name;
                 document.getElementById('table-head-title').innerText = `📊 JASHVIP ${currentModeKey} HISTORY (LAST 100)`;
-
-                const btn = document.getElementById('toggle-bot-btn');
-                btn.className = 'ctrl-btn btn-pause';
-                document.getElementById('btn-icon').innerText = '⏸️';
-                document.getElementById('btn-text').innerText = 'PAUSE BETTING';
-                document.getElementById('status-txt').className = 'status-pill';
-                document.getElementById('status-txt').innerText = '⦿ AI ENGINE ACTIVE';
-
-                document.getElementById('config-screen').style.display = 'none';
-                document.getElementById('app').style.display = 'block';
+                document.getElementById('history-body').innerHTML = '';
 
                 updateDisplay();
                 startTimer();
