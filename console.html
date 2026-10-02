@@ -265,7 +265,7 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 15px;
+            margin-bottom: 12px;
             background: linear-gradient(145deg, rgba(10, 28, 19, 0.95), rgba(4, 15, 10, 0.95));
             padding: 14px 20px;
             border-radius: 28px;
@@ -317,6 +317,90 @@
             box-shadow: 0 0 15px rgba(0, 230, 118, 0.3);
             font-weight: 700;
             letter-spacing: 1px;
+            transition: all 0.3s;
+        }
+
+        .status-paused {
+            border-color: #ffaa00 !important;
+            color: #ffd966 !important;
+            box-shadow: 0 0 20px rgba(255, 170, 0, 0.5) !important;
+            animation: pauseGlow 1.5s infinite alternate;
+        }
+
+        @keyframes pauseGlow {
+            0% { box-shadow: 0 0 10px rgba(255, 170, 0, 0.3); }
+            100% { box-shadow: 0 0 25px rgba(255, 170, 0, 0.8); }
+        }
+
+        /* Bot Start / Stop & Balance Sync Control Bar */
+        .bot-control-bar {
+            display: flex;
+            gap: 12px;
+            margin-bottom: 16px;
+        }
+
+        .ctrl-btn {
+            flex: 1;
+            padding: 13px 18px;
+            border-radius: 20px;
+            font-size: 14px;
+            font-weight: 800;
+            letter-spacing: 1px;
+            cursor: pointer;
+            border: 1.5px solid;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            transition: all 0.25s ease;
+            text-transform: uppercase;
+        }
+
+        .btn-pause {
+            background: rgba(255, 170, 0, 0.15);
+            border-color: #ffaa00;
+            color: #ffd966;
+            box-shadow: 0 0 18px rgba(255, 170, 0, 0.3);
+        }
+
+        .btn-pause:hover {
+            background: #ffaa00;
+            color: #040e09;
+            box-shadow: 0 0 30px rgba(255, 170, 0, 0.7);
+            transform: translateY(-2px);
+        }
+
+        .btn-resume {
+            background: rgba(0, 230, 118, 0.25);
+            border-color: #00ff88;
+            color: #00ff88;
+            box-shadow: 0 0 20px rgba(0, 255, 136, 0.4);
+            animation: resumePulse 1.4s infinite alternate;
+        }
+
+        @keyframes resumePulse {
+            0% { box-shadow: 0 0 15px rgba(0, 255, 136, 0.3); transform: scale(1); }
+            100% { box-shadow: 0 0 35px rgba(0, 255, 136, 0.8); transform: scale(1.02); }
+        }
+
+        .btn-resume:hover {
+            background: #00ff88;
+            color: #040e09;
+            box-shadow: 0 0 45px rgba(0, 255, 136, 0.9);
+        }
+
+        .btn-edit-bal {
+            background: rgba(0, 229, 255, 0.12);
+            border-color: #00e5ff;
+            color: #00e5ff;
+            box-shadow: 0 0 15px rgba(0, 229, 255, 0.2);
+        }
+
+        .btn-edit-bal:hover {
+            background: #00e5ff;
+            color: #040e09;
+            box-shadow: 0 0 25px rgba(0, 229, 255, 0.6);
+            transform: translateY(-2px);
         }
 
         /* Stats Grid */
@@ -639,6 +723,7 @@
             .timer-countdown { font-size: 34px; }
             .copy-btn { font-size: 15px; padding: 8px 18px; }
             .copy-toast { padding: 20px 25px; min-width: 260px; }
+            .ctrl-btn { font-size: 12px; padding: 11px 12px; }
         }
     </style>
 </head>
@@ -732,6 +817,7 @@
 
     <!-- ================= STEP 4: MAIN LIVE PREDICTION DASHBOARD ================= -->
     <div id="app">
+        <!-- App Header -->
         <div class="app-header">
             <div class="logo-wrap">
                 <div class="app-logo">⚡ JASHVIP</div>
@@ -740,11 +826,23 @@
             <div id="status-txt" class="status-pill">⦿ AI ENGINE ACTIVE</div>
         </div>
 
+        <!-- Start / Stop & Balance Sync Controls -->
+        <div class="bot-control-bar">
+            <button id="toggle-bot-btn" class="ctrl-btn btn-pause" onclick="toggleBetting()">
+                <span id="btn-icon">⏸️</span>
+                <span id="btn-text">PAUSE BETTING</span>
+            </button>
+            <button class="ctrl-btn btn-edit-bal" onclick="editBalance()" title="Update continuing balance">
+                <span>✏️</span>
+                <span>SYNC BALANCE</span>
+            </button>
+        </div>
+
         <!-- Real-Time Account Stats -->
         <div class="stats-grid">
             <div class="stat-card">
                 <div class="stat-val">₹<span id="bal-display">0</span></div>
-                <div class="stat-lbl">Balance</div>
+                <div class="stat-lbl">Continuing Balance</div>
             </div>
             <div class="stat-card">
                 <div class="stat-val" id="target-display">₹0</div>
@@ -836,6 +934,7 @@
             // Purely in-memory / session storage
             const state = {
                 active: false,
+                isPaused: false, // Start / Pause toggle
                 balance: 0,
                 startBalance: 0,
                 targetBalance: 0,
@@ -915,7 +1014,6 @@
             // ==================== AUTHENTICATION (STEP 1) ====================
             window.validateKey = function() {
                 const input = document.getElementById('access-key-input').value.trim();
-                // Accepts JASHVIP or standard access keys
                 if (input.toLowerCase() === 'jashvip' || input.toUpperCase() === 'TGX121' || input.length >= 4) {
                     document.getElementById('auth-screen').style.display = 'none';
                     document.getElementById('mode-screen').style.display = 'flex';
@@ -924,7 +1022,6 @@
                 }
             };
 
-            // Enter key support on password
             document.getElementById('access-key-input').addEventListener('keypress', function(e) {
                 if (e.key === 'Enter') window.validateKey();
             });
@@ -951,9 +1048,56 @@
                 document.getElementById('mode-screen').style.display = 'flex';
             };
 
+            // ==================== START / STOP (PAUSE & RESUME) ====================
+            window.toggleBetting = function() {
+                state.isPaused = !state.isPaused;
+                const btn = document.getElementById('toggle-bot-btn');
+                const icon = document.getElementById('btn-icon');
+                const txt = document.getElementById('btn-text');
+                const status = document.getElementById('status-txt');
+
+                if (state.isPaused) {
+                    state.pendingBet = null; // Clear pending bet so no deduction happens!
+                    btn.className = 'ctrl-btn btn-resume';
+                    icon.innerText = '▶️';
+                    txt.innerText = 'RESUME BETTING';
+                    status.className = 'status-pill status-paused';
+                    status.innerText = '⏸️ BETTING PAUSED';
+                    document.getElementById('next-bet').innerText = '0 (PAUSED)';
+                    document.getElementById('consensus-display').innerText = '⏸️ BETTING PAUSED — CONTINUING BALANCE PROTECTED';
+                } else {
+                    btn.className = 'ctrl-btn btn-pause';
+                    icon.innerText = '⏸️';
+                    txt.innerText = 'PAUSE BETTING';
+                    status.className = 'status-pill';
+                    status.innerText = '⦿ AI ENGINE ACTIVE';
+                    // Re-calibrate bet size to current continuing balance
+                    state.baseBet = Math.max(10, Math.floor(state.balance * state.riskMultiplier));
+                    state.currentBet = state.baseBet;
+                    state.consecutiveLosses = 0;
+                    updateDisplay();
+                    mainLoop(); // Immediate sync
+                }
+            };
+
+            // Manual Balance Sync / Edit
+            window.editBalance = function() {
+                const cur = Math.floor(state.balance);
+                const input = prompt("Update your actual continuing balance (₹):", cur);
+                if (input !== null) {
+                    const val = parseFloat(input);
+                    if (!isNaN(val) && val > 0) {
+                        state.balance = val;
+                        state.baseBet = Math.max(10, Math.floor(state.balance * state.riskMultiplier));
+                        state.currentBet = state.baseBet;
+                        state.consecutiveLosses = 0;
+                        updateDisplay();
+                        alert(`✅ Continuing balance updated to ₹${Math.floor(state.balance)}. Continuing with this balance.`);
+                    }
+                }
+            };
+
             // ==================== HIGH-ACCURACY PREDICTION ENGINE ====================
-            // Fixes the losing pattern by learning from historical trends, dragon streaks, and Markov transitions
-            
             // Logic 1: Dragon / Trend Continuation Engine
             function logic1_DragonTrend(list) {
                 if (!list || list.length < 2) return "BIG";
@@ -963,9 +1107,7 @@
                     if (sizes[i] === sizes[0]) streak++;
                     else break;
                 }
-                // Never bet against a strong dragon streak (length 2 to 6)
                 if (streak >= 2 && streak <= 6) return sizes[0];
-                // Dragon exhaustion point (7+): Expect trend break
                 if (streak >= 7) return sizes[0] === "BIG" ? "SMALL" : "BIG";
                 return sizes[0];
             }
@@ -995,11 +1137,9 @@
                 for (let i = 0; i < Math.min(5, sizes.length - 1); i++) {
                     if (sizes[i] !== sizes[i+1]) changes++;
                 }
-                // If alternating (B-S-B-S), continue chop
                 if (changes >= 3) {
                     return sizes[0] === "BIG" ? "SMALL" : "BIG";
                 }
-                // If trending, follow latest
                 return sizes[0];
             }
 
@@ -1022,7 +1162,6 @@
                 const n0 = parseInt(list[0].number);
                 const n1 = parseInt(list[1].number);
                 const delta = n0 - n1;
-                // If acceleration is positive and crossed mid, continue upward
                 if (delta > 2) return "BIG";
                 if (delta < -2) return "SMALL";
                 return n0 % 2 === 0 ? (n0 >= 5 ? "BIG" : "SMALL") : (n1 >= 5 ? "BIG" : "SMALL");
@@ -1041,7 +1180,7 @@
                 return parseInt(list[0].number) >= 5 ? "SMALL" : "BIG";
             }
 
-            // Self-Training: Evaluate Logics against recent history and assign accuracy weights
+            // Self-Training: Evaluate Logics against recent history
             function trainLogics(list) {
                 if (!list || list.length < 6) return;
                 const logics = [
@@ -1055,7 +1194,6 @@
 
                 for (let li = 0; li < logics.length; li++) {
                     let hits = 0, tests = 0;
-                    // Test each logic on historical samples
                     for (let j = 0; j < Math.min(6, list.length - 2); j++) {
                         const subHistory = list.slice(j + 1);
                         const actual = parseInt(list[j].number) >= 5 ? "BIG" : "SMALL";
@@ -1064,8 +1202,7 @@
                         tests++;
                     }
                     const acc = tests > 0 ? hits / tests : 0.5;
-                    // Higher weight for winning logics, lower for losing
-                    state.logicWeights[li] = Math.max(0.2, acc * 2.5);
+                    state.logicWeights[li] = Math.max(0.4, acc * 2.0);
                 }
             }
 
@@ -1082,7 +1219,6 @@
 
                 const votes = [l1, l2, l3, l4, l5, l6];
 
-                // Update UI Badges
                 const badgeIds = ['l1-badge', 'l2-badge', 'l3-badge', 'l4-badge', 'l5-badge', 'l6-badge'];
                 const names = ['L1 (DRAGON)', 'L2 (MARKOV)', 'L3 (CHOP)', 'L4 (EMA)', 'L5 (DELTA)', 'L6 (VECTOR)'];
                 
@@ -1104,12 +1240,19 @@
                     }
                 }
 
-                const final = scoreBig >= scoreSmall ? "BIG" : "SMALL";
+                // If 4 or more agree, majority always wins
+                let final;
+                if (rawBig >= 4) final = "BIG";
+                else if (rawSmall >= 4) final = "SMALL";
+                else final = scoreBig >= scoreSmall ? "BIG" : "SMALL";
+
                 const totalScore = scoreBig + scoreSmall;
                 const confidence = Math.min(98, Math.max(65, Math.round((Math.max(scoreBig, scoreSmall) / totalScore) * 100)));
                 const matchCount = final === 'BIG' ? rawBig : rawSmall;
 
-                document.getElementById('consensus-display').innerText = `⚡ AI CONFIDENCE: ${confidence}% (${matchCount}/6 MATCH)`;
+                if (!state.isPaused) {
+                    document.getElementById('consensus-display').innerText = `⚡ AI CONFIDENCE: ${confidence}% (${matchCount}/6 MATCH)`;
+                }
 
                 return { final, l1, l2, l3, l4, l5, l6, confidence };
             }
@@ -1273,11 +1416,10 @@
                     state.balance -= state.pendingBet.amount;
                     state.consecutiveLosses++;
 
-                    // Smart Dynamic Multiplier with Stop-Loss Protection
-                    // Avoid aggressive blowups: use 2x / 2.5x instead of 3x
-                    let multiplier = Math.min(8, Math.pow(2.2, state.consecutiveLosses));
+                    // Smart Level Sizing capped to prevent big drawdowns
+                    let multiplier = Math.min(4.5, Math.pow(2.2, state.consecutiveLosses));
                     let raw = Math.floor(state.baseBet * multiplier);
-                    if (raw > state.balance * 0.6) raw = Math.min(raw, Math.floor(state.balance * 0.6));
+                    if (raw > state.balance * 0.5) raw = Math.min(raw, Math.floor(state.balance * 0.5));
                     state.currentBet = Math.max(state.baseBet, raw);
 
                     updateHistoryRow(state.pendingBet.issue, `LOSS -${state.pendingBet.amount}`, state.balance, 'loss-row', actual);
@@ -1302,7 +1444,8 @@
 
                     resetTimerFromAPI();
 
-                    if (state.pendingBet && state.pendingBet.issue === latestIssue) {
+                    // Only process settlement if not paused
+                    if (!state.isPaused && state.pendingBet && state.pendingBet.issue === latestIssue) {
                         processResult(latest);
                     }
 
@@ -1316,9 +1459,22 @@
                     }
 
                     const nextIssue = (BigInt(latestIssue) + 1n).toString();
+
+                    // IF PAUSED: Keep timer & prediction display live, but DO NOT BET!
+                    if (state.isPaused) {
+                        const vote = getAdaptiveVote(list);
+                        document.getElementById('next-issue').innerText = `PERIOD: ${nextIssue.slice(-5)}`;
+                        document.getElementById('pred-value').innerText = vote.final;
+                        document.getElementById('pred-text').className = `pred-result ${vote.final.toLowerCase()}`;
+                        document.getElementById('next-bet').innerText = '0 (PAUSED)';
+                        document.getElementById('consensus-display').innerText = '⏸️ BETTING PAUSED — CONTINUING BALANCE PROTECTED';
+                        return;
+                    }
+
+                    // IF ACTIVE: Place bet with continuing balance
                     if (!state.pendingBet || state.pendingBet.issue !== nextIssue) {
                         const vote = getAdaptiveVote(list);
-                        const betAmount = Math.min(state.currentBet, Math.floor(state.balance * 0.6));
+                        const betAmount = Math.min(state.currentBet, Math.floor(state.balance * 0.5));
 
                         state.pendingBet = {
                             issue: nextIssue,
@@ -1358,6 +1514,7 @@
                 state.baseBet = Math.max(10, Math.floor(bal * mode));
                 state.currentBet = state.baseBet;
                 state.consecutiveLosses = 0;
+                state.isPaused = false;
                 state.stats = { wins: 0, losses: 0, total: 0 };
                 state.pendingBet = null;
 
@@ -1366,6 +1523,14 @@
                 document.getElementById('header-mode-badge').innerText = `${modeInfo.name} ⚙️`;
                 document.getElementById('live-mode-name').innerText = modeInfo.name;
                 document.getElementById('table-head-title').innerText = `📊 JASHVIP ${currentModeKey} HISTORY (LAST 100)`;
+
+                // Reset pause button state
+                const btn = document.getElementById('toggle-bot-btn');
+                btn.className = 'ctrl-btn btn-pause';
+                document.getElementById('btn-icon').innerText = '⏸️';
+                document.getElementById('btn-text').innerText = 'PAUSE BETTING';
+                document.getElementById('status-txt').className = 'status-pill';
+                document.getElementById('status-txt').innerText = '⦿ AI ENGINE ACTIVE';
 
                 document.getElementById('config-screen').style.display = 'none';
                 document.getElementById('app').style.display = 'block';
