@@ -335,23 +335,23 @@
         /* Bot Start / Stop & Balance Sync Control Bar */
         .bot-control-bar {
             display: flex;
-            gap: 12px;
+            gap: 10px;
             margin-bottom: 16px;
         }
 
         .ctrl-btn {
             flex: 1;
-            padding: 13px 18px;
+            padding: 12px 14px;
             border-radius: 20px;
-            font-size: 14px;
+            font-size: 13px;
             font-weight: 800;
-            letter-spacing: 1px;
+            letter-spacing: 0.8px;
             cursor: pointer;
             border: 1.5px solid;
             display: flex;
             align-items: center;
             justify-content: center;
-            gap: 8px;
+            gap: 6px;
             transition: all 0.25s ease;
             text-transform: uppercase;
         }
@@ -400,6 +400,43 @@
             background: #00e5ff;
             color: #040e09;
             box-shadow: 0 0 25px rgba(0, 229, 255, 0.6);
+            transform: translateY(-2px);
+        }
+
+        .header-logout-btn {
+            font-size: 11px;
+            font-weight: 800;
+            background: rgba(255, 59, 86, 0.16);
+            border: 1px solid #ff3b56;
+            color: #ff4d6d;
+            padding: 6px 12px;
+            border-radius: 40px;
+            cursor: pointer;
+            letter-spacing: 0.8px;
+            transition: all 0.25s ease;
+            box-shadow: 0 0 10px rgba(255, 59, 86, 0.2);
+            text-transform: uppercase;
+        }
+
+        .header-logout-btn:hover {
+            background: #ff3b56;
+            color: #ffffff;
+            box-shadow: 0 0 20px rgba(255, 59, 86, 0.6);
+            transform: translateY(-1px);
+        }
+
+        .btn-logout {
+            background: rgba(255, 59, 86, 0.15);
+            border-color: #ff3b56;
+            color: #ff4d6d;
+            box-shadow: 0 0 16px rgba(255, 59, 86, 0.25);
+            max-width: 120px;
+        }
+
+        .btn-logout:hover {
+            background: #ff3b56;
+            color: #ffffff;
+            box-shadow: 0 0 30px rgba(255, 59, 86, 0.8);
             transform: translateY(-2px);
         }
 
@@ -723,7 +760,7 @@
             .timer-countdown { font-size: 34px; }
             .copy-btn { font-size: 15px; padding: 8px 18px; }
             .copy-toast { padding: 20px 25px; min-width: 260px; }
-            .ctrl-btn { font-size: 12px; padding: 11px 12px; }
+            .ctrl-btn { font-size: 11px; padding: 10px 8px; }
         }
     </style>
 </head>
@@ -823,7 +860,10 @@
                 <div class="app-logo">⚡ JASHVIP</div>
                 <div class="mode-badge-live" id="header-mode-badge" onclick="backToModeSelect()" title="Click to change mode">WINGO 30S ⚙️</div>
             </div>
-            <div id="status-txt" class="status-pill">⦿ AI ENGINE ACTIVE</div>
+            <div style="display: flex; align-items: center; gap: 8px;">
+                <div id="status-txt" class="status-pill">⦿ AI ENGINE ACTIVE</div>
+                <button class="header-logout-btn" onclick="logoutSession()" title="Logout and clear session">🚪 LOGOUT</button>
+            </div>
         </div>
 
         <!-- Start / Stop & Balance Sync Controls -->
@@ -834,7 +874,11 @@
             </button>
             <button class="ctrl-btn btn-edit-bal" onclick="editBalance()" title="Update continuing balance">
                 <span>✏️</span>
-                <span>SYNC BALANCE</span>
+                <span>SYNC BAL</span>
+            </button>
+            <button class="ctrl-btn btn-logout" onclick="logoutSession()" title="Logout and delete saved session">
+                <span>🚪</span>
+                <span>LOGOUT</span>
             </button>
         </div>
 
@@ -909,10 +953,7 @@
         (function() {
             "use strict";
 
-            // FREE UP BROWSER STORAGE AS REQUESTED
-            try {
-                localStorage.clear();
-            } catch(e) {}
+            const SESSION_STORAGE_KEY = "jashvip_active_game_session";
 
             // ==================== CONFIGURATION ====================
             const ENDPOINTS = {
@@ -931,10 +972,10 @@
             let currentModeKey = "30S";
             const MAX_HISTORY = 100;
 
-            // Purely in-memory / session storage
+            // State with full session history persistence
             const state = {
                 active: false,
-                isPaused: false, // Start / Pause toggle
+                isPaused: false,
                 balance: 0,
                 startBalance: 0,
                 targetBalance: 0,
@@ -945,7 +986,7 @@
                 consecutiveLosses: 0,
                 stats: { wins: 0, losses: 0, total: 0 },
                 cachedHistory: [],
-                // Adaptive weights for 6 logics
+                sessionHistory: [], // Persisted rows
                 logicWeights: [1.0, 1.0, 1.0, 1.0, 1.0, 1.0],
                 logicStreaks: [0, 0, 0, 0, 0, 0]
             };
@@ -953,6 +994,153 @@
             let secondsLeft = 30;
             let timerInterval = null;
             let fastLoopInterval = null;
+
+            // ==================== SESSION PERSISTENCE ====================
+            function saveActiveSession() {
+                try {
+                    if (!state.active) return;
+                    const payload = {
+                        active: state.active,
+                        isPaused: state.isPaused,
+                        currentModeKey: currentModeKey,
+                        balance: state.balance,
+                        startBalance: state.startBalance,
+                        targetBalance: state.targetBalance,
+                        baseBet: state.baseBet,
+                        currentBet: state.currentBet,
+                        riskMultiplier: state.riskMultiplier,
+                        consecutiveLosses: state.consecutiveLosses,
+                        stats: state.stats,
+                        sessionHistory: state.sessionHistory || []
+                    };
+                    localStorage.setItem(SESSION_STORAGE_KEY, JSON.stringify(payload));
+                } catch(e) {}
+            }
+
+            function restoreActiveSession() {
+                try {
+                    const raw = localStorage.getItem(SESSION_STORAGE_KEY);
+                    if (!raw) return false;
+                    const data = JSON.parse(raw);
+                    if (!data || !data.active) return false;
+
+                    // Restore state fields
+                    state.active = true;
+                    state.isPaused = !!data.isPaused;
+                    currentModeKey = data.currentModeKey || "30S";
+                    state.balance = data.balance || 0;
+                    state.startBalance = data.startBalance || 0;
+                    state.targetBalance = data.targetBalance || 0;
+                    state.baseBet = data.baseBet || 10;
+                    state.currentBet = data.currentBet || 10;
+                    state.riskMultiplier = data.riskMultiplier || 0.02;
+                    state.consecutiveLosses = data.consecutiveLosses || 0;
+                    state.stats = data.stats || { wins: 0, losses: 0, total: 0 };
+                    state.sessionHistory = data.sessionHistory || [];
+
+                    // Restore UI labels
+                    const modeInfo = ENDPOINTS[currentModeKey];
+                    document.getElementById('header-mode-badge').innerText = `${modeInfo.name} ⚙️`;
+                    document.getElementById('live-mode-name').innerText = modeInfo.name;
+                    document.getElementById('table-head-title').innerText = `📊 JASHVIP ${currentModeKey} HISTORY (LAST 100)`;
+
+                    // Restore Pause/Active Controls
+                    const btn = document.getElementById('toggle-bot-btn');
+                    if (state.isPaused) {
+                        btn.className = 'ctrl-btn btn-resume';
+                        document.getElementById('btn-icon').innerText = '▶️';
+                        document.getElementById('btn-text').innerText = 'RESUME BETTING';
+                        document.getElementById('status-txt').className = 'status-pill status-paused';
+                        document.getElementById('status-txt').innerText = '⏸️ BETTING PAUSED';
+                        document.getElementById('next-bet').innerText = '0 (PAUSED)';
+                        document.getElementById('consensus-display').innerText = '⏸️ BETTING PAUSED — CONTINUING BALANCE PROTECTED';
+                    } else {
+                        btn.className = 'ctrl-btn btn-pause';
+                        document.getElementById('btn-icon').innerText = '⏸️';
+                        document.getElementById('btn-text').innerText = 'PAUSE BETTING';
+                        document.getElementById('status-txt').className = 'status-pill';
+                        document.getElementById('status-txt').innerText = '⦿ AI ENGINE ACTIVE';
+                    }
+
+                    // Restore History Table Rows
+                    const tbody = document.getElementById('history-body');
+                    tbody.innerHTML = '';
+                    state.sessionHistory.forEach(item => {
+                        const row = document.createElement('tr');
+                        row.id = `row-${item.issue}`;
+                        row.className = item.cls || '';
+                        row.innerHTML = `
+                            <td>${item.issue.slice(-5)}</td>
+                            <td>${item.l1}</td><td>${item.l2}</td><td>${item.l3}</td>
+                            <td>${item.l4}</td><td>${item.l5}</td><td>${item.l6}</td>
+                            <td>${item.pick}</td><td>₹${item.amount}</td>
+                            <td class="res">${item.res}</td><td class="bal">₹${Math.floor(item.bal)}</td>
+                        `;
+                        tbody.appendChild(row);
+                    });
+
+                    // Hide modals, show app
+                    document.getElementById('auth-screen').style.display = 'none';
+                    document.getElementById('mode-screen').style.display = 'none';
+                    document.getElementById('config-screen').style.display = 'none';
+                    document.getElementById('app').style.display = 'block';
+
+                    updateDisplay();
+                    startTimer();
+                    mainLoop();
+                    fastLoopInterval = setInterval(mainLoop, 1500);
+
+                    return true;
+                } catch(e) {
+                    return false;
+                }
+            }
+
+            window.logoutSession = function() {
+                if (confirm("Are you sure you want to LOGOUT? This will completely wipe all saved session history, balance, and return to the login page.")) {
+                    try {
+                        localStorage.removeItem(SESSION_STORAGE_KEY);
+                        localStorage.clear();
+                    } catch(e) {}
+                    try {
+                        sessionStorage.clear();
+                    } catch(e) {}
+
+                    if (timerInterval) clearInterval(timerInterval);
+                    if (fastLoopInterval) clearInterval(fastLoopInterval);
+
+                    state.active = false;
+                    state.isPaused = false;
+                    state.balance = 0;
+                    state.startBalance = 0;
+                    state.targetBalance = 0;
+                    state.baseBet = 10;
+                    state.currentBet = 10;
+                    state.pendingBet = null;
+                    state.consecutiveLosses = 0;
+                    state.stats = { wins: 0, losses: 0, total: 0 };
+                    state.cachedHistory = [];
+                    state.sessionHistory = [];
+
+                    // Clear HTML history table
+                    const tbody = document.getElementById('history-body');
+                    if (tbody) tbody.innerHTML = '';
+
+                    // Clear access key input
+                    const keyInput = document.getElementById('access-key-input');
+                    if (keyInput) keyInput.value = '';
+
+                    // Hide app and screens, show auth-screen (login page)
+                    document.getElementById('app').style.display = 'none';
+                    document.getElementById('config-screen').style.display = 'none';
+                    document.getElementById('mode-screen').style.display = 'none';
+
+                    const authScreen = document.getElementById('auth-screen');
+                    authScreen.style.display = 'flex';
+                    if (keyInput) setTimeout(() => keyInput.focus(), 100);
+                }
+            };
+            window.resetSession = window.logoutSession;
 
             // ==================== CELEBRATION PARTICLES ====================
             const canvas = document.getElementById('party-canvas');
@@ -1043,6 +1231,7 @@
                 if (timerInterval) clearInterval(timerInterval);
                 if (fastLoopInterval) clearInterval(fastLoopInterval);
                 state.active = false;
+                saveActiveSession();
                 document.getElementById('config-screen').style.display = 'none';
                 document.getElementById('app').style.display = 'none';
                 document.getElementById('mode-screen').style.display = 'flex';
@@ -1057,7 +1246,7 @@
                 const status = document.getElementById('status-txt');
 
                 if (state.isPaused) {
-                    state.pendingBet = null; // Clear pending bet so no deduction happens!
+                    state.pendingBet = null;
                     btn.className = 'ctrl-btn btn-resume';
                     icon.innerText = '▶️';
                     txt.innerText = 'RESUME BETTING';
@@ -1071,13 +1260,13 @@
                     txt.innerText = 'PAUSE BETTING';
                     status.className = 'status-pill';
                     status.innerText = '⦿ AI ENGINE ACTIVE';
-                    // Re-calibrate bet size to current continuing balance
                     state.baseBet = Math.max(10, Math.floor(state.balance * state.riskMultiplier));
                     state.currentBet = state.baseBet;
                     state.consecutiveLosses = 0;
                     updateDisplay();
-                    mainLoop(); // Immediate sync
+                    mainLoop();
                 }
+                saveActiveSession();
             };
 
             // Manual Balance Sync / Edit
@@ -1092,13 +1281,13 @@
                         state.currentBet = state.baseBet;
                         state.consecutiveLosses = 0;
                         updateDisplay();
-                        alert(`✅ Continuing balance updated to ₹${Math.floor(state.balance)}. Continuing with this balance.`);
+                        saveActiveSession();
+                        alert(`✅ Continuing balance updated to ₹${Math.floor(state.balance)}.`);
                     }
                 }
             };
 
             // ==================== HIGH-ACCURACY PREDICTION ENGINE ====================
-            // Logic 1: Dragon / Trend Continuation Engine
             function logic1_DragonTrend(list) {
                 if (!list || list.length < 2) return "BIG";
                 const sizes = list.map(item => parseInt(item.number) >= 5 ? "BIG" : "SMALL");
@@ -1112,7 +1301,6 @@
                 return sizes[0];
             }
 
-            // Logic 2: Empirical Markov 2nd-Order Transition Matrix
             function logic2_MarkovChain(list) {
                 if (!list || list.length < 5) return "BIG";
                 const sizes = list.map(item => parseInt(item.number) >= 5 ? "BIG" : "SMALL");
@@ -1129,7 +1317,6 @@
                 return sizes[0] === "BIG" ? "SMALL" : "BIG";
             }
 
-            // Logic 3: Alternating / Chop Market Detector
             function logic3_ChopDetector(list) {
                 if (!list || list.length < 4) return "SMALL";
                 const sizes = list.map(item => parseInt(item.number) >= 5 ? "BIG" : "SMALL");
@@ -1143,7 +1330,6 @@
                 return sizes[0];
             }
 
-            // Logic 4: Weighted Exponential Moving Average (EMA)
             function logic4_WeightedEMA(list) {
                 if (!list || list.length < 5) return "BIG";
                 let weightedSum = 0, weightsTotal = 0;
@@ -1156,7 +1342,6 @@
                 return ema >= 4.5 ? "BIG" : "SMALL";
             }
 
-            // Logic 5: Parity & Cyclical Delta Oscillator
             function logic5_DeltaOscillator(list) {
                 if (!list || list.length < 4) return "BIG";
                 const n0 = parseInt(list[0].number);
@@ -1167,7 +1352,6 @@
                 return n0 % 2 === 0 ? (n0 >= 5 ? "BIG" : "SMALL") : (n1 >= 5 ? "BIG" : "SMALL");
             }
 
-            // Logic 6: Quantum Volatility & Momentum Vector
             function logic6_MomentumVector(list) {
                 if (!list || list.length < 6) return "SMALL";
                 let momentum = 0;
@@ -1180,7 +1364,6 @@
                 return parseInt(list[0].number) >= 5 ? "SMALL" : "BIG";
             }
 
-            // Self-Training: Evaluate Logics against recent history
             function trainLogics(list) {
                 if (!list || list.length < 6) return;
                 const logics = [
@@ -1206,7 +1389,6 @@
                 }
             }
 
-            // Weighted Ensemble Vote
             function getAdaptiveVote(list) {
                 trainLogics(list);
 
@@ -1240,7 +1422,6 @@
                     }
                 }
 
-                // If 4 or more agree, majority always wins
                 let final;
                 if (rawBig >= 4) final = "BIG";
                 else if (rawSmall >= 4) final = "SMALL";
@@ -1384,6 +1565,17 @@
                 `;
                 tbody.prepend(row);
                 while (tbody.children.length > MAX_HISTORY) tbody.removeChild(tbody.lastChild);
+
+                if (!state.sessionHistory) state.sessionHistory = [];
+                state.sessionHistory.unshift({
+                    issue: issue,
+                    l1: data.l1, l2: data.l2, l3: data.l3,
+                    l4: data.l4, l5: data.l5, l6: data.l6,
+                    pick: data.pick, amount: data.amount,
+                    res: 'Wait...', bal: state.balance, cls: '', actual: ''
+                });
+                if (state.sessionHistory.length > MAX_HISTORY) state.sessionHistory.pop();
+                saveActiveSession();
             }
 
             function updateHistoryRow(issue, res, bal, cls, actual) {
@@ -1393,6 +1585,16 @@
                     row.querySelector('.res').innerText = `${res} (${actual})`;
                     row.querySelector('.bal').innerText = '₹' + Math.floor(bal);
                 }
+                if (state.sessionHistory) {
+                    const item = state.sessionHistory.find(x => x.issue === issue);
+                    if (item) {
+                        item.res = `${res} (${actual})`;
+                        item.bal = bal;
+                        item.cls = cls;
+                        item.actual = actual;
+                    }
+                }
+                saveActiveSession();
             }
 
             // ==================== RESULT PROCESSING & LOSS RECOVERY ====================
@@ -1416,7 +1618,6 @@
                     state.balance -= state.pendingBet.amount;
                     state.consecutiveLosses++;
 
-                    // Smart Level Sizing capped to prevent big drawdowns
                     let multiplier = Math.min(4.5, Math.pow(2.2, state.consecutiveLosses));
                     let raw = Math.floor(state.baseBet * multiplier);
                     if (raw > state.balance * 0.5) raw = Math.min(raw, Math.floor(state.balance * 0.5));
@@ -1426,6 +1627,7 @@
                 }
                 state.pendingBet = null;
                 updateDisplay();
+                saveActiveSession();
             }
 
             // ==================== MAIN DATA LOOP ====================
@@ -1444,7 +1646,6 @@
 
                     resetTimerFromAPI();
 
-                    // Only process settlement if not paused
                     if (!state.isPaused && state.pendingBet && state.pendingBet.issue === latestIssue) {
                         processResult(latest);
                     }
@@ -1454,13 +1655,13 @@
                         clearInterval(timerInterval);
                         clearInterval(fastLoopInterval);
                         partyPopper();
+                        saveActiveSession();
                         alert('🎯 TARGET ACHIEVED! ALL GAINS SECURED!');
                         return;
                     }
 
                     const nextIssue = (BigInt(latestIssue) + 1n).toString();
 
-                    // IF PAUSED: Keep timer & prediction display live, but DO NOT BET!
                     if (state.isPaused) {
                         const vote = getAdaptiveVote(list);
                         document.getElementById('next-issue').innerText = `PERIOD: ${nextIssue.slice(-5)}`;
@@ -1471,7 +1672,6 @@
                         return;
                     }
 
-                    // IF ACTIVE: Place bet with continuing balance
                     if (!state.pendingBet || state.pendingBet.issue !== nextIssue) {
                         const vote = getAdaptiveVote(list);
                         const betAmount = Math.min(state.currentBet, Math.floor(state.balance * 0.5));
@@ -1516,15 +1716,14 @@
                 state.consecutiveLosses = 0;
                 state.isPaused = false;
                 state.stats = { wins: 0, losses: 0, total: 0 };
+                state.sessionHistory = [];
                 state.pendingBet = null;
 
-                // Mode labels
                 const modeInfo = ENDPOINTS[currentModeKey];
                 document.getElementById('header-mode-badge').innerText = `${modeInfo.name} ⚙️`;
                 document.getElementById('live-mode-name').innerText = modeInfo.name;
                 document.getElementById('table-head-title').innerText = `📊 JASHVIP ${currentModeKey} HISTORY (LAST 100)`;
 
-                // Reset pause button state
                 const btn = document.getElementById('toggle-bot-btn');
                 btn.className = 'ctrl-btn btn-pause';
                 document.getElementById('btn-icon').innerText = '⏸️';
@@ -1538,14 +1737,23 @@
                 updateDisplay();
                 startTimer();
                 state.active = true;
+                saveActiveSession();
                 mainLoop();
                 fastLoopInterval = setInterval(mainLoop, 1500);
             };
 
             window.onbeforeunload = function() {
+                saveActiveSession();
                 if (timerInterval) clearInterval(timerInterval);
                 if (fastLoopInterval) clearInterval(fastLoopInterval);
             };
+
+            // AUTO-RESTORE ACTIVE SESSION ON LOAD
+            if (document.readyState === 'complete' || document.readyState === 'interactive') {
+                restoreActiveSession();
+            } else {
+                document.addEventListener('DOMContentLoaded', restoreActiveSession);
+            }
         })();
     </script>
 </body>
