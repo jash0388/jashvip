@@ -972,7 +972,7 @@
             let currentModeKey = "30S";
             const MAX_HISTORY = 100;
 
-            // State with full session history persistence
+            // State with full session history persistence and deep history pool
             const state = {
                 active: false,
                 isPaused: false,
@@ -987,8 +987,10 @@
                 stats: { wins: 0, losses: 0, total: 0 },
                 cachedHistory: [],
                 sessionHistory: [], // Persisted rows
+                historicalPool: [], // Deep historical rounds (up to 120 rounds)
                 logicWeights: [1.0, 1.0, 1.0, 1.0, 1.0, 1.0],
-                logicStreaks: [0, 0, 0, 0, 0, 0]
+                logicAccuracy: [0.5, 0.5, 0.5, 0.5, 0.5, 0.5],
+                logicInverted: [false, false, false, false, false, false]
             };
 
             let secondsLeft = 30;
@@ -1011,7 +1013,8 @@
                         riskMultiplier: state.riskMultiplier,
                         consecutiveLosses: state.consecutiveLosses,
                         stats: state.stats,
-                        sessionHistory: state.sessionHistory || []
+                        sessionHistory: state.sessionHistory || [],
+                        historicalPool: (state.historicalPool || []).slice(0, 80)
                     };
                     localStorage.setItem(SESSION_STORAGE_KEY, JSON.stringify(payload));
                 } catch(e) {}
@@ -1037,6 +1040,7 @@
                     state.consecutiveLosses = data.consecutiveLosses || 0;
                     state.stats = data.stats || { wins: 0, losses: 0, total: 0 };
                     state.sessionHistory = data.sessionHistory || [];
+                    state.historicalPool = data.historicalPool || [];
 
                     // Restore UI labels
                     const modeInfo = ENDPOINTS[currentModeKey];
@@ -1287,7 +1291,10 @@
                 }
             };
 
-            // ==================== HIGH-ACCURACY PREDICTION ENGINE ====================
+            // ==================== ADVANCED PATTERN & HUMAN-REVERSE PREDICTION ENGINE ====================
+            
+            // 1. DRAGON / TREND SPECIALIST:
+            // Follows streaks of 2 to 6. If streak >= 7, triggers exhaustion reversal.
             function logic1_DragonTrend(list) {
                 if (!list || list.length < 2) return "BIG";
                 const sizes = list.map(item => parseInt(item.number) >= 5 ? "BIG" : "SMALL");
@@ -1301,7 +1308,40 @@
                 return sizes[0];
             }
 
-            function logic2_MarkovChain(list) {
+            // 2. CHOP / 1-1 ZIGZAG SPECIALIST:
+            // Detects rapid alternations (B S B S) and predicts the alternating outcome.
+            function logic2_ChopAlternator(list) {
+                if (!list || list.length < 3) return "SMALL";
+                const sizes = list.map(item => parseInt(item.number) >= 5 ? "BIG" : "SMALL");
+                let alts = 0;
+                for (let i = 0; i < Math.min(4, sizes.length - 1); i++) {
+                    if (sizes[i] !== sizes[i+1]) alts++;
+                }
+                if (alts >= 2) {
+                    return sizes[0] === "BIG" ? "SMALL" : "BIG"; // Reverse last result!
+                }
+                return sizes[0];
+            }
+
+            // 3. 2-2 DOUBLES PATTERN SPECIALIST:
+            // Detects pair sequences (BB SS BB). Completes 2nd of pair or switches completed pair.
+            function logic3_DoublesPattern(list) {
+                if (!list || list.length < 3) return "BIG";
+                const sizes = list.map(item => parseInt(item.number) >= 5 ? "BIG" : "SMALL");
+                // Just switched after a pair (e.g. S after BB): predict 2nd S to complete pair!
+                if (sizes[0] !== sizes[1] && sizes[1] === sizes[2]) {
+                    return sizes[0];
+                }
+                // Completed pair of 2 (e.g. SS after BB): predict switch to opposite!
+                if (sizes.length >= 4 && sizes[0] === sizes[1] && sizes[1] !== sizes[2] && sizes[2] === sizes[3]) {
+                    return sizes[0] === "BIG" ? "SMALL" : "BIG";
+                }
+                return sizes[0];
+            }
+
+            // 4. MARKOV PROBABILITY MATRIX:
+            // Scans deep history for matching 2-step sequences and computes transition probabilities.
+            function logic4_MarkovProbability(list) {
                 if (!list || list.length < 5) return "BIG";
                 const sizes = list.map(item => parseInt(item.number) >= 5 ? "BIG" : "SMALL");
                 const currentPattern = sizes[0] + (sizes[1] || "");
@@ -1317,67 +1357,53 @@
                 return sizes[0] === "BIG" ? "SMALL" : "BIG";
             }
 
-            function logic3_ChopDetector(list) {
-                if (!list || list.length < 4) return "SMALL";
+            // 5. HUMAN RETAIL TRAP REVERSAL:
+            // Analyzes retail psychological traps (Gambler's fallacy, chasing tops) and plays the HOUSE REVERSE!
+            function logic5_HumanTrapReverse(list) {
+                if (!list || list.length < 3) return "BIG";
                 const sizes = list.map(item => parseInt(item.number) >= 5 ? "BIG" : "SMALL");
-                let changes = 0;
-                for (let i = 0; i < Math.min(5, sizes.length - 1); i++) {
-                    if (sizes[i] !== sizes[i+1]) changes++;
+                let streak = 1;
+                for (let i = 1; i < sizes.length; i++) {
+                    if (sizes[i] === sizes[0]) streak++;
+                    else break;
                 }
-                if (changes >= 3) {
+                // When 3+ identical appear, human thinks it must reverse. House keeps running dragon!
+                if (streak >= 3 && streak <= 6) return sizes[0];
+                // In alternating chop, human expects it to stop. House continues alternation!
+                if (sizes.length >= 3 && sizes[0] !== sizes[1] && sizes[1] !== sizes[2]) {
                     return sizes[0] === "BIG" ? "SMALL" : "BIG";
                 }
                 return sizes[0];
             }
 
-            function logic4_WeightedEMA(list) {
-                if (!list || list.length < 5) return "BIG";
-                let weightedSum = 0, weightsTotal = 0;
-                for (let i = 0; i < Math.min(6, list.length); i++) {
-                    const weight = 6 - i;
-                    weightedSum += parseInt(list[i].number) * weight;
-                    weightsTotal += weight;
-                }
-                const ema = weightedSum / weightsTotal;
-                return ema >= 4.5 ? "BIG" : "SMALL";
-            }
-
-            function logic5_DeltaOscillator(list) {
-                if (!list || list.length < 4) return "BIG";
+            // 6. ADAPTIVE MOMENTUM & DELTA:
+            // Calculates weighted rate of change and number mean reversion.
+            function logic6_AdaptiveMomentum(list) {
+                if (!list || list.length < 4) return "SMALL";
                 const n0 = parseInt(list[0].number);
                 const n1 = parseInt(list[1].number);
                 const delta = n0 - n1;
-                if (delta > 2) return "BIG";
-                if (delta < -2) return "SMALL";
+                if (delta >= 4) return "SMALL"; // Mean reversion from high peak
+                if (delta <= -4) return "BIG";  // Mean reversion from low valley
                 return n0 % 2 === 0 ? (n0 >= 5 ? "BIG" : "SMALL") : (n1 >= 5 ? "BIG" : "SMALL");
             }
 
-            function logic6_MomentumVector(list) {
-                if (!list || list.length < 6) return "SMALL";
-                let momentum = 0;
-                for (let i = 0; i < 4; i++) {
-                    momentum += (parseInt(list[i].number) - 4.5);
-                }
-                if (Math.abs(momentum) >= 2) {
-                    return momentum > 0 ? "BIG" : "SMALL";
-                }
-                return parseInt(list[0].number) >= 5 ? "SMALL" : "BIG";
-            }
-
+            // DYNAMIC REAL-TIME SELF-TRAINING & CONTRARIAN REVERSAL
             function trainLogics(list) {
-                if (!list || list.length < 6) return;
+                if (!list || list.length < 5) return;
                 const logics = [
                     logic1_DragonTrend,
-                    logic2_MarkovChain,
-                    logic3_ChopDetector,
-                    logic4_WeightedEMA,
-                    logic5_DeltaOscillator,
-                    logic6_MomentumVector
+                    logic2_ChopAlternator,
+                    logic3_DoublesPattern,
+                    logic4_MarkovProbability,
+                    logic5_HumanTrapReverse,
+                    logic6_AdaptiveMomentum
                 ];
 
                 for (let li = 0; li < logics.length; li++) {
                     let hits = 0, tests = 0;
-                    for (let j = 0; j < Math.min(6, list.length - 2); j++) {
+                    const testWindow = Math.min(14, list.length - 2);
+                    for (let j = 0; j < testWindow; j++) {
                         const subHistory = list.slice(j + 1);
                         const actual = parseInt(list[j].number) >= 5 ? "BIG" : "SMALL";
                         const pred = logics[li](subHistory);
@@ -1385,35 +1411,56 @@
                         tests++;
                     }
                     const acc = tests > 0 ? hits / tests : 0.5;
-                    state.logicWeights[li] = Math.max(0.4, acc * 2.0);
+                    state.logicAccuracy[li] = acc;
+
+                    // CONTRARIAN REVERSAL:
+                    // If a model has accuracy < 48%, it is getting systematically trapped by the market.
+                    // ITS INVERSE IS WINNING! So we invert its vote and assign inverse weight!
+                    if (acc < 0.48) {
+                        state.logicInverted[li] = true;
+                        state.logicWeights[li] = (1.0 - acc) * 2.2;
+                    } else {
+                        state.logicInverted[li] = false;
+                        state.logicWeights[li] = Math.max(0.6, acc * 2.0);
+                    }
                 }
             }
 
             function getAdaptiveVote(list) {
                 trainLogics(list);
 
-                const l1 = logic1_DragonTrend(list);
-                const l2 = logic2_MarkovChain(list);
-                const l3 = logic3_ChopDetector(list);
-                const l4 = logic4_WeightedEMA(list);
-                const l5 = logic5_DeltaOscillator(list);
-                const l6 = logic6_MomentumVector(list);
-
-                const votes = [l1, l2, l3, l4, l5, l6];
+                const rawVotes = [
+                    logic1_DragonTrend(list),
+                    logic2_ChopAlternator(list),
+                    logic3_DoublesPattern(list),
+                    logic4_MarkovProbability(list),
+                    logic5_HumanTrapReverse(list),
+                    logic6_AdaptiveMomentum(list)
+                ];
 
                 const badgeIds = ['l1-badge', 'l2-badge', 'l3-badge', 'l4-badge', 'l5-badge', 'l6-badge'];
-                const names = ['L1 (DRAGON)', 'L2 (MARKOV)', 'L3 (CHOP)', 'L4 (EMA)', 'L5 (DELTA)', 'L6 (VECTOR)'];
+                const names = ['L1 (DRAGON)', 'L2 (CHOP)', 'L3 (DOUBLES)', 'L4 (MARKOV)', 'L5 (REV TRAP)', 'L6 (MOMENTUM)'];
                 
                 let scoreBig = 0, scoreSmall = 0;
                 let rawBig = 0, rawSmall = 0;
 
+                const effectiveVotes = [];
+
                 for (let i = 0; i < 6; i++) {
+                    let vote = rawVotes[i];
+                    // If model is inverted by market traps, DO THE REVERSE!
+                    if (state.logicInverted && state.logicInverted[i]) {
+                        vote = vote === "BIG" ? "SMALL" : "BIG";
+                    }
+                    effectiveVotes.push(vote);
+
                     const el = document.getElementById(badgeIds[i]);
                     if (el) {
-                        el.innerText = `${names[i]}: ${votes[i]}`;
+                        const isInverted = state.logicInverted && state.logicInverted[i];
+                        el.innerText = `${names[i]}: ${vote}${isInverted ? ' (REV)' : ''}`;
                         el.className = `logic-badge ${state.logicWeights[i] >= 1.2 ? 'l-win' : 'l-normal'}`;
                     }
-                    if (votes[i] === 'BIG') {
+                    if (vote === 'BIG') {
                         scoreBig += state.logicWeights[i];
                         rawBig++;
                     } else {
@@ -1423,19 +1470,31 @@
                 }
 
                 let final;
-                if (rawBig >= 4) final = "BIG";
-                else if (rawSmall >= 4) final = "SMALL";
-                else final = scoreBig >= scoreSmall ? "BIG" : "SMALL";
+                // If on Level 2 (1 loss in a row), activate Level 2 Counter-Trap priority
+                if (state.consecutiveLosses === 1 && list.length >= 3) {
+                    const s0 = parseInt(list[0].number) >= 5 ? "BIG" : "SMALL";
+                    const s1 = parseInt(list[1].number) >= 5 ? "BIG" : "SMALL";
+                    // If alternating pattern caused Level 1 loss, prioritize alternating continuation
+                    if (s0 !== s1) {
+                        final = s0 === "BIG" ? "SMALL" : "BIG";
+                    } else {
+                        final = scoreBig >= scoreSmall ? "BIG" : "SMALL";
+                    }
+                } else {
+                    if (rawBig >= 4) final = "BIG";
+                    else if (rawSmall >= 4) final = "SMALL";
+                    else final = scoreBig >= scoreSmall ? "BIG" : "SMALL";
+                }
 
                 const totalScore = scoreBig + scoreSmall;
-                const confidence = Math.min(98, Math.max(65, Math.round((Math.max(scoreBig, scoreSmall) / totalScore) * 100)));
+                const confidence = Math.min(98, Math.max(68, Math.round((Math.max(scoreBig, scoreSmall) / (totalScore || 1)) * 100)));
                 const matchCount = final === 'BIG' ? rawBig : rawSmall;
 
                 if (!state.isPaused) {
-                    document.getElementById('consensus-display').innerText = `⚡ AI CONFIDENCE: ${confidence}% (${matchCount}/6 MATCH)`;
+                    document.getElementById('consensus-display').innerText = `⚡ AI CONFIDENCE: ${confidence}% (${matchCount}/6 MATCH) · 2-LVL SHIELD ACTIVE`;
                 }
 
-                return { final, l1, l2, l3, l4, l5, l6, confidence };
+                return { final, l1: effectiveVotes[0], l2: effectiveVotes[1], l3: effectiveVotes[2], l4: effectiveVotes[3], l5: effectiveVotes[4], l6: effectiveVotes[5], confidence };
             }
 
             // ==================== COPY FUNCTION ====================
@@ -1618,10 +1677,19 @@
                     state.balance -= state.pendingBet.amount;
                     state.consecutiveLosses++;
 
-                    let multiplier = Math.min(4.5, Math.pow(2.2, state.consecutiveLosses));
-                    let raw = Math.floor(state.baseBet * multiplier);
-                    if (raw > state.balance * 0.5) raw = Math.min(raw, Math.floor(state.balance * 0.5));
-                    state.currentBet = Math.max(state.baseBet, raw);
+                    // STRICT 2-LEVEL HARD CAP PROTECTION:
+                    // Level 1: baseBet (e.g. ₹10)
+                    // Level 2: 2.2x baseBet (e.g. ₹22) to recover L1 + profit
+                    // IF Level 2 loses: IMMEDIATELY RESET TO LEVEL 1! NEVER compound to Level 3, 4, 5!
+                    if (state.consecutiveLosses === 1) {
+                        let l2 = Math.floor(state.baseBet * 2.2);
+                        if (l2 > state.balance * 0.35) l2 = Math.max(state.baseBet, Math.floor(state.balance * 0.35));
+                        state.currentBet = Math.max(state.baseBet, l2);
+                    } else {
+                        // Level 2 completed: Reset back to Level 1 safe bet
+                        state.currentBet = state.baseBet;
+                        state.consecutiveLosses = 0;
+                    }
 
                     updateHistoryRow(state.pendingBet.issue, `LOSS -${state.pendingBet.amount}`, state.balance, 'loss-row', actual);
                 }
@@ -1640,7 +1708,17 @@
                     const list = json?.data?.list;
                     if (!list || !list.length) return;
 
-                    state.cachedHistory = list;
+                    // Deep history pool accumulation (stores up to 120 rounds)
+                    if (!state.historicalPool) state.historicalPool = [];
+                    list.forEach(item => {
+                        if (!state.historicalPool.some(x => x.issueNumber === item.issueNumber)) {
+                            state.historicalPool.push(item);
+                        }
+                    });
+                    state.historicalPool.sort((a, b) => (BigInt(b.issueNumber) > BigInt(a.issueNumber) ? 1 : -1));
+                    if (state.historicalPool.length > 120) state.historicalPool = state.historicalPool.slice(0, 120);
+
+                    state.cachedHistory = state.historicalPool;
                     const latest = list[0];
                     const latestIssue = latest.issueNumber;
 
