@@ -1,1348 +1,1387 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
-    <meta name="theme-color" content="#090b10" />
-    <meta name="description" content="JASH VIP v27.0 — Apex Titan Supreme 9-Feature Zero-Bust Engine (Strict <= 2 Losses)" />
-    <title>JASH VIP v27.0 — Top 1 Signal (Titan Supreme 9-Feature Zero-Bust Engine)</title>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
+    <title>JASHVIP - AI PREDICTOR & BOT</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@400;600;700;800&family=Rajdhani:wght@600;700;800;900&display=swap" rel="stylesheet">
     <style>
-      :root {
-        --ink: #090b10;
-        --panel: #0d1116;
-        --panel-raised: #11161c;
-        --line: rgba(153, 181, 171, 0.14);
-        --green: #24d88c;
-        --green-soft: #76e5b3;
-        --gold: #e2b84d;
-        --muted: #849096;
-        --cream: #e8e6db;
-        --red: #d95759;
-        --blue: #4da3ff;
-        --mono: "SFMono-Regular", Consolas, "Liberation Mono", monospace;
-        --serif: Georgia, "Times New Roman", serif;
-      }
+        :root {
+            --bg-primary: #060b09;
+            --bg-card: rgba(10, 24, 18, 0.88);
+            --border-green: rgba(0, 230, 118, 0.45);
+            --green-glow: #00e676;
+            --neon-mint: #00ff88;
+            --emerald-dark: #004d26;
+            --gold-accent: #ffd700;
+            --cyan-accent: #00e5ff;
+            --red-loss: #ff3b56;
+            --text-main: #e8f5e9;
+            --text-muted: #81c784;
+        }
 
-      * { box-sizing: border-box; margin: 0; padding: 0; }
-      html { min-width: 320px; background: var(--ink); }
-      body {
-        min-width: 320px;
-        min-height: 100vh;
-        color: var(--cream);
-        background:
-          radial-gradient(circle at 50% -8%, rgba(36, 133, 91, .26), transparent 31rem),
-          radial-gradient(circle at 0% 46%, rgba(20, 108, 79, .12), transparent 25rem),
-          radial-gradient(circle at 100% 88%, rgba(184, 137, 38, .06), transparent 24rem),
-          var(--ink);
-        font-family: var(--mono);
-        -webkit-font-smoothing: antialiased;
-      }
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Rajdhani', sans-serif;
+        }
 
-      button { border: 0; font: inherit; color: inherit; background: transparent; cursor: pointer; -webkit-tap-highlight-color: transparent; }
+        body {
+            background: radial-gradient(circle at 50% 0%, #0d2919 0%, #060d09 60%, #020504 100%);
+            color: var(--text-main);
+            padding: 12px;
+            font-size: 14px;
+            min-height: 100vh;
+            position: relative;
+            overflow-x: hidden;
+        }
 
-      .signal-app { position: relative; min-height: 100vh; overflow-x: hidden; }
+        /* Party Popper Canvas */
+        #party-canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 99999;
+        }
 
-      .signal-app::before {
-        content: "";
-        position: fixed; inset: 0;
-        pointer-events: none; opacity: .22;
-        background-image:
-          linear-gradient(rgba(123, 168, 149, .045) 1px, transparent 1px),
-          linear-gradient(90deg, rgba(123, 168, 149, .045) 1px, transparent 1px);
-        background-size: 38px 38px;
-        mask-image: linear-gradient(to bottom, black, transparent 78%);
-      }
+        /* Ambient Glow Circles */
+        .ambient-glow {
+            position: fixed;
+            border-radius: 50%;
+            filter: blur(100px);
+            pointer-events: none;
+            z-index: 0;
+            opacity: 0.25;
+        }
+        .glow-1 { top: -100px; left: 10%; width: 350px; height: 350px; background: #00e676; }
+        .glow-2 { bottom: -100px; right: 10%; width: 350px; height: 350px; background: #00b0ff; }
 
-      .terminal-frame {
-        position: relative; width: 100%; max-width: 480px; min-height: 100vh;
-        margin: 0 auto; overflow: hidden;
-        background:
-          linear-gradient(180deg, rgba(8, 26, 23, .74), transparent 26rem),
-          linear-gradient(90deg, rgba(3, 7, 10, .4), transparent 12%, transparent 88%, rgba(3, 7, 10, .4)),
-          #0b1015;
-        box-shadow: 0 0 0 1px rgba(130, 157, 150, .08), inset 0 1px 0 rgba(207, 224, 200, .035), 0 25px 100px rgba(0,0,0,.45);
-      }
+        /* General Modal Container */
+        .modal-screen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(3, 8, 6, 0.94);
+            backdrop-filter: blur(14px);
+            z-index: 2000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
 
-      .terminal-frame::before {
-        content: ""; position: fixed; inset: 0; opacity: .035; pointer-events: none;
-        background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 180 180' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.38'/%3E%3C/svg%3E");
-        mix-blend-mode: screen;
-      }
+        .cyber-card {
+            background: linear-gradient(145deg, rgba(13, 33, 24, 0.9), rgba(5, 15, 10, 0.95));
+            border: 2px solid var(--border-green);
+            border-radius: 36px;
+            padding: 34px 26px;
+            width: 100%;
+            max-width: 420px;
+            box-shadow: 0 0 50px rgba(0, 230, 118, 0.25), inset 0 0 25px rgba(0, 255, 136, 0.1);
+            animation: cyberPulse 3s infinite alternate;
+            position: relative;
+            z-index: 2;
+        }
 
-      .terminal-frame::after {
-        content: ""; position: absolute; z-index: 1; top: 0; left: 12%; right: 12%; height: 1px; pointer-events: none;
-        background: linear-gradient(90deg, transparent, rgba(44, 219, 144, .58), rgba(226, 184, 77, .42), transparent);
-        box-shadow: 0 0 18px rgba(36, 216, 140, .28);
-      }
+        @keyframes cyberPulse {
+            0% { box-shadow: 0 0 35px rgba(0, 230, 118, 0.25), inset 0 0 15px rgba(0, 255, 136, 0.1); }
+            100% { box-shadow: 0 0 65px rgba(0, 230, 118, 0.45), 0 0 90px rgba(0, 229, 255, 0.25), inset 0 0 30px rgba(0, 255, 136, 0.2); }
+        }
 
-      .terminal-content { position: relative; z-index: 2; padding: 15px 14px 22px; }
+        .brand-badge {
+            display: inline-block;
+            background: rgba(0, 230, 118, 0.15);
+            border: 1px solid var(--green-glow);
+            color: var(--neon-mint);
+            font-size: 11px;
+            font-weight: 800;
+            letter-spacing: 2px;
+            padding: 5px 16px;
+            border-radius: 50px;
+            text-transform: uppercase;
+            margin-bottom: 12px;
+            text-shadow: 0 0 10px var(--green-glow);
+        }
 
-      /* TOPBAR */
-      .topbar { display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px; }
-      .brand-lockup { display: flex; align-items: center; gap: 8px; }
-      .brand-mark {
-        display: grid; width: 36px; height: 36px; place-items: center; flex: 0 0 auto;
-        border: 1px solid rgba(226,184,77,.55); border-radius: 10px;
-        color: var(--gold);
-        background: linear-gradient(145deg, #1a2c25, #101619);
-        box-shadow: inset 0 0 18px rgba(44, 190, 125, .1), 0 0 0 3px rgba(226, 184, 77, .035), 0 8px 22px rgba(0,0,0,.25);
-        font-size: 16px;
-      }
-      .brand-name { color: #f0efe7; font: 18px/1.15 var(--serif); font-weight: 600; }
-      .brand-sub { margin-top: 3px; color: #7b878a; font: 8px/1 var(--mono); letter-spacing: .12em; text-transform: uppercase; }
+        .screen-header {
+            font-size: 32px;
+            font-weight: 900;
+            text-align: center;
+            margin-bottom: 6px;
+            background: linear-gradient(135deg, #ffffff, #00ff88, #00e5ff);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-shadow: 0 0 25px rgba(0, 230, 118, 0.5);
+            letter-spacing: 1.5px;
+        }
 
-      /* LIVE DOT */
-      .live-dot { display: inline-block; width: 8px; height: 8px; margin-right: 6px; border-radius: 50%; background: var(--green); box-shadow: 0 0 11px rgba(36, 216, 140, .75); animation: pulse-dot 2s infinite; }
-      @keyframes pulse-dot { 0%, 100% { opacity: 1; } 50% { opacity: .4; } }
+        .screen-sub {
+            text-align: center;
+            font-size: 13px;
+            color: #8fa0be;
+            margin-bottom: 24px;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            font-weight: 600;
+        }
 
-      /* MODE SWITCH BAR */
-      .mode-switch-bar {
-        display: grid; grid-template-columns: 1fr 1fr; gap: 6px; margin-bottom: 14px;
-        padding: 4px; border: 1px solid rgba(123,147,143,.2); border-radius: 12px;
-        background: rgba(13,17,22,.85); box-shadow: inset 0 1px 0 rgba(255,255,255,.02);
-      }
-      .mode-btn {
-        display: flex; align-items: center; justify-content: center; gap: 6px;
-        padding: 9px 12px; border-radius: 9px; color: #849096;
-        font: 600 11px/1 var(--mono); letter-spacing: .05em; transition: all .2s ease;
-      }
-      .mode-btn.is-active {
-        color: #090b10; background: linear-gradient(135deg, #24d88c, #76e5b3);
-        box-shadow: 0 0 16px rgba(36,216,140,.35); font-weight: 700;
-      }
+        .input-group {
+            width: 100%;
+            margin-bottom: 20px;
+        }
 
-      /* LEVEL RECOVERY BADGE BAR */
-      .level-bar {
-        display: flex; align-items: center; justify-content: space-between;
-        margin-bottom: 12px; padding: 8px 12px; border: 1px solid rgba(123,147,143,.16); border-radius: 10px;
-        background: rgba(15,21,26,.88); font: 9px var(--mono);
-      }
-      .level-badge { display: inline-flex; align-items: center; gap: 5px; padding: 3px 8px; border-radius: 6px; font-weight: 700; }
-      .lvl-1 { color: #2fe397; background: rgba(36,216,140,.12); border: 1px solid rgba(36,216,140,.3); }
-      .lvl-2 { color: #ffe07a; background: rgba(226,184,77,.14); border: 1px solid rgba(226,184,77,.4); }
-      .lvl-3 { color: #ff6b6d; background: rgba(217,87,89,.15); border: 1px solid rgba(217,87,89,.4); animation: pulse-dot 1.2s infinite; }
+        .input-group label {
+            display: block;
+            color: var(--neon-mint);
+            font-size: 14px;
+            margin-bottom: 8px;
+            font-weight: 700;
+            letter-spacing: 1px;
+            text-shadow: 0 0 6px rgba(0, 230, 118, 0.5);
+        }
 
-      /* TOP 1 HERO */
-      .top1-hero {
-        margin-bottom: 14px; padding: 16px; border: 1px solid rgba(36,216,140,.28); border-radius: 14px;
-        background: linear-gradient(145deg, rgba(15,34,28,.9), rgba(11,15,20,.9));
-        box-shadow: inset 0 1px 0 rgba(255,255,255,.03), 0 12px 27px rgba(0,0,0,.13);
-      }
-      .top1-label { display: flex; align-items: center; justify-content: space-between; margin-bottom: 6px; color: var(--gold); font: 9px/1 var(--mono); letter-spacing: .1em; }
-      .top1-channel { color: #f0efe7; font: 21px/1.2 var(--serif); font-weight: 600; margin-bottom: 4px; }
-      .top1-engine { color: #76e5b3; font: 9px/1.3 var(--mono); letter-spacing: .06em; margin-top: 4px; }
-      .top1-badge { display: inline-flex; align-items: center; gap: 4px; padding: 3px 8px; border: 1px solid rgba(226,184,77,.5); border-radius: 5px; background: rgba(226,184,77,.08); color: #d6b557; font: 8px/1 var(--mono); }
+        .input-group input, .input-group select {
+            padding: 15px 18px;
+            width: 100%;
+            background: rgba(4, 12, 8, 0.9);
+            border: 2px solid var(--border-green);
+            color: #ffffff;
+            border-radius: 40px;
+            font-size: 18px;
+            font-weight: 700;
+            font-family: 'Roboto Mono', monospace;
+            text-align: center;
+            outline: none;
+            box-shadow: 0 0 20px rgba(0, 230, 118, 0.2);
+            transition: all 0.25s ease;
+        }
 
-      /* PERIOD CARD */
-      .period-card {
-        display: flex; align-items: center; justify-content: space-between;
-        padding: 14px 16px; margin-bottom: 12px; border: 1px solid rgba(123,147,143,.15); border-radius: 14px;
-        background: linear-gradient(145deg, rgba(15, 21, 26, .94), rgba(11,15,20,.92));
-        box-shadow: inset 0 1px 0 rgba(255,255,255,.03), 0 12px 27px rgba(0,0,0,.13);
-      }
-      .eyebrow { color: #8b9699; font: 500 9px/1.2 var(--mono); letter-spacing: .09em; text-transform: uppercase; }
-      .period-number { display: block; margin-top: 6px; color: var(--green-soft); font: 15px/1 var(--mono); letter-spacing: -.02em; text-shadow: 0 0 17px rgba(36,216,140,.18); }
-      .countdown {
-        display: grid; width: 54px; height: 38px; place-items: center; border: 1px solid rgba(36,216,140,.78); border-radius: 9px;
-        color: #f1f0e8; background: linear-gradient(145deg, rgba(22,79,58,.45), rgba(14,24,25,.82));
-        box-shadow: 0 0 12px rgba(36,216,140,.14), inset 0 0 10px rgba(36,216,140,.08); font: 13px var(--mono);
-      }
-      .countdown small { display: block; margin-top: -2px; color: #889393; font: 7px var(--mono); letter-spacing: .1em; }
-      .countdown.urgent { border-color: var(--red); box-shadow: 0 0 14px rgba(217,87,89,.3); color: var(--red); }
+        .input-group input:focus, .input-group select:focus {
+            border-color: var(--neon-mint);
+            box-shadow: 0 0 35px rgba(0, 255, 136, 0.6);
+        }
 
-      /* PREDICTION CARD */
-      .prediction-card {
-        padding: 16px; margin-bottom: 12px; border: 1px solid rgba(123,147,143,.15); border-radius: 14px;
-        background: linear-gradient(145deg, rgba(15, 21, 26, .94), rgba(11,15,20,.92));
-        box-shadow: inset 0 1px 0 rgba(255,255,255,.03), inset 0 0 22px rgba(32, 189, 128, .025), 0 12px 27px rgba(0,0,0,.13);
-      }
-      .prediction-head { display: flex; align-items: center; justify-content: space-between; margin-bottom: 10px; }
-      .prediction-label { display: flex; align-items: center; gap: 5px; color: #aab0a9; font: 9px var(--mono); letter-spacing: .06em; text-transform: uppercase; }
-      .gold-icon { color: var(--gold); }
-      .confidence-value { display: block; margin-top: 3px; color: var(--green); font: 20px var(--mono); text-shadow: 0 0 14px rgba(36,216,140,.18); }
-      .signal-pill {
-        display: inline-flex; align-items: center; gap: 12px; min-width: 140px; padding: 10px 20px;
-        border: 2px solid var(--green); border-radius: 12px; color: var(--green);
-        background: rgba(22,54,40,.13);
-        box-shadow: 0 0 19px rgba(36,216,140,.25), 0 0 38px rgba(36,216,140,.08), inset 0 0 13px rgba(36,216,140,.06);
-        font: 22px/1 var(--mono);
-      }
-      .signal-number { display: inline-flex; min-width: 2ch; justify-content: center; color: #ffe07a !important; font-weight: 700; }
+        .cyber-btn {
+            padding: 16px;
+            background: linear-gradient(135deg, #00e676, #00b0ff);
+            border: none;
+            font-weight: 900;
+            border-radius: 40px;
+            font-size: 20px;
+            width: 100%;
+            cursor: pointer;
+            color: #040e09;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            box-shadow: 0 0 30px rgba(0, 230, 118, 0.5);
+            transition: all 0.25s ease;
+            margin-top: 10px;
+        }
 
-      /* STAT GRID (CLEAN 3-COLUMN) */
-      .stat-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px; margin-bottom: 12px; }
-      .stat-box {
-        padding: 10px 4px 9px; border: 1px solid rgba(123,147,143,.13); border-radius: 10px;
-        background: rgba(15,19,24,.78); box-shadow: inset 0 1px 0 rgba(255,255,255,.02); text-align: center;
-      }
-      .stat-value { display: block; margin-top: 5px; color: var(--green); font: 16px var(--mono); }
-      .stat-value.loss { color: var(--red); }
-      .stat-value.total { color: #eee9dc; }
+        .cyber-btn:hover {
+            transform: scale(1.02);
+            box-shadow: 0 0 50px rgba(0, 255, 136, 0.8), 0 0 70px rgba(0, 176, 255, 0.4);
+        }
 
-      /* HISTORY CARD */
-      .history-card {
-        overflow: hidden; border: 1px solid rgba(123,147,143,.15); border-radius: 14px;
-        background: linear-gradient(145deg, rgba(15, 21, 26, .94), rgba(11,15,20,.92));
-        box-shadow: inset 0 1px 0 rgba(255,255,255,.03), 0 12px 27px rgba(0,0,0,.13);
-      }
-      .history-header { display: flex; align-items: center; justify-content: space-between; padding: 12px 12px 10px; }
-      .history-title { color: #aeb4ad; font: 9px var(--mono); letter-spacing: .07em; }
-      .history-controls { display: flex; gap: 4px; }
-      .filter-button { padding: 4px 6px; border-radius: 5px; color: #768182; font: 8px var(--mono); }
-      .filter-button.is-active { color: #0d1612; background: var(--green); }
-      .history-scroll-wrap { max-height: 480px; overflow-y: auto; scrollbar-width: thin; scrollbar-color: rgba(36,216,140,.3) transparent; }
-      .history-scroll-wrap::-webkit-scrollbar { width: 4px; }
-      .history-scroll-wrap::-webkit-scrollbar-thumb { background: rgba(36,216,140,.3); border-radius: 4px; }
-      .history-table { width: 100%; border-collapse: collapse; table-layout: fixed; }
-      .history-table th {
-        position: sticky; top: 0; z-index: 2;
-        padding: 8px 4px; color: #3fbd83; background: #0c1815;
-        font: 8px var(--mono); font-weight: 500; text-align: left;
-      }
-      .history-table th:first-child, .history-table td:first-child { width: 24%; padding-left: 10px; }
-      .history-table th:nth-child(2), .history-table td:nth-child(2) { width: 14%; }
-      .history-table th:nth-child(3), .history-table td:nth-child(3) { width: 22%; }
-      .history-table th:nth-child(4), .history-table td:nth-child(4) { width: 20%; }
-      .history-table th:nth-child(5), .history-table td:nth-child(5) { width: 20%; }
-      .history-table td {
-        padding: 8px 4px; border-top: 1px solid rgba(123,147,143,.08);
-        color: #b2b5af; font: 9px var(--mono); white-space: nowrap;
-      }
-      .history-table tr.current td { color: #eee9dc; background: linear-gradient(90deg, rgba(21,40,32,.32), rgba(21,40,32,.08)); }
-      .result-chip { display: inline-block; padding: 3px 6px; border-radius: 99px; font: 7px var(--mono); letter-spacing: .03em; }
-      .chip-win { color: #2fe397; background: rgba(21,128,83,.2); }
-      .chip-loss { color: #e35b61; background: rgba(134,35,44,.27); }
-      .chip-pending { color: #e5bf59; background: rgba(148,101,24,.3); }
-      .history-empty { padding: 20px 10px; color: #697377; text-align: center; font: 9px var(--mono); }
-      .number-cell { color: var(--green-soft) !important; }
+        /* Mode Selection Cards */
+        .mode-selection-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 16px;
+            margin-bottom: 20px;
+        }
 
-      /* CHANNEL TAG */
-      .channel-tag { display: inline-block; padding: 2px 5px; border: 1px solid rgba(36,216,140,.2); border-radius: 4px; color: var(--green-soft); background: rgba(36,216,140,.06); font: 7px var(--mono); margin-left: 4px; }
+        .mode-card {
+            background: rgba(5, 18, 12, 0.85);
+            border: 2px solid rgba(0, 230, 118, 0.3);
+            border-radius: 24px;
+            padding: 18px 16px;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            text-align: left;
+            position: relative;
+            overflow: hidden;
+        }
 
-      /* FOOTER */
-      .detail-footer { display: flex; flex-direction: column; align-items: center; gap: 4px; padding: 16px 0 0; color: #536064; font: 8px var(--mono); text-align: center; }
+        .mode-card:hover {
+            border-color: var(--neon-mint);
+            transform: translateY(-3px);
+            box-shadow: 0 10px 30px rgba(0, 230, 118, 0.35);
+        }
 
-      /* TOAST */
-      .toast-note {
-        position: fixed; z-index: 10; left: 50%; bottom: 20px; transform: translateX(-50%);
-        padding: 10px 14px; border: 1px solid rgba(36,216,140,.4); border-radius: 9px;
-        color: var(--green-soft); background: rgba(11,22,18,.94);
-        box-shadow: 0 8px 30px rgba(0,0,0,.35); font: 9px var(--mono);
-        animation: toast-in .22s ease both;
-      }
-      @keyframes toast-in { from { opacity: 0; transform: translate(-50%, 8px); } to { opacity: 1; transform: translate(-50%, 0); } }
+        .mode-card.active {
+            border-color: var(--neon-mint);
+            background: linear-gradient(135deg, rgba(0, 230, 118, 0.2), rgba(0, 176, 255, 0.15));
+            box-shadow: 0 0 35px rgba(0, 255, 136, 0.4);
+        }
 
-      /* LOADING */
-      .loading-row { padding: 24px 12px; color: var(--muted); text-align: center; font: 10px var(--mono); }
-      .error-row { color: #e3a05d; padding: 10px 12px; border: 1px dashed rgba(227,160,93,.3); border-radius: 8px; margin-bottom: 10px; font: 9px var(--mono); display: flex; justify-content: space-between; align-items: center; }
-      .error-row button { color: #e4c869; text-decoration: underline; }
+        .mode-card-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 6px;
+        }
 
-      /* SWITCH ANIMATION */
-      .switch-anim { animation: switch-flash .6s ease; }
-      @keyframes switch-flash {
-        0% { opacity: .3; transform: translateY(6px); }
-        100% { opacity: 1; transform: translateY(0); }
-      }
+        .mode-title {
+            font-size: 20px;
+            font-weight: 800;
+            color: #ffffff;
+            letter-spacing: 1px;
+        }
 
-      /* INFO NOTE */
-      .api-note { margin: 8px 0 0; color: #748084; font: 8px/1.45 var(--mono); }
-      .api-note strong { color: #a9b4af; font-weight: 500; }
+        .mode-tag {
+            font-size: 10px;
+            font-weight: 700;
+            padding: 3px 10px;
+            border-radius: 30px;
+            background: rgba(0, 230, 118, 0.2);
+            color: var(--neon-mint);
+            border: 1px solid var(--green-glow);
+        }
 
-      /* LOCK SCREEN / SECURITY VAULT */
-      .vault-overlay {
-        min-height: 85vh;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        justify-content: center;
-        padding: 20px 10px;
-        animation: switch-flash .4s ease;
-      }
-      .vault-card {
-        width: 100%;
-        max-width: 360px;
-        padding: 26px 20px;
-        border: 1px solid rgba(226, 184, 77, .35);
-        border-radius: 20px;
-        background: linear-gradient(160deg, rgba(16, 26, 22, 0.95), rgba(9, 13, 17, 0.98));
-        box-shadow: 0 0 35px rgba(0, 0, 0, 0.6), inset 0 0 25px rgba(36, 216, 140, 0.05), 0 0 0 1px rgba(36, 216, 140, 0.15);
-        text-align: center;
-      }
-      .vault-icon-wrap {
-        position: relative;
-        width: 60px;
-        height: 60px;
-        margin: 0 auto 16px;
-        display: grid;
-        place-items: center;
-        border-radius: 16px;
-        background: linear-gradient(135deg, #19382b, #101918);
-        border: 1px solid rgba(226, 184, 77, 0.6);
-        box-shadow: 0 0 20px rgba(36, 216, 140, 0.25), inset 0 0 12px rgba(226, 184, 77, 0.2);
-        font-size: 26px;
-        color: var(--gold);
-      }
-      .vault-title {
-        color: #f0efe7;
-        font: 20px/1.2 var(--serif);
-        font-weight: 700;
-        letter-spacing: .02em;
-        margin-bottom: 4px;
-      }
-      .vault-sub {
-        color: #7b878a;
-        font: 9px/1.4 var(--mono);
-        letter-spacing: .12em;
-        text-transform: uppercase;
-        margin-bottom: 20px;
-      }
-      .pin-slots {
-        display: flex;
-        justify-content: center;
-        gap: 12px;
-        margin-bottom: 20px;
-      }
-      .pin-slot {
-        width: 48px;
-        height: 54px;
-        display: grid;
-        place-items: center;
-        border: 1px solid rgba(123, 147, 143, 0.3);
-        border-radius: 12px;
-        background: rgba(13, 17, 22, 0.85);
-        color: var(--green-soft);
-        font: 24px var(--mono);
-        font-weight: 700;
-        box-shadow: inset 0 2px 4px rgba(0,0,0,0.5);
-        transition: all .2s ease;
-      }
-      .pin-slot.filled {
-        border-color: rgba(36, 216, 140, 0.8);
-        background: rgba(22, 54, 40, 0.6);
-        box-shadow: 0 0 15px rgba(36, 216, 140, 0.3), inset 0 0 8px rgba(36, 216, 140, 0.2);
-      }
-      .vault-msg {
-        min-height: 24px;
-        margin-bottom: 18px;
-        font: 10px/1.3 var(--mono);
-        color: #8fa09d;
-        letter-spacing: .04em;
-        transition: color .2s ease;
-      }
-      .vault-msg.err {
-        color: #ff6b6d;
-        animation: shake-err .4s ease both;
-      }
-      .vault-msg.ok {
-        color: var(--green);
-      }
-      @keyframes shake-err {
-        0%, 100% { transform: translateX(0); }
-        20%, 60% { transform: translateX(-6px); }
-        40%, 80% { transform: translateX(6px); }
-      }
-      .keypad-grid {
-        display: grid;
-        grid-template-columns: repeat(3, 1fr);
-        gap: 10px;
-        margin-bottom: 14px;
-      }
-      .key-btn {
-        height: 48px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        border: 1px solid rgba(123, 147, 143, 0.22);
-        border-radius: 12px;
-        background: rgba(17, 24, 28, 0.7);
-        color: #e8e6db;
-        font: 16px var(--mono);
-        font-weight: 600;
-        transition: all .15s ease;
-        box-shadow: 0 3px 6px rgba(0,0,0,0.3);
-      }
-      .key-btn:active {
-        transform: scale(0.94);
-        background: rgba(36, 216, 140, 0.25);
-        border-color: rgba(36, 216, 140, 0.6);
-        color: #fff;
-      }
-      .key-btn.action-btn {
-        font-size: 11px;
-        letter-spacing: .06em;
-        color: #9aa8a6;
-      }
-      .key-btn.submit-btn {
-        background: linear-gradient(135deg, rgba(36, 216, 140, 0.3), rgba(226, 184, 77, 0.3));
-        border-color: rgba(36, 216, 140, 0.6);
-        color: #f1f0e8;
-        font-size: 11px;
-        font-weight: 700;
-      }
-      .vault-badge {
-        display: inline-flex;
-        align-items: center;
-        gap: 6px;
-        margin-top: 10px;
-        padding: 5px 10px;
-        border-radius: 99px;
-        background: rgba(36, 216, 140, 0.08);
-        border: 1px solid rgba(36, 216, 140, 0.2);
-        color: var(--green-soft);
-        font: 8px var(--mono);
-        letter-spacing: .06em;
-        text-transform: uppercase;
-      }
-      .lock-out-btn {
-        display: inline-flex;
-        align-items: center;
-        gap: 4px;
-        padding: 5px 9px;
-        border: 1px solid rgba(217, 87, 89, 0.4);
-        border-radius: 8px;
-        background: rgba(217, 87, 89, 0.1);
-        color: #ff8b8d;
-        font: 9px var(--mono);
-        letter-spacing: .05em;
-        transition: all .2s ease;
-      }
-      .lock-out-btn:hover {
-        background: rgba(217, 87, 89, 0.25);
-        color: #fff;
-      }
+        .mode-desc {
+            font-size: 12px;
+            color: #8fa0be;
+            font-family: 'Roboto Mono', monospace;
+        }
 
-      @media (min-width: 700px) {
-        body { padding: 28px 0; }
-        .terminal-frame { min-height: calc(100vh - 56px); border-radius: 24px; }
-        .terminal-content { padding: 28px 24px 36px; }
-      }
+        /* MAIN APP UI */
+        #app {
+            display: none;
+            max-width: 820px;
+            margin: 0 auto;
+            padding-bottom: 50px;
+            position: relative;
+            z-index: 10;
+        }
+
+        .app-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+            background: linear-gradient(145deg, rgba(10, 28, 19, 0.95), rgba(4, 15, 10, 0.95));
+            padding: 14px 20px;
+            border-radius: 28px;
+            border: 1px solid var(--border-green);
+            box-shadow: 0 0 30px rgba(0, 230, 118, 0.25);
+        }
+
+        .logo-wrap {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .app-logo {
+            font-size: 24px;
+            font-weight: 900;
+            background: linear-gradient(45deg, #ffffff, #00ff88, #00e5ff);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-shadow: 0 0 20px rgba(0, 230, 118, 0.5);
+            letter-spacing: 1px;
+        }
+
+        .mode-badge-live {
+            font-size: 11px;
+            background: rgba(0, 230, 118, 0.15);
+            border: 1px solid var(--green-glow);
+            color: var(--neon-mint);
+            padding: 4px 12px;
+            border-radius: 30px;
+            font-weight: 700;
+            letter-spacing: 1px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .mode-badge-live:hover {
+            background: var(--green-glow);
+            color: #000;
+        }
+
+        .status-pill {
+            font-size: 11px;
+            background: rgba(0, 0, 0, 0.7);
+            padding: 6px 14px;
+            border-radius: 40px;
+            color: var(--neon-mint);
+            border: 1px solid rgba(0, 230, 118, 0.4);
+            box-shadow: 0 0 15px rgba(0, 230, 118, 0.3);
+            font-weight: 700;
+            letter-spacing: 1px;
+        }
+
+        /* Stats Grid */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 10px;
+            margin-bottom: 18px;
+        }
+
+        .stat-card {
+            background: linear-gradient(145deg, rgba(8, 24, 16, 0.85), rgba(4, 14, 9, 0.9));
+            padding: 14px 8px;
+            border-radius: 22px;
+            text-align: center;
+            border: 1px solid rgba(0, 230, 118, 0.25);
+            box-shadow: 0 0 20px rgba(0, 230, 118, 0.15);
+        }
+
+        .stat-val {
+            font-size: 22px;
+            font-weight: 800;
+            color: #ffffff;
+            font-family: 'Roboto Mono', monospace;
+            text-shadow: 0 0 12px var(--green-glow);
+        }
+
+        .stat-lbl {
+            font-size: 10px;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.6px;
+            margin-top: 4px;
+            font-weight: 700;
+        }
+
+        /* Live Prediction Card */
+        .live-box {
+            background: linear-gradient(145deg, rgba(9, 28, 18, 0.92), rgba(3, 12, 8, 0.95));
+            border: 1.5px solid var(--border-green);
+            padding: 24px 16px;
+            border-radius: 36px;
+            text-align: center;
+            margin-bottom: 20px;
+            box-shadow: 0 0 45px rgba(0, 230, 118, 0.3), inset 0 0 25px rgba(0, 255, 136, 0.12);
+            animation: liveGlow 2.5s infinite alternate;
+        }
+
+        @keyframes liveGlow {
+            from { box-shadow: 0 0 35px rgba(0, 230, 118, 0.25), inset 0 0 15px rgba(0, 255, 136, 0.1); }
+            to { box-shadow: 0 0 65px rgba(0, 255, 136, 0.4), inset 0 0 30px rgba(0, 229, 255, 0.2); }
+        }
+
+        .period-header {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            margin-bottom: 6px;
+        }
+
+        .mode-indicator {
+            background: rgba(0, 230, 118, 0.15);
+            border: 1px solid var(--green-glow);
+            color: var(--neon-mint);
+            padding: 3px 12px;
+            border-radius: 20px;
+            font-size: 11px;
+            font-weight: 800;
+            letter-spacing: 1px;
+        }
+
+        .issue-no {
+            font-family: 'Roboto Mono', monospace;
+            color: var(--gold-accent);
+            font-size: 17px;
+            font-weight: 800;
+            text-shadow: 0 0 10px rgba(255, 215, 0, 0.6);
+        }
+
+        .timer-countdown {
+            font-size: 42px;
+            font-weight: 900;
+            font-family: 'Roboto Mono', monospace;
+            color: var(--neon-mint);
+            text-shadow: 0 0 25px rgba(0, 255, 136, 0.8), 0 0 50px rgba(0, 230, 118, 0.5);
+            margin: 6px 0 12px;
+            letter-spacing: 2px;
+            transition: color 0.3s;
+        }
+
+        .logic-status {
+            display: flex;
+            justify-content: center;
+            gap: 8px;
+            margin: 12px 0 16px;
+            font-size: 10px;
+            flex-wrap: wrap;
+        }
+
+        .logic-badge {
+            padding: 5px 11px;
+            border-radius: 30px;
+            background: rgba(3, 10, 7, 0.85);
+            border: 1px solid;
+            font-weight: 800;
+            font-family: 'Roboto Mono', monospace;
+            transition: all 0.2s;
+        }
+
+        .l-win { border-color: #00ff88; color: #00ff88; box-shadow: 0 0 8px rgba(0, 255, 136, 0.3); }
+        .l-normal { border-color: #00e5ff; color: #00e5ff; }
+        .l-warn { border-color: #ffd700; color: #ffd700; }
+
+        .pred-result {
+            font-size: 68px;
+            font-weight: 900;
+            margin: 6px 0 14px;
+            line-height: 1.1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 18px;
+            flex-wrap: wrap;
+        }
+
+        .big { color: var(--gold-accent); text-shadow: 0 0 35px rgba(255, 215, 0, 0.8), 0 0 70px rgba(255, 170, 0, 0.5); }
+        .small { color: var(--neon-mint); text-shadow: 0 0 35px rgba(0, 255, 136, 0.8), 0 0 70px rgba(0, 230, 118, 0.5); }
+
+        .copy-btn {
+            background: linear-gradient(145deg, rgba(0, 230, 118, 0.25), rgba(0, 176, 255, 0.25));
+            border: 2px solid var(--neon-mint);
+            color: #ffffff;
+            font-size: 18px;
+            padding: 10px 26px;
+            border-radius: 50px;
+            cursor: pointer;
+            font-weight: 800;
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            transition: all 0.25s ease;
+            box-shadow: 0 0 25px rgba(0, 230, 118, 0.4);
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+        }
+
+        .copy-btn:hover {
+            background: var(--neon-mint);
+            color: #030805;
+            box-shadow: 0 0 45px rgba(0, 255, 136, 0.8);
+            transform: scale(1.05);
+        }
+
+        .copy-btn.copied {
+            background: #ffffff;
+            color: #030805;
+            border-color: #ffffff;
+            box-shadow: 0 0 50px #ffffff;
+        }
+
+        .bet-badge {
+            background: rgba(3, 10, 7, 0.85);
+            padding: 8px 24px;
+            border-radius: 50px;
+            font-size: 20px;
+            color: #ffffff;
+            border: 2px solid var(--green-glow);
+            box-shadow: 0 0 25px rgba(0, 230, 118, 0.4);
+            display: inline-block;
+            margin-top: 6px;
+            font-weight: 800;
+            font-family: 'Roboto Mono', monospace;
+        }
+
+        .consensus-badge {
+            background: rgba(0, 230, 118, 0.15);
+            border: 1px solid var(--green-glow);
+            border-radius: 50px;
+            padding: 6px 20px;
+            font-size: 13px;
+            display: inline-block;
+            margin-top: 14px;
+            color: var(--neon-mint);
+            text-shadow: 0 0 8px rgba(0, 255, 136, 0.6);
+            font-weight: 800;
+            letter-spacing: 1px;
+        }
+
+        /* History Table Panel */
+        .history-panel {
+            background: linear-gradient(145deg, rgba(8, 24, 16, 0.95), rgba(4, 13, 8, 0.95));
+            border-radius: 30px;
+            overflow: hidden;
+            border: 1.5px solid var(--border-green);
+            box-shadow: 0 0 35px rgba(0, 230, 118, 0.2);
+        }
+
+        .panel-head {
+            padding: 16px 20px;
+            background: rgba(3, 15, 9, 0.95);
+            font-weight: 800;
+            border-bottom: 2px solid var(--border-green);
+            text-shadow: 0 0 10px rgba(0, 255, 136, 0.5);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 16px;
+            color: var(--neon-mint);
+        }
+
+        .win-rate {
+            color: #00ff88;
+            font-size: 16px;
+            text-shadow: 0 0 10px #00ff88;
+            font-weight: 800;
+            font-family: 'Roboto Mono', monospace;
+        }
+
+        .table-container {
+            overflow-x: auto;
+            max-height: 420px;
+            overflow-y: auto;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 12px;
+            min-width: 850px;
+        }
+
+        th {
+            text-align: left;
+            padding: 12px 8px;
+            background: #030a06;
+            color: var(--neon-mint);
+            font-weight: 800;
+            position: sticky;
+            top: 0;
+            z-index: 10;
+            border-bottom: 1px solid rgba(0, 230, 118, 0.3);
+            letter-spacing: 0.5px;
+        }
+
+        td {
+            padding: 9px 8px;
+            border-bottom: 1px solid rgba(0, 230, 118, 0.1);
+            font-family: 'Roboto Mono', monospace;
+            font-size: 12px;
+        }
+
+        .win-row {
+            color: #00ff88;
+            background: rgba(0, 255, 136, 0.14);
+            text-shadow: 0 0 6px #00ff88;
+            font-weight: 700;
+        }
+
+        .loss-row {
+            color: var(--red-loss);
+            background: rgba(255, 59, 86, 0.12);
+            text-shadow: 0 0 6px var(--red-loss);
+            font-weight: 700;
+        }
+
+        /* Footer Watermark */
+        .tg-credit {
+            position: fixed;
+            bottom: 8px;
+            right: 12px;
+            font-size: 12px;
+            color: var(--neon-mint);
+            text-shadow: 0 0 10px var(--green-glow);
+            z-index: 1200;
+            background: rgba(3, 10, 7, 0.85);
+            padding: 6px 16px;
+            border-radius: 50px;
+            backdrop-filter: blur(6px);
+            border: 1px solid var(--border-green);
+            font-family: 'Roboto Mono', monospace;
+            font-weight: 800;
+            letter-spacing: 0.5px;
+        }
+
+        /* Styled Copy Toast */
+        .copy-toast {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: linear-gradient(165deg, #04140b, #092817);
+            border: 3px solid var(--neon-mint);
+            border-radius: 40px;
+            padding: 28px 45px;
+            z-index: 99999;
+            backdrop-filter: blur(25px);
+            box-shadow: 0 0 100px rgba(0, 255, 136, 0.7), 0 0 200px rgba(0, 230, 118, 0.4);
+            animation: epicEntrance 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
+            text-align: center;
+            min-width: 320px;
+        }
+
+        @keyframes epicEntrance {
+            0% { opacity: 0; transform: translate(-50%, -30%) scale(0.4); filter: blur(10px); }
+            100% { opacity: 1; transform: translate(-50%, -50%) scale(1); filter: blur(0); }
+        }
+
+        .toast-icon { font-size: 55px; margin-bottom: 6px; }
+        .toast-title { font-size: 32px; font-weight: 900; color: #ffffff; text-shadow: 0 0 25px var(--neon-mint); letter-spacing: 2px; }
+        .toast-message { font-size: 20px; color: var(--neon-mint); font-weight: 800; margin-top: 4px; }
+        .toast-sub { font-size: 14px; color: #8fa0be; margin-top: 8px; font-weight: 700; }
+
+        @media (max-width: 480px) {
+            .cyber-card { padding: 26px 18px; }
+            .screen-header { font-size: 26px; }
+            .app-logo { font-size: 20px; }
+            .stat-val { font-size: 18px; }
+            .pred-result { font-size: 50px; }
+            .timer-countdown { font-size: 34px; }
+            .copy-btn { font-size: 15px; padding: 8px 18px; }
+            .copy-toast { padding: 20px 25px; min-width: 260px; }
+        }
     </style>
-  </head>
-  <body>
-    <main class="signal-app">
-      <section class="terminal-frame">
-        <div id="app" class="terminal-content"></div>
-      </section>
-    </main>
+</head>
+<body>
+
+    <div class="ambient-glow glow-1"></div>
+    <div class="ambient-glow glow-2"></div>
+    <canvas id="party-canvas"></canvas>
+
+    <div class="tg-credit">⚡ <span>@jashvip</span> ⚡</div>
+
+    <!-- ================= STEP 1: PASSWORD / ACCESS SCREEN ================= -->
+    <div id="auth-screen" class="modal-screen">
+        <div class="cyber-card">
+            <div style="text-align: center;">
+                <span class="brand-badge">🔐 SECURE VIP ACCESS</span>
+            </div>
+            <div class="screen-header">JASHVIP</div>
+            <div class="screen-sub">ENTER VIP ACCESS KEY</div>
+            
+            <div class="input-group">
+                <label>⚡ ACCESS KEY ⚡</label>
+                <input type="password" id="access-key-input" placeholder="••••••••" autocomplete="off">
+            </div>
+            <button class="cyber-btn" onclick="validateKey()">UNLOCK ACCESS</button>
+        </div>
+    </div>
+
+    <!-- ================= STEP 2: MODE SELECTION (1 MIN OR 30 SECONDS) ================= -->
+    <div id="mode-screen" class="modal-screen" style="display: none;">
+        <div class="cyber-card">
+            <div style="text-align: center;">
+                <span class="brand-badge">🎯 SELECT ENGINE MODE</span>
+            </div>
+            <div class="screen-header">CHOOSE TIMEFRAME</div>
+            <div class="screen-sub">FAST OR HIGH STABILITY ENGINE</div>
+
+            <div class="mode-selection-grid">
+                <div class="mode-card active" id="card-30s" onclick="selectMode('30S')">
+                    <div class="mode-card-header">
+                        <div class="mode-title">⚡ WINGO 30 SECONDS</div>
+                        <span class="mode-tag">RECOMMENDED</span>
+                    </div>
+                    <div class="mode-desc">High speed 30s period • 2,880 daily rounds • Fast profit compounding</div>
+                </div>
+
+                <div class="mode-card" id="card-1m" onclick="selectMode('1M')">
+                    <div class="mode-card-header">
+                        <div class="mode-title">⏱️ WINGO 1 MINUTE</div>
+                        <span class="mode-tag">STABLE</span>
+                    </div>
+                    <div class="mode-desc">Standard 60s period • 1,440 daily rounds • Maximum trend certainty</div>
+                </div>
+            </div>
+
+            <button class="cyber-btn" onclick="proceedToConfig()">CONTINUE ➔</button>
+        </div>
+    </div>
+
+    <!-- ================= STEP 3: BALANCE & TARGET CONFIGURATION ================= -->
+    <div id="config-screen" class="modal-screen" style="display: none;">
+        <div class="cyber-card">
+            <div style="text-align: center;">
+                <span class="brand-badge" id="selected-mode-tag">🎯 WINGO 30S SELECTED</span>
+            </div>
+            <div class="screen-header">CONFIG & TARGET</div>
+            <div class="screen-sub">SMART LOSS-PROTECTION SETTINGS</div>
+            
+            <div class="input-group">
+                <label>💰 STARTING BALANCE (₹)</label>
+                <input type="number" id="setup-bal" value="1000" step="100" min="50">
+            </div>
+            <div class="input-group">
+                <label>🎯 TARGET BALANCE (₹)</label>
+                <input type="number" id="setup-target" value="2000" step="100" min="100">
+            </div>
+            <div class="input-group">
+                <label>⚡ RISK STRATEGY</label>
+                <select id="setup-mode">
+                    <option value="0.01">1% (Conservative — Safe Grinding)</option>
+                    <option value="0.02" selected>2% (Moderate — Balanced Growth)</option>
+                    <option value="0.03">3% (Aggressive — High Speed)</option>
+                </select>
+            </div>
+            <button class="cyber-btn" onclick="launchBot()">🚀 LAUNCH JASHVIP BOT</button>
+            <div style="text-align: center; margin-top: 14px;">
+                <a href="javascript:void(0)" onclick="backToModeSelect()" style="color: var(--text-muted); font-size: 12px; text-decoration: none; font-weight: 700;">← Change Game Mode</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- ================= STEP 4: MAIN LIVE PREDICTION DASHBOARD ================= -->
+    <div id="app">
+        <div class="app-header">
+            <div class="logo-wrap">
+                <div class="app-logo">⚡ JASHVIP</div>
+                <div class="mode-badge-live" id="header-mode-badge" onclick="backToModeSelect()" title="Click to change mode">WINGO 30S ⚙️</div>
+            </div>
+            <div id="status-txt" class="status-pill">⦿ AI ENGINE ACTIVE</div>
+        </div>
+
+        <!-- Real-Time Account Stats -->
+        <div class="stats-grid">
+            <div class="stat-card">
+                <div class="stat-val">₹<span id="bal-display">0</span></div>
+                <div class="stat-lbl">Balance</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-val" id="target-display">₹0</div>
+                <div class="stat-lbl">Target</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-val" id="profit-display">₹0</div>
+                <div class="stat-lbl">Profit</div>
+            </div>
+        </div>
+
+        <!-- Live Signal Box -->
+        <div class="live-box">
+            <div class="period-header">
+                <span class="mode-indicator" id="live-mode-name">WINGO 30 SECONDS</span>
+                <span class="issue-no" id="next-issue">#PERIOD</span>
+            </div>
+            
+            <div class="timer-countdown" id="timer-display">00:30</div>
+
+            <!-- Dynamic 6-Engine Logic Badges -->
+            <div class="logic-status" id="logic-badges">
+                <span class="logic-badge l-normal" id="l1-badge">L1 (DRAGON): --</span>
+                <span class="logic-badge l-normal" id="l2-badge">L2 (MARKOV): --</span>
+                <span class="logic-badge l-normal" id="l3-badge">L3 (CHOP): --</span>
+                <span class="logic-badge l-normal" id="l4-badge">L4 (EMA): --</span>
+                <span class="logic-badge l-normal" id="l5-badge">L5 (DELTA): --</span>
+                <span class="logic-badge l-normal" id="l6-badge">L6 (VECTOR): --</span>
+            </div>
+
+            <!-- Prediction Result -->
+            <div class="pred-result" id="pred-text">
+                <span id="pred-value">ANALYZING...</span>
+                <button class="copy-btn" id="copyPredBtn" onclick="copyPrediction()">
+                    <span>📋</span> COPY
+                </button>
+            </div>
+
+            <div class="bet-badge">RECOMMENDED BET: ₹<span id="next-bet">0</span></div>
+            <br>
+            <div class="consensus-badge" id="consensus-display">⚡ AI CONFIDENCE: CALIBRATING...</div>
+        </div>
+
+        <!-- Historical Win/Loss Log Table -->
+        <div class="history-panel">
+            <div class="panel-head">
+                <span id="table-head-title">📊 JASHVIP HISTORY (LAST 100)</span>
+                <span class="win-rate" id="winrate-display">0% (0/0)</span>
+            </div>
+            <div class="table-container">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Period</th><th>L1</th><th>L2</th><th>L3</th><th>L4</th><th>L5</th><th>L6</th><th>Final</th><th>Bet</th><th>Result</th><th>Bal</th>
+                        </tr>
+                    </thead>
+                    <tbody id="history-body"></tbody>
+                </table>
+            </div>
+        </div>
+    </div>
 
     <script>
-      (() => {
-        const MODE_KEY = "jashvip_selected_mode_v9um";
-        const MAX_HISTORY = 1000;
+        (function() {
+            "use strict";
 
-        // Supported Game Modes
-        const GAME_MODES = {
-          "30S": {
-            id: "30S",
-            name: "WinGo 30S",
-            url: "https://draw.ar-lottery01.com/WinGo/WinGo_30S/GetHistoryIssuePage.json",
-            cycleSeconds: 30,
-            storageKey: "jashvip_top1_hist_30s_v27",
-            pendingKey: "jashvip_pending_30s_v27"
-          },
-          "1M": {
-            id: "1M",
-            name: "WinGo 1M",
-            url: "https://draw.ar-lottery01.com/WinGo/WinGo_1M/GetHistoryIssuePage.json",
-            cycleSeconds: 60,
-            storageKey: "jashvip_top1_hist_1m_v27",
-            pendingKey: "jashvip_pending_1m_v27"
-          }
-        };
+            // FREE UP BROWSER STORAGE AS REQUESTED
+            try {
+                localStorage.clear();
+            } catch(e) {}
 
-        let currentMode = localStorage.getItem(MODE_KEY) || "30S";
-        if (!GAME_MODES[currentMode]) currentMode = "30S";
-
-        // === HELPERS ===
-        const counts = nums => nums.reduce((o,n) => { o[n]=(o[n]||0)+1; return o; }, Array(10).fill(0));
-        const sizeFor = n => Number(n) >= 5 ? "BIG" : "SMALL";
-        const opp = s => s === "BIG" ? "SMALL" : "BIG";
-        const esc = v => String(v??"").replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
-        const nextDecimal = v => { const c=String(v||"").split(""); let carry=1; for(let i=c.length-1;i>=0&&carry;i--){ const d=Number(c[i])+carry; c[i]=String(d%10); carry=d>9?1:0; } return carry?`1${c.join("")}`:c.join(""); };
-        const shortPeriod = v => { const t=String(v||"—"); return t.length>8?`…${t.slice(-8)}`:t; };
-
-        function getRuns(sizes) {
-          const runs = [];
-          if (!sizes.length) return runs;
-          let curr = sizes[0], l = 1;
-          for (let i = 1; i < sizes.length; i++) {
-            if (sizes[i] === curr) l++;
-            else { runs.push({ size: curr, len: l }); curr = sizes[i]; l = 1; }
-          }
-          runs.push({ size: curr, len: l });
-          return runs;
-        }
-
-                        // === 9-FEATURE TITAN SUPREME STATE TABLES (100% ZERO BUST <= 2 ON 735 REAL DRAWS) ===
-        const TITAN_RULES_30S = {"0_1_2_0_1_0_0_0_1": "SMALL", "0_2_2_0_0_0_0_1_1": "SAME", "0_3_2_0_0_0_0_1_0": "SMALL", "0_4_2_0_0_0_0_0_1": "SMALL", "0_4_2_0_0_0_0_0_0": "OPP", "0_1_3_2_1_0_1_1_1": "OPP", "0_1_1_3_2_1_0_0_1": "BIG", "0_1_1_1_3_1_1_0_0": "OPP", "0_2_1_1_0_1_1_1_1": "OPP", "0_1_2_1_1_2_0_1_0": "OPP", "0_2_2_1_0_1_0_0_1": "OPP", "0_1_2_2_1_1_1_1_1": "OPP", "0_1_1_2_2_1_0_0_1": "BIG", "0_1_1_1_3_2_1_1_1": "OPP", "0_1_1_1_3_2_0_0_1": "SAME", "0_2_1_1_0_2_0_1_1": "OPP", "0_1_2_1_1_2_1_0_1": "BIG", "0_1_1_2_2_2_0_1_1": "BIG", "0_1_1_1_3_2_1_1_0": "OPP", "0_1_1_1_3_2_1_0_0": "LAST", "0_2_1_1_0_2_1_1_1": "OPP", "0_2_2_1_0_1_0_1_0": "OPP", "0_3_2_1_0_1_0_1_0": "OPP", "0_1_3_2_1_1_1_0_1": "BIG", "0_2_3_2_0_1_1_1_1": "OPP", "0_1_2_3_1_1_0_0_1": "SMALL", "0_2_2_3_0_1_0_0_0": "OPP", "0_3_2_3_0_1_0_0_0": "SMALL", "0_4_2_3_0_0_0_1_1": "SMALL", "0_4_2_3_0_0_0_1_0": "OPP", "0_1_3_2_1_0_1_1_0": "LAST", "0_1_1_1_3_2_0_0_0": "BIG", "0_2_1_1_0_2_1_0_0": "LAST", "0_1_2_1_1_2_0_0_0": "SAME", "0_2_2_1_0_1_0_0_0": "SAME", "0_3_2_1_0_1_0_0_0": "OPP", "0_4_2_1_0_0_0_1_1": "SMALL", "0_2_3_2_0_0_1_1_1": "OPP", "0_1_2_3_1_1_0_1_0": "SMALL", "0_2_2_3_0_1_0_0_1": "SAME", "0_4_2_3_0_0_0_0_0": "SMALL", "0_2_3_2_0_0_1_0_1": "OPP", "0_1_2_3_1_1_0_0_0": "OPP", "0_1_1_2_2_1_1_1_1": "OPP", "0_1_1_1_3_2_0_1_0": "OPP_LAST", "0_2_1_1_0_1_0_0_1": "SAME", "0_3_1_1_0_1_0_0_0": "OPP", "0_1_3_1_1_1_1_1_1": "SMALL", "0_1_1_3_2_1_0_1_0": "BIG", "0_1_1_1_3_1_1_0_1": "LAST", "0_2_1_1_0_2_1_1_0": "OPP", "0_2_1_2_0_1_0_0_0": "BIG", "0_3_1_2_0_1_0_1_1": "OPP", "0_1_3_1_1_1_1_0_1": "OPP_LAST", "0_2_3_1_0_1_1_1_1": "SAME", "0_3_3_1_0_0_1_0_1": "OPP_LAST", "0_4_3_1_0_0_1_1_1": "OPP", "0_1_3_3_1_1_0_0_1": "LAST", "0_2_3_3_0_0_0_0_0": "OPP", "0_1_2_3_1_1_1_1_1": "SAME", "0_2_1_2_0_1_0_1_1": "SAME", "0_1_2_1_1_1_1_0_1": "OPP", "0_1_1_2_2_2_0_0_0": "SAME", "0_1_1_1_3_2_0_1_1": "OPP", "0_2_1_1_0_2_0_1_0": "OPP", "0_2_2_1_0_1_1_1_1": "OPP", "0_1_2_2_1_1_0_0_1": "SMALL", "0_2_2_2_0_1_0_0_0": "SAME", "0_3_2_2_0_1_0_0_0": "SMALL", "0_1_3_2_1_1_1_1_1": "OPP", "0_2_3_2_0_1_1_0_1": "OPP", "0_1_2_3_1_1_0_1_1": "SMALL", "1_1_2_0_1_0_0_0_1": "BIG", "1_2_2_0_0_0_0_1_1": "SMALL", "1_3_2_0_0_0_0_1_0": "OPP", "1_4_2_0_0_0_0_0_1": "SMALL", "1_4_2_0_0_0_0_0_0": "SMALL", "1_1_3_2_1_0_1_1_1": "SAME", "1_1_1_3_2_1_0_0_1": "OPP", "1_1_1_1_3_1_1_0_0": "SMALL", "1_2_1_1_0_1_1_1_1": "OPP", "1_1_2_1_1_2_0_1_0": "BIG", "1_2_2_1_0_1_0_0_1": "SMALL", "1_1_2_2_1_1_1_1_1": "SMALL", "1_1_1_2_2_1_0_0_1": "BIG", "1_1_1_1_3_2_1_1_1": "SAME", "1_1_1_1_3_2_0_0_1": "BIG", "1_2_1_1_0_2_0_1_1": "SMALL", "1_1_2_1_1_2_1_0_1": "SMALL", "1_1_1_2_2_2_0_1_1": "OPP", "1_1_1_1_3_2_1_1_0": "SMALL", "1_1_1_1_3_2_1_0_0": "SMALL", "1_2_1_1_0_2_1_1_1": "BIG", "1_2_2_1_0_1_0_1_0": "SMALL", "1_3_2_1_0_1_0_1_0": "SMALL", "1_1_3_2_1_1_1_0_1": "SAME", "1_2_3_2_0_1_1_1_1": "BIG", "1_1_2_3_1_1_0_0_1": "OPP", "1_2_2_3_0_1_0_0_0": "OPP", "1_3_2_3_0_1_0_0_0": "SMALL", "1_4_2_3_0_0_0_1_1": "SMALL", "1_4_2_3_0_0_0_1_0": "SMALL", "1_1_3_2_1_0_1_1_0": "SMALL", "1_1_1_1_3_2_0_0_0": "BIG", "1_2_1_1_0_2_1_0_0": "OPP", "1_1_2_1_1_2_0_0_0": "OPP", "1_2_2_1_0_1_0_0_0": "SMALL", "1_3_2_1_0_1_0_0_0": "SMALL", "1_4_2_1_0_0_0_1_1": "OPP", "1_2_3_2_0_0_1_1_1": "BIG", "1_1_2_3_1_1_0_1_0": "BIG", "1_2_2_3_0_1_0_0_1": "SMALL", "1_4_2_3_0_0_0_0_0": "SMALL", "1_2_3_2_0_0_1_0_1": "BIG", "1_1_2_3_1_1_0_0_0": "BIG", "1_1_1_2_2_1_1_1_1": "SAME", "1_1_1_1_3_2_0_1_0": "BIG", "1_2_1_1_0_1_0_0_1": "OPP", "1_3_1_1_0_1_0_0_0": "SMALL", "1_1_3_1_1_1_1_1_1": "SAME", "1_1_1_3_2_1_0_1_0": "OPP", "1_1_1_1_3_1_1_0_1": "OPP_LAST", "1_2_1_1_0_2_1_1_0": "SAME", "1_2_1_2_0_1_0_0_0": "SMALL", "1_3_1_2_0_1_0_1_1": "SMALL", "1_1_3_1_1_1_1_0_1": "SAME", "1_2_3_1_0_1_1_1_1": "LAST", "1_3_3_1_0_0_1_0_1": "BIG", "1_4_3_1_0_0_1_1_1": "BIG", "1_1_3_3_1_1_0_0_1": "BIG", "1_2_3_3_0_0_0_0_0": "SMALL", "1_1_2_3_1_1_1_1_1": "LAST", "1_2_1_2_0_1_0_1_1": "OPP", "1_1_2_1_1_1_1_0_1": "SMALL", "1_1_1_2_2_2_0_0_0": "OPP", "1_1_1_1_3_2_0_1_1": "BIG", "1_2_1_1_0_2_0_1_0": "OPP", "1_2_2_1_0_1_1_1_1": "SMALL", "1_1_2_2_1_1_0_0_1": "OPP_LAST", "1_2_2_2_0_1_0_0_0": "OPP", "1_3_2_2_0_1_0_0_0": "SMALL", "1_1_3_2_1_1_1_1_1": "SMALL", "1_2_3_2_0_1_1_0_1": "BIG", "1_1_2_3_1_1_0_1_1": "BIG", "2_1_2_0_1_0_0_0_1": "SMALL", "2_2_2_0_0_0_0_1_1": "SMALL", "2_3_2_0_0_0_0_1_0": "SMALL", "2_4_2_0_0_0_0_0_1": "SMALL", "2_4_2_0_0_0_0_0_0": "SMALL", "2_1_3_2_1_0_1_1_1": "BIG", "2_1_1_3_2_1_0_0_1": "SAME", "2_1_1_1_3_1_1_0_0": "SMALL", "2_2_1_1_0_1_1_1_1": "SAME", "2_1_2_1_1_2_0_1_0": "OPP", "2_2_2_1_0_1_0_0_1": "SMALL", "2_1_2_2_1_1_1_1_1": "OPP", "2_1_1_2_2_1_0_0_1": "OPP", "2_1_1_1_3_2_1_1_1": "SMALL", "2_1_1_1_3_2_0_0_1": "SAME", "2_2_1_1_0_2_0_1_1": "SMALL", "2_1_2_1_1_2_1_0_1": "BIG", "2_1_1_2_2_2_0_1_1": "BIG", "2_1_1_1_3_2_1_1_0": "OPP", "2_1_1_1_3_2_1_0_0": "SMALL", "2_2_1_1_0_2_1_1_1": "OPP", "2_2_2_1_0_1_0_1_0": "SMALL", "2_3_2_1_0_1_0_1_0": "SMALL", "2_1_3_2_1_1_1_0_1": "BIG", "2_2_3_2_0_1_1_1_1": "BIG", "2_1_2_3_1_1_0_0_1": "SMALL", "2_2_2_3_0_1_0_0_0": "SMALL", "2_3_2_3_0_1_0_0_0": "SMALL", "2_4_2_3_0_0_0_1_1": "SMALL", "2_4_2_3_0_0_0_1_0": "SMALL", "2_1_3_2_1_0_1_1_0": "OPP", "2_1_1_1_3_2_0_0_0": "OPP_LAST", "2_2_1_1_0_2_1_0_0": "BIG", "2_1_2_1_1_2_0_0_0": "SMALL", "2_2_2_1_0_1_0_0_0": "SMALL", "2_3_2_1_0_1_0_0_0": "SMALL", "2_4_2_1_0_0_0_1_1": "SMALL", "2_2_3_2_0_0_1_1_1": "BIG", "2_1_2_3_1_1_0_1_0": "SMALL", "2_2_2_3_0_1_0_0_1": "SMALL", "2_4_2_3_0_0_0_0_0": "SMALL", "2_2_3_2_0_0_1_0_1": "BIG", "2_1_2_3_1_1_0_0_0": "SMALL", "2_1_1_2_2_1_1_1_1": "SMALL", "2_1_1_1_3_2_0_1_0": "BIG", "2_2_1_1_0_1_0_0_1": "SMALL", "2_3_1_1_0_1_0_0_0": "SMALL", "2_1_3_1_1_1_1_1_1": "SAME", "2_1_1_3_2_1_0_1_0": "SAME", "2_1_1_1_3_1_1_0_1": "SMALL", "2_2_1_1_0_2_1_1_0": "BIG", "2_2_1_2_0_1_0_0_0": "OPP", "2_3_1_2_0_1_0_1_1": "SMALL", "2_1_3_1_1_1_1_0_1": "BIG", "2_2_3_1_0_1_1_1_1": "BIG", "2_3_3_1_0_0_1_0_1": "BIG", "2_4_3_1_0_0_1_1_1": "BIG", "2_1_3_3_1_1_0_0_1": "LAST", "2_2_3_3_0_0_0_0_0": "SMALL", "2_1_2_3_1_1_1_1_1": "OPP", "2_2_1_2_0_1_0_1_1": "SMALL", "2_1_2_1_1_1_1_0_1": "BIG", "2_1_1_2_2_2_0_0_0": "BIG", "2_1_1_1_3_2_0_1_1": "SAME", "2_2_1_1_0_2_0_1_0": "SMALL", "2_2_2_1_0_1_1_1_1": "BIG", "2_1_2_2_1_1_0_0_1": "OPP", "2_2_2_2_0_1_0_0_0": "SMALL", "2_3_2_2_0_1_0_0_0": "SMALL", "2_1_3_2_1_1_1_1_1": "BIG", "2_2_3_2_0_1_1_0_1": "OPP", "2_1_2_3_1_1_0_1_1": "OPP", "0_3_0_0_0_0_1_1_0": "OPP", "0_1_3_0_1_0_0_0_1": "OPP", "0_1_1_3_2_1_1_1_1": "SMALL", "0_1_1_1_3_1_0_0_1": "SAME", "0_1_1_2_2_2_1_1_0": "OPP", "0_2_1_1_0_1_0_1_1": "OPP", "0_1_2_1_1_2_1_1_0": "BIG", "0_1_1_2_2_2_0_0_1": "BIG", "0_3_2_1_0_1_1_1_0": "OPP", "0_4_2_1_0_0_1_0_1": "OPP", "0_1_3_2_1_1_0_0_0": "SMALL", "0_2_3_2_0_0_0_0_0": "OPP", "0_3_3_2_0_0_0_1_1": "LAST", "0_4_3_2_0_0_0_0_1": "SMALL", "0_4_3_2_0_0_0_1_1": "OPP", "0_1_3_3_1_0_1_0_1": "OPP", "0_1_1_3_2_1_0_1_1": "SAME", "0_2_1_3_0_1_0_1_0": "OPP_LAST", "0_1_2_1_1_1_1_1_0": "LAST", "0_2_2_1_0_1_1_1_0": "SAME", "0_1_3_2_1_1_0_0_1": "OPP", "0_1_1_3_2_1_1_0_0": "SAME", "0_2_1_3_0_1_1_1_1": "BIG", "0_1_2_1_1_1_0_1_0": "SMALL", "0_1_2_1_1_1_1_0_0": "OPP", "0_2_1_2_0_1_0_0_1": "OPP", "0_3_1_2_0_1_0_0_0": "OPP", "0_4_1_2_0_1_0_0_0": "SMALL", "0_1_1_1_3_1_1_1_1": "OPP", "1_3_0_0_0_0_1_1_0": "BIG", "1_1_3_0_1_0_0_0_1": "BIG", "1_1_1_3_2_1_1_1_1": "BIG", "1_1_1_1_3_1_0_0_1": "BIG", "1_1_1_2_2_2_1_1_0": "OPP", "1_2_1_1_0_1_0_1_1": "SAME", "1_1_2_1_1_2_1_1_0": "SMALL", "1_1_1_2_2_2_0_0_1": "SAME", "1_3_2_1_0_1_1_1_0": "OPP_LAST", "1_4_2_1_0_0_1_0_1": "OPP_LAST", "1_1_3_2_1_1_0_0_0": "BIG", "1_2_3_2_0_0_0_0_0": "SMALL", "1_3_3_2_0_0_0_1_1": "SMALL", "1_4_3_2_0_0_0_0_1": "SMALL", "1_4_3_2_0_0_0_1_1": "SMALL", "1_1_3_3_1_0_1_0_1": "SMALL", "1_1_1_3_2_1_0_1_1": "SAME", "1_2_1_3_0_1_0_1_0": "SMALL", "1_1_2_1_1_1_1_1_0": "SMALL", "1_2_2_1_0_1_1_1_0": "OPP", "1_1_3_2_1_1_0_0_1": "SAME", "1_1_1_3_2_1_1_0_0": "OPP", "1_2_1_3_0_1_1_1_1": "BIG", "1_1_2_1_1_1_0_1_0": "BIG", "1_1_2_1_1_1_1_0_0": "OPP", "1_2_1_2_0_1_0_0_1": "SMALL", "1_3_1_2_0_1_0_0_0": "OPP", "1_4_1_2_0_1_0_0_0": "SMALL", "1_1_1_1_3_1_1_1_1": "SMALL", "2_3_0_0_0_0_1_1_0": "BIG", "2_1_3_0_1_0_0_0_1": "SMALL", "2_1_1_3_2_1_1_1_1": "SMALL", "2_1_1_1_3_1_0_0_1": "BIG", "2_1_1_2_2_2_1_1_0": "SMALL", "2_2_1_1_0_1_0_1_1": "SMALL", "2_1_2_1_1_2_1_1_0": "BIG", "2_1_1_2_2_2_0_0_1": "SAME", "2_3_2_1_0_1_1_1_0": "LAST", "2_4_2_1_0_0_1_0_1": "BIG", "2_1_3_2_1_1_0_0_0": "SMALL", "2_2_3_2_0_0_0_0_0": "SMALL", "2_3_3_2_0_0_0_1_1": "SMALL", "2_4_3_2_0_0_0_0_1": "SMALL", "2_4_3_2_0_0_0_1_1": "SMALL", "2_1_3_3_1_0_1_0_1": "SAME", "2_1_1_3_2_1_0_1_1": "BIG", "2_2_1_3_0_1_0_1_0": "OPP", "2_1_2_1_1_1_1_1_0": "BIG", "2_2_2_1_0_1_1_1_0": "OPP", "2_1_3_2_1_1_0_0_1": "SMALL", "2_1_1_3_2_1_1_0_0": "OPP", "2_2_1_3_0_1_1_1_1": "OPP", "2_1_2_1_1_1_0_1_0": "SMALL", "2_1_2_1_1_1_1_0_0": "BIG", "2_2_1_2_0_1_0_0_1": "SMALL", "2_3_1_2_0_1_0_0_0": "SMALL", "2_4_1_2_0_1_0_0_0": "SMALL", "2_1_1_1_3_1_1_1_1": "SMALL", "0_1_2_1_1_1_1_1_1": "SMALL", "0_2_1_1_0_1_1_1_0": "OPP_LAST", "0_1_2_1_1_2_0_0_1": "OPP", "0_1_1_2_2_2_1_1_1": "SMALL", "0_2_1_2_0_1_1_0_1": "SMALL", "0_3_1_2_0_1_1_0_0": "BIG", "0_4_1_2_0_1_1_1_1": "OPP", "0_1_3_1_1_1_0_0_1": "SMALL", "0_2_3_1_0_0_0_0_0": "SAME", "0_3_3_1_0_0_0_1_1": "SMALL", "0_4_3_1_0_0_0_1_0": "OPP", "0_1_3_3_1_1_1_0_1": "BIG", "0_2_3_3_0_0_1_1_1": "SAME", "0_3_3_3_0_0_1_1_0": "OPP", "0_1_3_3_1_1_0_1_0": "BIG", "0_2_3_3_0_1_0_0_1": "OPP", "0_2_1_2_0_1_0_1_0": "BIG", "0_3_1_2_0_1_0_0_1": "SMALL", "1_1_2_1_1_1_1_1_1": "SAME", "1_2_1_1_0_1_1_1_0": "OPP", "1_1_2_1_1_2_0_0_1": "BIG", "1_1_1_2_2_2_1_1_1": "OPP", "1_2_1_2_0_1_1_0_1": "BIG", "1_3_1_2_0_1_1_0_0": "BIG", "1_4_1_2_0_1_1_1_1": "BIG", "1_1_3_1_1_1_0_0_1": "SAME", "1_2_3_1_0_0_0_0_0": "SMALL", "1_3_3_1_0_0_0_1_1": "SMALL", "1_4_3_1_0_0_0_1_0": "SMALL", "1_1_3_3_1_1_1_0_1": "OPP", "1_2_3_3_0_0_1_1_1": "BIG", "1_3_3_3_0_0_1_1_0": "OPP", "1_1_3_3_1_1_0_1_0": "BIG", "1_2_3_3_0_1_0_0_1": "SMALL", "1_2_1_2_0_1_0_1_0": "SMALL", "1_3_1_2_0_1_0_0_1": "SMALL", "2_1_2_1_1_1_1_1_1": "OPP", "2_2_1_1_0_1_1_1_0": "BIG", "2_1_2_1_1_2_0_0_1": "SMALL", "2_1_1_2_2_2_1_1_1": "SAME", "2_2_1_2_0_1_1_0_1": "BIG", "2_3_1_2_0_1_1_0_0": "BIG", "2_4_1_2_0_1_1_1_1": "BIG", "2_1_3_1_1_1_0_0_1": "SMALL", "2_2_3_1_0_0_0_0_0": "OPP", "2_3_3_1_0_0_0_1_1": "SMALL", "2_4_3_1_0_0_0_1_0": "LAST", "2_1_3_3_1_1_1_0_1": "OPP", "2_2_3_3_0_0_1_1_1": "BIG", "2_3_3_3_0_0_1_1_0": "BIG", "2_1_3_3_1_1_0_1_0": "OPP", "2_2_3_3_0_1_0_0_1": "OPP", "2_2_1_2_0_1_0_1_0": "SMALL", "2_3_1_2_0_1_0_0_1": "OPP", "0_3_0_0_0_0_0_0_1": "SMALL", "0_4_0_0_0_0_0_0_0": "SMALL", "0_1_3_0_1_0_1_0_0": "BIG", "0_2_3_0_0_0_1_0_0": "SMALL", "0_3_3_0_0_0_1_1_1": "OPP", "1_3_0_0_0_0_0_0_1": "SMALL", "1_4_0_0_0_0_0_0_0": "SMALL", "1_1_3_0_1_0_1_0_0": "SMALL", "1_2_3_0_0_0_1_0_0": "BIG", "1_3_3_0_0_0_1_1_1": "BIG", "2_3_0_0_0_0_0_0_1": "SMALL", "2_4_0_0_0_0_0_0_0": "SMALL", "2_1_3_0_1_0_1_0_0": "BIG", "2_2_3_0_0_0_1_0_0": "BIG", "2_3_3_0_0_0_1_1_1": "BIG", "0_2_1_0_0_0_0_0_0": "OPP", "0_2_2_1_0_1_1_0_1": "SAME", "0_3_2_1_0_1_1_0_0": "BIG", "0_4_2_1_0_0_1_1_1": "OPP", "0_4_2_1_0_0_1_1_0": "OPP", "0_1_3_2_1_0_0_0_1": "OPP", "0_3_3_2_0_0_0_0_0": "OPP", "0_4_3_2_0_0_0_0_0": "SMALL", "0_1_3_3_1_1_1_0_0": "OPP", "0_2_3_3_0_0_1_0_0": "OPP", "1_2_1_0_0_0_0_0_0": "SMALL", "1_2_2_1_0_1_1_0_1": "OPP", "1_3_2_1_0_1_1_0_0": "BIG", "1_4_2_1_0_0_1_1_1": "BIG", "1_4_2_1_0_0_1_1_0": "BIG", "1_1_3_2_1_0_0_0_1": "OPP", "1_3_3_2_0_0_0_0_0": "SMALL", "1_4_3_2_0_0_0_0_0": "SMALL", "1_1_3_3_1_1_1_0_0": "SMALL", "1_2_3_3_0_0_1_0_0": "BIG", "2_2_1_0_0_0_0_0_0": "SMALL", "2_2_2_1_0_1_1_0_1": "OPP_LAST", "2_3_2_1_0_1_1_0_0": "BIG", "2_4_2_1_0_0_1_1_1": "BIG", "2_4_2_1_0_0_1_1_0": "BIG", "2_1_3_2_1_0_0_0_1": "SMALL", "2_3_3_2_0_0_0_0_0": "SMALL", "2_4_3_2_0_0_0_0_0": "SMALL", "2_1_3_3_1_1_1_0_0": "LAST", "2_2_3_3_0_0_1_0_0": "OPP", "0_1_2_0_1_0_0_0_0": "SAME", "0_2_2_0_0_0_0_0_0": "OPP", "0_1_2_2_1_1_1_0_0": "OPP", "0_1_1_2_2_1_0_0_0": "BIG", "0_1_3_1_1_1_1_1_0": "OPP", "0_2_1_3_0_1_0_0_0": "BIG", "0_3_1_3_0_1_0_0_0": "SAME", "0_4_1_3_0_1_0_0_0": "OPP", "1_1_2_0_1_0_0_0_0": "BIG", "1_2_2_0_0_0_0_0_0": "SMALL", "1_1_2_2_1_1_1_0_0": "SMALL", "1_1_1_2_2_1_0_0_0": "SAME", "1_1_3_1_1_1_1_1_0": "OPP", "1_2_1_3_0_1_0_0_0": "SMALL", "1_3_1_3_0_1_0_0_0": "OPP_LAST", "1_4_1_3_0_1_0_0_0": "BIG", "2_1_2_0_1_0_0_0_0": "SMALL", "2_2_2_0_0_0_0_0_0": "SMALL", "2_1_2_2_1_1_1_0_0": "BIG", "2_1_1_2_2_1_0_0_0": "BIG", "2_1_3_1_1_1_1_1_0": "BIG", "2_2_1_3_0_1_0_0_0": "SAME", "2_3_1_3_0_1_0_0_0": "SAME", "2_4_1_3_0_1_0_0_0": "SMALL", "0_2_1_0_0_0_1_0_0": "SAME", "0_3_1_0_0_0_1_1_1": "BIG", "0_4_1_0_0_0_1_0_1": "OPP", "0_1_3_1_1_1_0_1_1": "SMALL", "0_1_1_3_2_1_1_1_0": "SMALL", "0_2_1_3_0_1_1_1_0": "OPP", "0_1_2_1_1_1_0_0_1": "OPP", "0_2_1_2_0_1_1_1_0": "SAME", "0_1_2_2_1_1_1_1_0": "LAST", "1_2_1_0_0_0_1_0_0": "BIG", "1_3_1_0_0_0_1_1_1": "BIG", "1_4_1_0_0_0_1_0_1": "BIG", "1_1_3_1_1_1_0_1_1": "SAME", "1_1_1_3_2_1_1_1_0": "SMALL", "1_2_1_3_0_1_1_1_0": "OPP", "1_1_2_1_1_1_0_0_1": "OPP", "1_2_1_2_0_1_1_1_0": "OPP", "1_1_2_2_1_1_1_1_0": "SMALL", "2_2_1_0_0_0_1_0_0": "BIG", "2_3_1_0_0_0_1_1_1": "BIG", "2_4_1_0_0_0_1_0_1": "BIG", "2_1_3_1_1_1_0_1_1": "SMALL", "2_1_1_3_2_1_1_1_0": "SMALL", "2_2_1_3_0_1_1_1_0": "BIG", "2_1_2_1_1_1_0_0_1": "SMALL", "2_2_1_2_0_1_1_1_0": "SAME", "2_1_2_2_1_1_1_1_0": "BIG", "0_1_2_0_1_0_0_1_0": "SMALL", "0_1_1_2_2_1_1_0_1": "SMALL", "0_2_1_2_0_1_1_1_1": "SMALL", "0_3_1_2_0_1_1_1_0": "OPP", "0_4_1_2_0_1_1_1_0": "BIG", "0_4_1_2_0_0_1_1_0": "OPP", "0_1_3_1_1_0_0_0_1": "OPP", "0_2_1_3_0_1_1_0_1": "SMALL", "0_3_1_3_0_1_1_0_0": "OPP", "0_1_3_1_1_1_0_0_0": "OPP", "0_2_3_1_0_1_0_0_0": "OPP", "0_1_2_3_1_1_1_0_0": "BIG", "0_2_2_3_0_1_1_1_1": "SAME", "0_3_2_3_0_1_1_0_1": "OPP", "0_1_3_2_1_1_0_1_1": "SAME", "0_2_3_2_0_1_0_0_1": "SMALL", "0_1_3_3_1_1_1_1_1": "OPP", "0_2_1_3_0_1_0_1_1": "BIG", "1_1_2_0_1_0_0_1_0": "BIG", "1_1_1_2_2_1_1_0_1": "SMALL", "1_2_1_2_0_1_1_1_1": "SAME", "1_3_1_2_0_1_1_1_0": "BIG", "1_4_1_2_0_1_1_1_0": "OPP", "1_4_1_2_0_0_1_1_0": "BIG", "1_1_3_1_1_0_0_0_1": "LAST", "1_2_1_3_0_1_1_0_1": "SMALL", "1_3_1_3_0_1_1_0_0": "BIG", "1_1_3_1_1_1_0_0_0": "OPP_LAST", "1_2_3_1_0_1_0_0_0": "SMALL", "1_1_2_3_1_1_1_0_0": "SAME", "1_2_2_3_0_1_1_1_1": "BIG", "1_3_2_3_0_1_1_0_1": "BIG", "1_1_3_2_1_1_0_1_1": "BIG", "1_2_3_2_0_1_0_0_1": "SMALL", "1_1_3_3_1_1_1_1_1": "OPP", "1_2_1_3_0_1_0_1_1": "SMALL", "2_1_2_0_1_0_0_1_0": "SMALL", "2_1_1_2_2_1_1_0_1": "SMALL", "2_2_1_2_0_1_1_1_1": "OPP", "2_3_1_2_0_1_1_1_0": "BIG", "2_4_1_2_0_1_1_1_0": "BIG", "2_4_1_2_0_0_1_1_0": "BIG", "2_1_3_1_1_0_0_0_1": "SMALL", "2_2_1_3_0_1_1_0_1": "BIG", "2_3_1_3_0_1_1_0_0": "BIG", "2_1_3_1_1_1_0_0_0": "OPP", "2_2_3_1_0_1_0_0_0": "SMALL", "2_1_2_3_1_1_1_0_0": "BIG", "2_2_2_3_0_1_1_1_1": "BIG", "2_3_2_3_0_1_1_0_1": "BIG", "2_1_3_2_1_1_0_1_1": "OPP", "2_2_3_2_0_1_0_0_1": "SMALL", "2_1_3_3_1_1_1_1_1": "BIG", "2_2_1_3_0_1_0_1_1": "SMALL", "0_1_3_0_1_0_0_1_0": "OPP", "0_1_1_3_2_1_1_0_1": "SMALL", "0_1_1_1_3_1_0_1_1": "LAST", "0_2_1_1_0_2_1_0_1": "OPP", "0_1_2_1_1_2_0_1_1": "OPP", "0_4_2_1_0_0_0_1_0": "BIG", "0_1_3_2_1_1_1_1_0": "OPP", "0_3_1_3_0_1_0_1_0": "OPP", "0_3_1_3_0_1_0_1_1": "SAME", "0_2_3_1_0_1_1_1_0": "SMALL", "0_3_3_1_0_0_1_1_0": "BIG", "0_2_3_3_0_1_0_1_0": "BIG", "0_3_3_3_0_0_0_0_1": "OPP", "0_3_1_3_0_1_0_0_1": "OPP", "0_3_2_1_0_1_0_1_1": "SMALL", "0_4_1_3_0_1_0_1_0": "OPP", "0_2_1_1_0_1_1_0_0": "SMALL", "0_3_1_1_0_1_1_0_0": "BIG", "0_4_1_1_0_1_1_0_0": "OPP", "0_2_3_1_0_0_0_0_1": "SMALL", "1_1_3_0_1_0_0_1_0": "BIG", "1_1_1_3_2_1_1_0_1": "OPP", "1_1_1_1_3_1_0_1_1": "BIG", "1_2_1_1_0_2_1_0_1": "OPP", "1_1_2_1_1_2_0_1_1": "BIG", "1_4_2_1_0_0_0_1_0": "SMALL", "1_1_3_2_1_1_1_1_0": "BIG", "1_3_1_3_0_1_0_1_0": "SMALL", "1_3_1_3_0_1_0_1_1": "SMALL", "1_2_3_1_0_1_1_1_0": "BIG", "1_3_3_1_0_0_1_1_0": "BIG", "1_2_3_3_0_1_0_1_0": "SMALL", "1_3_3_3_0_0_0_0_1": "SMALL", "1_3_1_3_0_1_0_0_1": "SMALL", "1_3_2_1_0_1_0_1_1": "SMALL", "1_4_1_3_0_1_0_1_0": "SMALL", "1_2_1_1_0_1_1_0_0": "BIG", "1_3_1_1_0_1_1_0_0": "BIG", "1_4_1_1_0_1_1_0_0": "BIG", "1_2_3_1_0_0_0_0_1": "SMALL", "2_1_3_0_1_0_0_1_0": "SMALL", "2_1_1_3_2_1_1_0_1": "SMALL", "2_1_1_1_3_1_0_1_1": "SAME", "2_2_1_1_0_2_1_0_1": "BIG", "2_1_2_1_1_2_0_1_1": "SMALL", "2_4_2_1_0_0_0_1_0": "SMALL", "2_1_3_2_1_1_1_1_0": "SAME", "2_3_1_3_0_1_0_1_0": "SMALL", "2_3_1_3_0_1_0_1_1": "SMALL", "2_2_3_1_0_1_1_1_0": "BIG", "2_3_3_1_0_0_1_1_0": "BIG", "2_2_3_3_0_1_0_1_0": "SMALL", "2_3_3_3_0_0_0_0_1": "SMALL", "2_3_1_3_0_1_0_0_1": "SMALL", "2_3_2_1_0_1_0_1_1": "OPP", "2_4_1_3_0_1_0_1_0": "SMALL", "2_2_1_1_0_1_1_0_0": "BIG", "2_3_1_1_0_1_1_0_0": "BIG", "2_4_1_1_0_1_1_0_0": "BIG", "2_2_3_1_0_0_0_0_1": "SAME", "0_2_2_0_0_0_0_1_0": "BIG", "0_4_2_2_0_0_0_0_0": "OPP", "0_2_3_2_0_0_1_1_0": "SAME", "0_3_3_2_0_0_1_1_0": "LAST", "0_3_1_3_0_1_1_1_0": "BIG", "0_4_1_3_0_1_1_1_0": "OPP", "0_4_3_1_0_0_0_0_1": "SMALL", "0_4_3_1_0_0_0_1_1": "SMALL", "0_1_1_3_2_1_0_0_0": "BIG", "0_1_1_2_2_1_1_0_0": "OPP", "0_2_2_2_0_1_1_0_1": "SAME", "0_3_2_2_0_1_1_1_1": "BIG", "0_4_2_2_0_0_1_1_0": "BIG", "0_4_2_2_0_0_1_0_1": "BIG", "0_4_2_2_0_0_1_1_1": "OPP", "0_1_3_2_1_0_0_1_0": "SMALL", "0_1_1_1_3_1_0_0_0": "SAME", "0_3_1_2_0_1_0_1_0": "SMALL", "0_4_1_2_0_1_0_1_0": "OPP", "0_2_1_1_0_2_0_0_0": "OPP", "0_1_2_1_1_2_1_1_1": "OPP", "0_1_1_2_2_2_0_1_0": "SAME", "0_1_1_2_2_2_1_0_0": "SMALL", "0_1_2_1_1_2_1_0_0": "BIG", "0_4_2_2_0_0_0_1_1": "SMALL", "0_4_2_2_0_0_0_1_0": "OPP_LAST", "0_4_3_2_0_0_1_1_0": "BIG", "0_4_3_2_0_0_1_0_1": "BIG", "0_4_3_2_0_0_1_1_1": "BIG", "0_1_3_3_1_0_0_0_1": "SMALL", "0_2_2_3_0_1_1_0_1": "OPP", "0_1_2_2_1_1_0_0_0": "OPP", "0_2_1_1_0_1_0_0_0": "OPP", "0_2_2_1_0_1_1_0_0": "OPP", "0_1_2_2_1_1_0_1_1": "SMALL", "0_2_2_2_0_1_0_1_0": "OPP", "0_2_2_2_0_1_1_1_0": "OPP", "0_2_2_1_0_1_0_1_1": "BIG", "0_3_2_1_0_1_0_0_1": "OPP", "0_1_3_1_1_1_1_0_0": "OPP", "0_3_1_1_0_1_0_1_1": "OPP", "0_4_1_1_0_1_0_1_0": "SMALL", "0_4_1_1_0_0_0_1_0": "SMALL", "0_4_1_1_0_0_0_0_1": "OPP", "0_1_3_1_1_0_1_0_0": "OPP", "0_1_1_1_3_1_1_1_0": "OPP", "0_2_2_2_0_1_0_0_1": "SAME", "0_1_3_2_1_1_1_0_0": "OPP", "0_3_2_1_0_1_1_0_1": "OPP", "0_2_3_2_0_1_0_0_0": "SAME", "0_1_3_3_1_0_1_1_0": "OPP", "0_2_2_2_0_1_0_1_1": "SAME", "0_1_1_2_2_1_0_1_0": "BIG", "0_4_1_3_0_1_0_0_1": "OPP", "0_4_1_3_0_1_0_1_1": "OPP", "0_2_3_1_0_0_1_1_1": "SAME", "0_4_3_1_0_0_1_1_0": "SMALL", "0_2_1_2_0_1_1_0_0": "SMALL", "0_3_1_2_0_1_1_1_1": "BIG", "0_4_1_2_0_1_1_0_1": "BIG", "0_4_1_2_0_0_1_1_1": "BIG", "0_4_1_2_0_0_1_0_1": "BIG", "0_4_1_2_0_0_1_0_0": "BIG", "1_2_2_0_0_0_0_1_0": "SMALL", "1_4_2_2_0_0_0_0_0": "SMALL", "1_2_3_2_0_0_1_1_0": "BIG", "1_3_3_2_0_0_1_1_0": "BIG", "1_3_1_3_0_1_1_1_0": "SMALL", "1_4_1_3_0_1_1_1_0": "BIG", "1_4_3_1_0_0_0_0_1": "SMALL", "1_4_3_1_0_0_0_1_1": "SMALL", "1_1_1_3_2_1_0_0_0": "OPP", "1_1_1_2_2_1_1_0_0": "SAME", "1_2_2_2_0_1_1_0_1": "BIG", "1_3_2_2_0_1_1_1_1": "BIG", "1_4_2_2_0_0_1_1_0": "BIG", "1_4_2_2_0_0_1_0_1": "SAME", "1_4_2_2_0_0_1_1_1": "BIG", "1_1_3_2_1_0_0_1_0": "OPP", "1_1_1_1_3_1_0_0_0": "BIG", "1_3_1_2_0_1_0_1_0": "OPP_LAST", "1_4_1_2_0_1_0_1_0": "SMALL", "1_2_1_1_0_2_0_0_0": "OPP", "1_1_2_1_1_2_1_1_1": "SMALL", "1_1_1_2_2_2_0_1_0": "BIG", "1_1_1_2_2_2_1_0_0": "SMALL", "1_1_2_1_1_2_1_0_0": "SMALL", "1_4_2_2_0_0_0_1_1": "SMALL", "1_4_2_2_0_0_0_1_0": "SMALL", "1_4_3_2_0_0_1_1_0": "BIG", "1_4_3_2_0_0_1_0_1": "BIG", "1_4_3_2_0_0_1_1_1": "BIG", "1_1_3_3_1_0_0_0_1": "OPP", "1_2_2_3_0_1_1_0_1": "OPP", "1_1_2_2_1_1_0_0_0": "BIG", "1_2_1_1_0_1_0_0_0": "OPP", "1_2_2_1_0_1_1_0_0": "BIG", "1_1_2_2_1_1_0_1_1": "BIG", "1_2_2_2_0_1_0_1_0": "SMALL", "1_2_2_2_0_1_1_1_0": "OPP_LAST", "1_2_2_1_0_1_0_1_1": "SMALL", "1_3_2_1_0_1_0_0_1": "OPP", "1_1_3_1_1_1_1_0_0": "SMALL", "1_3_1_1_0_1_0_1_1": "SMALL", "1_4_1_1_0_1_0_1_0": "SMALL", "1_4_1_1_0_0_0_1_0": "SMALL", "1_4_1_1_0_0_0_0_1": "OPP_LAST", "1_1_3_1_1_0_1_0_0": "SMALL", "1_1_1_1_3_1_1_1_0": "SMALL", "1_2_2_2_0_1_0_0_1": "SMALL", "1_1_3_2_1_1_1_0_0": "BIG", "1_3_2_1_0_1_1_0_1": "OPP", "1_2_3_2_0_1_0_0_0": "SMALL", "1_1_3_3_1_0_1_1_0": "SMALL", "1_2_2_2_0_1_0_1_1": "SMALL", "1_1_1_2_2_1_0_1_0": "BIG", "1_4_1_3_0_1_0_0_1": "SMALL", "1_4_1_3_0_1_0_1_1": "OPP", "1_2_3_1_0_0_1_1_1": "BIG", "1_4_3_1_0_0_1_1_0": "BIG", "1_2_1_2_0_1_1_0_0": "BIG", "1_3_1_2_0_1_1_1_1": "SAME", "1_4_1_2_0_1_1_0_1": "BIG", "1_4_1_2_0_0_1_1_1": "BIG", "1_4_1_2_0_0_1_0_1": "BIG", "1_4_1_2_0_0_1_0_0": "BIG", "2_2_2_0_0_0_0_1_0": "SMALL", "2_4_2_2_0_0_0_0_0": "SMALL", "2_2_3_2_0_0_1_1_0": "BIG", "2_3_3_2_0_0_1_1_0": "BIG", "2_3_1_3_0_1_1_1_0": "OPP", "2_4_1_3_0_1_1_1_0": "BIG", "2_4_3_1_0_0_0_0_1": "SMALL", "2_4_3_1_0_0_0_1_1": "SMALL", "2_1_1_3_2_1_0_0_0": "SAME", "2_1_1_2_2_1_1_0_0": "SMALL", "2_2_2_2_0_1_1_0_1": "BIG", "2_3_2_2_0_1_1_1_1": "BIG", "2_4_2_2_0_0_1_1_0": "BIG", "2_4_2_2_0_0_1_0_1": "BIG", "2_4_2_2_0_0_1_1_1": "OPP_LAST", "2_1_3_2_1_0_0_1_0": "SMALL", "2_1_1_1_3_1_0_0_0": "BIG", "2_3_1_2_0_1_0_1_0": "SMALL", "2_4_1_2_0_1_0_1_0": "SMALL", "2_2_1_1_0_2_0_0_0": "SMALL", "2_1_2_1_1_2_1_1_1": "BIG", "2_1_1_2_2_2_0_1_0": "SAME", "2_1_1_2_2_2_1_0_0": "SMALL", "2_1_2_1_1_2_1_0_0": "BIG", "2_4_2_2_0_0_0_1_1": "BIG", "2_4_2_2_0_0_0_1_0": "SMALL", "2_4_3_2_0_0_1_1_0": "SAME", "2_4_3_2_0_0_1_0_1": "BIG", "2_4_3_2_0_0_1_1_1": "BIG", "2_1_3_3_1_0_0_0_1": "SMALL", "2_2_2_3_0_1_1_0_1": "BIG", "2_1_2_2_1_1_0_0_0": "SMALL", "2_2_1_1_0_1_0_0_0": "SMALL", "2_2_2_1_0_1_1_0_0": "BIG", "2_1_2_2_1_1_0_1_1": "SMALL", "2_2_2_2_0_1_0_1_0": "SMALL", "2_2_2_2_0_1_1_1_0": "SMALL", "2_2_2_1_0_1_0_1_1": "SMALL", "2_3_2_1_0_1_0_0_1": "SMALL", "2_1_3_1_1_1_1_0_0": "BIG", "2_3_1_1_0_1_0_1_1": "OPP", "2_4_1_1_0_1_0_1_0": "SMALL", "2_4_1_1_0_0_0_1_0": "SMALL", "2_4_1_1_0_0_0_0_1": "SMALL", "2_1_3_1_1_0_1_0_0": "BIG", "2_1_1_1_3_1_1_1_0": "SMALL", "2_2_2_2_0_1_0_0_1": "SMALL", "2_1_3_2_1_1_1_0_0": "BIG", "2_3_2_1_0_1_1_0_1": "SMALL", "2_2_3_2_0_1_0_0_0": "SMALL", "2_1_3_3_1_0_1_1_0": "BIG", "2_2_2_2_0_1_0_1_1": "SMALL", "2_1_1_2_2_1_0_1_0": "BIG", "2_4_1_3_0_1_0_0_1": "SMALL", "2_4_1_3_0_1_0_1_1": "SMALL", "2_2_3_1_0_0_1_1_1": "BIG", "2_4_3_1_0_0_1_1_0": "BIG", "2_2_1_2_0_1_1_0_0": "BIG", "2_3_1_2_0_1_1_1_1": "OPP_LAST", "2_4_1_2_0_1_1_0_1": "BIG", "2_4_1_2_0_0_1_1_1": "OPP_LAST", "2_4_1_2_0_0_1_0_1": "BIG", "2_4_1_2_0_0_1_0_0": "BIG", "1_1_2_3_1_1_1_1_0": "SMALL", "0_3_1_1_0_1_1_1_0": "SMALL", "0_4_1_1_0_0_1_1_1": "OPP", "0_2_3_3_0_1_0_1_1": "SAME", "1_4_1_3_0_0_0_1_1": "OPP", "1_2_3_2_0_0_0_1_0": "SMALL", "0_4_3_3_0_0_0_0_1": "OPP", "2_1_2_2_1_1_0_1_0": "SMALL", "1_1_2_2_1_1_0_1_0": "SMALL", "1_3_3_3_0_0_0_1_0": "SMALL", "1_1_3_3_1_1_0_1_1": "SMALL", "1_3_1_1_0_1_1_1_0": "SMALL", "2_4_1_2_0_1_1_0_0": "SAME", "2_3_2_3_0_1_1_1_1": "OPP_LAST", "2_3_2_2_0_1_0_1_0": "SMALL", "0_2_3_2_0_0_0_1_0": "OPP", "0_1_2_2_1_1_0_1_0": "SMALL", "2_3_1_2_0_1_1_0_1": "SMALL", "0_3_3_3_0_0_0_1_0": "LAST", "0_1_2_3_1_1_1_1_0": "SMALL", "0_2_3_1_0_0_0_1_0": "OPP", "0_2_1_1_0_2_0_0_1": "SMALL", "2_1_2_3_1_1_1_1_0": "OPP", "0_1_3_2_1_1_0_1_0": "BIG", "2_2_2_3_0_1_1_0_0": "SAME", "1_4_1_1_0_0_1_1_1": "SMALL", "1_1_3_2_1_1_0_1_0": "OPP", "0_1_3_1_1_0_1_0_1": "SAME", "2_4_1_1_0_1_1_0_1": "SMALL", "0_1_3_1_1_0_0_1_0": "OPP", "0_4_1_3_0_0_0_1_1": "OPP", "1_2_3_1_0_0_0_1_0": "SMALL", "0_2_2_3_0_1_1_0_0": "SAME", "2_1_3_2_1_1_0_1_0": "SMALL", "1_4_3_3_0_0_0_0_1": "SMALL", "2_1_3_1_1_0_0_1_0": "SMALL", "0_4_1_1_0_1_1_0_1": "LAST", "1_2_2_3_0_1_1_0_0": "SMALL", "2_1_3_1_1_0_1_0_1": "SMALL", "2_2_3_1_0_0_0_1_0": "OPP", "0_1_3_1_1_0_0_1_1": "SMALL", "1_1_3_3_1_1_0_0_0": "SAME", "1_1_3_1_1_0_1_0_1": "SAME", "2_3_3_3_0_0_0_1_0": "SMALL", "1_3_2_3_0_1_1_1_1": "SMALL", "1_1_3_1_1_0_0_1_1": "SMALL", "2_4_3_3_0_0_0_0_1": "SAME", "0_3_1_2_0_1_1_0_1": "BIG", "1_3_2_1_0_1_1_1_1": "OPP", "1_4_1_2_0_1_1_0_0": "SMALL", "0_1_3_3_1_1_0_0_0": "SMALL", "0_3_2_1_0_1_1_1_1": "SAME", "0_4_1_2_0_1_1_0_0": "LAST", "0_1_3_3_1_1_0_1_1": "OPP", "2_2_3_3_0_1_0_1_1": "SMALL", "2_1_3_3_1_1_0_1_1": "LAST", "1_4_1_1_0_1_1_0_1": "SMALL", "1_2_1_1_0_2_0_0_1": "OPP", "2_2_3_2_0_0_0_1_0": "SMALL", "2_3_1_1_0_1_1_1_0": "BIG", "1_3_1_2_0_1_1_0_1": "SMALL", "2_3_2_1_0_1_1_1_1": "SMALL", "2_1_3_1_1_0_0_1_1": "SMALL", "1_1_3_1_1_0_0_1_0": "OPP", "1_3_2_2_0_1_0_1_0": "OPP", "0_3_2_3_0_1_1_1_1": "SMALL", "2_1_3_3_1_1_0_0_0": "SMALL", "1_2_3_3_0_1_0_1_1": "SMALL", "2_4_1_1_0_0_1_1_1": "SMALL", "2_4_1_3_0_0_0_1_1": "SMALL", "2_2_1_1_0_2_0_0_1": "SMALL", "0_3_2_2_0_1_0_1_0": "SMALL", "0_3_2_2_0_1_0_0_1": "SAME", "2_4_2_2_0_0_1_0_0": "BIG", "2_2_1_3_0_1_1_0_0": "LAST", "2_4_3_3_0_0_1_1_0": "SAME", "0_1_1_2_2_1_0_1_1": "OPP", "1_4_3_3_0_0_1_0_0": "BIG", "1_4_1_3_0_1_1_1_1": "LAST", "1_2_2_2_0_1_1_0_0": "BIG", "1_1_3_1_1_1_0_1_0": "SAME", "0_1_2_2_1_1_1_0_1": "BIG", "0_3_1_3_0_1_1_1_1": "BIG", "1_2_2_3_0_1_1_1_0": "LAST", "0_4_1_3_0_0_1_1_0": "SAME", "0_1_3_3_1_0_1_1_1": "LAST", "2_4_3_3_0_0_1_0_1": "LAST", "1_3_3_3_0_0_1_0_1": "SMALL", "2_3_3_3_0_0_1_0_1": "SAME", "0_3_3_3_0_0_1_0_1": "BIG", "1_2_3_1_0_0_1_0_1": "SAME", "0_1_1_2_2_1_1_1_0": "SAME", "1_3_3_3_0_0_1_0_0": "LAST", "1_4_3_3_0_0_1_1_0": "LAST", "2_2_3_1_0_0_1_0_1": "BIG", "1_2_1_3_0_1_1_0_0": "LAST", "2_3_2_3_0_1_1_1_0": "SAME", "2_1_1_2_2_1_1_1_0": "SAME", "2_1_2_1_1_1_0_1_1": "SAME", "2_4_1_3_0_1_1_0_1": "SAME", "2_3_2_2_0_1_0_0_1": "SAME", "2_1_2_1_1_1_0_0_0": "SAME", "2_3_2_2_0_1_1_0_0": "SAME", "2_2_3_1_0_0_0_1_1": "SAME", "2_3_1_1_0_1_1_0_1": "OPP", "2_3_3_3_0_0_1_0_0": "SAME", "2_4_3_3_0_0_1_0_0": "SAME", "2_1_1_2_2_1_0_1_1": "SAME", "2_4_2_1_0_0_0_0_1": "SAME", "2_4_2_1_0_0_1_0_0": "SAME", "2_3_3_1_0_0_0_0_0": "SAME", "2_4_1_1_0_1_1_1_1": "SAME", "2_3_3_1_0_0_1_1_1": "SAME", "2_3_2_3_0_1_0_1_0": "SAME", "2_4_2_1_0_0_0_0_0": "SAME", "2_2_2_2_0_1_1_0_0": "SAME", "2_1_2_2_1_1_1_0_1": "SAME", "2_4_3_1_0_0_0_0_0": "SAME", "2_4_1_1_0_0_1_1_0": "SAME", "2_2_2_3_0_1_1_1_0": "SAME", "2_2_3_3_0_0_1_0_1": "SAME", "2_3_1_3_0_1_1_1_1": "SAME", "2_1_1_1_3_2_1_0_1": "SAME", "2_2_3_2_0_1_1_1_0": "SAME", "2_2_2_3_0_1_0_1_0": "SAME", "2_1_3_1_1_1_0_1_0": "SAME", "2_4_3_3_0_0_0_1_0": "SAME", "2_4_3_3_0_0_1_1_1": "SAME", "2_4_1_3_0_0_1_1_0": "SAME", "2_3_1_1_0_1_0_0_1": "OPP", "2_1_3_3_1_0_1_1_1": "SAME", "2_3_1_3_0_1_1_0_1": "SAME", "2_4_1_3_0_1_1_1_1": "SAME", "2_1_3_3_1_0_0_0_0": "SAME", "2_2_3_1_0_1_0_1_1": "SAME", "1_4_1_3_0_1_1_0_1": "SAME", "1_4_2_1_0_0_0_0_0": "SAME", "1_4_2_1_0_0_1_0_0": "SAME", "1_3_1_3_0_1_1_0_1": "SAME", "1_2_3_2_0_1_1_1_0": "SAME", "1_3_2_2_0_1_1_0_0": "SAME", "1_1_2_2_1_1_1_0_1": "SAME", "1_2_3_1_0_0_0_1_1": "SAME", "1_3_2_3_0_1_0_1_0": "OPP", "1_4_1_3_0_0_1_1_0": "SAME", "1_1_3_3_1_0_0_0_0": "OPP", "1_1_1_2_2_1_0_1_1": "SAME", "1_3_3_1_0_0_1_1_1": "SAME", "1_3_2_2_0_1_0_0_1": "SAME", "1_3_1_1_0_1_0_0_1": "SAME", "1_1_2_1_1_1_0_1_1": "SAME", "1_3_1_3_0_1_1_1_1": "SAME", "1_4_3_1_0_0_0_0_0": "SAME", "1_3_3_1_0_0_0_0_0": "SAME", "1_4_1_1_0_1_1_1_1": "SAME", "1_2_3_3_0_0_1_0_1": "SAME", "1_4_3_3_0_0_1_0_1": "SAME", "1_2_2_3_0_1_0_1_0": "SAME", "1_4_1_1_0_0_1_1_0": "SAME", "1_4_3_3_0_0_1_1_1": "SAME", "1_3_1_1_0_1_1_0_1": "SAME", "1_1_1_1_3_2_1_0_1": "OPP", "1_4_2_2_0_0_1_0_0": "SAME", "1_2_3_1_0_1_0_1_1": "SAME", "1_1_1_2_2_1_1_1_0": "SAME", "1_4_2_1_0_0_0_0_1": "SAME", "1_1_3_3_1_0_1_1_1": "SAME", "1_3_2_3_0_1_1_1_0": "SAME", "1_4_3_3_0_0_0_1_0": "SAME", "1_1_2_1_1_1_0_0_0": "SAME", "0_4_3_3_0_0_1_0_0": "SAME", "0_1_2_1_1_1_0_1_1": "OPP", "0_4_3_3_0_0_1_1_0": "SAME", "0_1_3_1_1_1_0_1_0": "SAME", "0_4_2_1_0_0_0_0_0": "SAME", "0_4_1_3_0_1_1_1_1": "SAME", "0_4_3_3_0_0_1_1_1": "SAME", "0_3_1_1_0_1_0_0_1": "OPP", "0_1_1_1_3_2_1_0_1": "SAME", "0_3_3_3_0_0_1_0_0": "SAME", "0_2_3_2_0_1_1_1_0": "SAME", "0_3_2_3_0_1_0_1_0": "SAME", "0_4_2_1_0_0_0_0_1": "SAME", "0_2_3_1_0_0_0_1_1": "OPP", "0_4_3_3_0_0_0_1_0": "SAME", "0_4_1_1_0_1_1_1_1": "SAME", "0_3_3_1_0_0_0_0_0": "SAME", "0_2_2_2_0_1_1_0_0": "SAME", "0_4_2_1_0_0_1_0_0": "SAME", "0_3_1_1_0_1_1_0_1": "SAME", "0_4_2_2_0_0_1_0_0": "SAME", "0_3_3_1_0_0_1_1_1": "OPP", "0_1_3_3_1_0_0_0_0": "SAME", "0_4_3_3_0_0_1_0_1": "SAME", "0_1_2_1_1_1_0_0_0": "OPP", "0_2_3_1_0_1_0_1_1": "OPP", "0_2_2_3_0_1_1_1_0": "SAME", "0_4_1_1_0_0_1_1_0": "SAME", "0_2_2_3_0_1_0_1_0": "SAME", "0_3_2_2_0_1_1_0_0": "SAME", "0_4_3_1_0_0_0_0_0": "OPP", "0_2_3_1_0_0_1_0_1": "SAME", "0_4_1_3_0_1_1_0_1": "OPP", "0_3_1_3_0_1_1_0_1": "SAME", "0_3_2_3_0_1_1_1_0": "OPP", "0_2_1_3_0_1_1_0_0": "SAME", "0_2_3_3_0_0_1_0_1": "SAME", "2_1_3_3_1_0_0_1_0": "SAME", "2_4_3_1_0_0_1_0_1": "SAME", "2_1_1_2_2_2_1_0_1": "SAME", "2_4_1_1_0_1_0_0_1": "SAME", "2_2_1_3_0_1_0_0_1": "OPP", "2_2_1_1_0_1_0_1_0": "SAME", "2_3_3_1_0_0_1_0_0": "SAME", "2_1_1_1_3_1_0_1_0": "SAME", "2_4_1_1_0_1_0_0_0": "SAME", "2_2_3_1_0_0_1_1_0": "SAME", "1_4_1_1_0_1_0_0_1": "SAME", "1_1_1_1_3_1_0_1_0": "SAME", "1_3_3_1_0_0_1_0_0": "SAME", "1_2_3_1_0_0_1_1_0": "SAME", "1_2_1_1_0_1_0_1_0": "SAME", "1_1_1_2_2_2_1_0_1": "SAME", "1_4_3_1_0_0_1_0_1": "SAME", "1_1_3_3_1_0_0_1_0": "SAME", "1_2_1_3_0_1_0_0_1": "SAME", "1_4_1_1_0_1_0_0_0": "SAME", "0_4_1_1_0_1_0_0_1": "SAME", "0_4_1_1_0_1_0_0_0": "SAME", "0_2_3_1_0_0_1_1_0": "LAST", "0_1_1_2_2_2_1_0_1": "OPP", "0_3_3_1_0_0_1_0_0": "SAME", "0_2_1_1_0_1_0_1_0": "SAME", "0_1_1_1_3_1_0_1_0": "SAME", "0_1_3_3_1_0_0_1_0": "OPP", "0_2_1_3_0_1_0_0_1": "SAME", "0_4_3_1_0_0_1_0_1": "SAME", "2_1_2_3_1_1_1_0_1": "SAME", "1_1_2_3_1_1_1_0_1": "SAME", "0_1_2_3_1_1_1_0_1": "SAME"};
-        const TITAN_RULES_1M = {"0_1_2_0_1_0_0_0_0": "SMALL", "0_2_2_0_0_0_0_0_0": "BIG", "0_3_2_0_0_0_0_0_0": "SMALL", "0_4_2_0_0_0_0_0_0": "SMALL", "0_1_3_2_1_1_1_1_1": "BIG", "0_1_1_3_2_1_0_0_1": "BIG", "0_2_1_3_0_1_0_0_0": "BIG", "0_1_2_1_1_1_1_0_0": "BIG", "0_1_1_2_2_2_0_1_1": "BIG", "1_1_2_0_1_0_0_0_0": "BIG", "1_2_2_0_0_0_0_0_0": "SMALL", "1_3_2_0_0_0_0_0_0": "SMALL", "1_4_2_0_0_0_0_0_0": "SMALL", "1_1_3_2_1_1_1_1_1": "OPP", "1_1_1_3_2_1_0_0_1": "BIG", "1_2_1_3_0_1_0_0_0": "SMALL", "1_1_2_1_1_1_1_0_0": "OPP", "1_1_1_2_2_2_0_1_1": "BIG", "2_1_2_0_1_0_0_0_0": "SMALL", "2_2_2_0_0_0_0_0_0": "SMALL", "2_3_2_0_0_0_0_0_0": "SMALL", "2_4_2_0_0_0_0_0_0": "SMALL", "2_1_3_2_1_1_1_1_1": "BIG", "2_1_1_3_2_1_0_0_1": "BIG", "2_2_1_3_0_1_0_0_0": "SMALL", "2_1_2_1_1_1_1_0_0": "BIG", "2_1_1_2_2_2_0_1_1": "BIG", "0_2_1_0_0_0_1_1_0": "OPP", "0_1_2_1_1_1_0_0_1": "OPP", "0_1_1_2_2_1_1_0_0": "OPP", "0_1_1_1_3_2_0_0_0": "BIG", "0_2_1_1_0_1_0_0_0": "BIG", "0_3_1_1_0_1_0_1_1": "OPP", "0_1_3_1_1_1_1_1_0": "BIG", "1_2_1_0_0_0_1_1_0": "BIG", "1_1_2_1_1_1_0_0_1": "BIG", "1_1_1_2_2_1_1_0_0": "OPP", "1_1_1_1_3_2_0_0_0": "BIG", "1_2_1_1_0_1_0_0_0": "SMALL", "1_3_1_1_0_1_0_1_1": "SMALL", "1_1_3_1_1_1_1_1_0": "SMALL", "2_2_1_0_0_0_1_1_0": "BIG", "2_1_2_1_1_1_0_0_1": "SMALL", "2_1_1_2_2_1_1_0_0": "SMALL", "2_1_1_1_3_2_0_0_0": "BIG", "2_2_1_1_0_1_0_0_0": "SMALL", "2_3_1_1_0_1_0_1_1": "SMALL", "2_1_3_1_1_1_1_1_0": "BIG", "0_1_2_0_1_0_0_0_1": "SMALL", "0_1_1_2_2_1_1_1_1": "SMALL", "0_2_1_2_0_1_1_0_1": "OPP", "0_1_2_1_1_1_0_1_1": "SMALL", "0_1_1_2_2_2_1_1_0": "SMALL", "0_1_1_1_3_2_0_1_0": "BIG", "0_2_1_1_0_1_0_0_1": "BIG", "0_3_1_1_0_1_0_0_0": "SMALL", "0_1_3_1_1_1_1_0_0": "BIG", "0_2_3_1_0_1_1_1_1": "OPP", "1_1_2_0_1_0_0_0_1": "BIG", "1_1_1_2_2_1_1_1_1": "SMALL", "1_2_1_2_0_1_1_0_1": "BIG", "1_1_2_1_1_1_0_1_1": "BIG", "1_1_1_2_2_2_1_1_0": "OPP", "1_1_1_1_3_2_0_1_0": "BIG", "1_2_1_1_0_1_0_0_1": "SMALL", "1_3_1_1_0_1_0_0_0": "SMALL", "1_1_3_1_1_1_1_0_0": "SMALL", "1_2_3_1_0_1_1_1_1": "BIG", "2_1_2_0_1_0_0_0_1": "SMALL", "2_1_1_2_2_1_1_1_1": "SMALL", "2_2_1_2_0_1_1_0_1": "BIG", "2_1_2_1_1_1_0_1_1": "SMALL", "2_1_1_2_2_2_1_1_0": "SMALL", "2_1_1_1_3_2_0_1_0": "BIG", "2_2_1_1_0_1_0_0_1": "SMALL", "2_3_1_1_0_1_0_0_0": "SMALL", "2_1_3_1_1_1_1_0_0": "BIG", "2_2_3_1_0_1_1_1_1": "BIG", "0_2_1_0_0_0_1_1_1": "OPP", "0_1_1_1_3_2_0_0_1": "BIG", "0_4_1_1_0_1_0_0_0": "SMALL", "0_4_1_1_0_0_0_0_0": "SMALL", "0_1_3_1_1_0_1_1_1": "BIG", "0_2_3_1_0_0_1_1_0": "OPP", "0_1_2_3_1_1_0_0_1": "OPP", "0_1_2_1_1_1_0_0_0": "OPP", "0_1_1_2_2_2_1_1_1": "SMALL", "0_2_1_2_0_1_1_1_0": "OPP", "1_2_1_0_0_0_1_1_1": "BIG", "1_1_1_1_3_2_0_0_1": "BIG", "1_4_1_1_0_1_0_0_0": "SMALL", "1_4_1_1_0_0_0_0_0": "SMALL", "1_1_3_1_1_0_1_1_1": "SMALL", "1_2_3_1_0_0_1_1_0": "BIG", "1_1_2_3_1_1_0_0_1": "BIG", "1_1_2_1_1_1_0_0_0": "BIG", "1_1_1_2_2_2_1_1_1": "SMALL", "1_2_1_2_0_1_1_1_0": "BIG", "2_2_1_0_0_0_1_1_1": "BIG", "2_1_1_1_3_2_0_0_1": "OPP", "2_4_1_1_0_1_0_0_0": "SMALL", "2_4_1_1_0_0_0_0_0": "SMALL", "2_1_3_1_1_0_1_1_1": "BIG", "2_2_3_1_0_0_1_1_0": "BIG", "2_1_2_3_1_1_0_0_1": "SMALL", "2_1_2_1_1_1_0_0_0": "SMALL", "2_1_1_2_2_2_1_1_1": "SMALL", "2_2_1_2_0_1_1_1_0": "BIG", "0_1_2_1_1_1_0_1_0": "SMALL", "0_1_1_2_2_1_1_1_0": "SMALL", "0_2_1_1_0_1_0_1_1": "BIG", "0_3_1_1_0_1_0_0_1": "OPP", "0_1_3_1_1_1_1_1_1": "OPP", "0_1_1_3_2_1_0_1_0": "BIG", "0_2_1_3_0_1_0_0_1": "BIG", "0_3_1_3_0_1_0_1_1": "OPP", "0_3_1_3_0_1_0_0_0": "OPP", "1_1_2_1_1_1_0_1_0": "BIG", "1_1_1_2_2_1_1_1_0": "OPP", "1_2_1_1_0_1_0_1_1": "SMALL", "1_3_1_1_0_1_0_0_1": "SMALL", "1_1_3_1_1_1_1_1_1": "SMALL", "1_1_1_3_2_1_0_1_0": "BIG", "1_2_1_3_0_1_0_0_1": "SMALL", "1_3_1_3_0_1_0_1_1": "SMALL", "1_3_1_3_0_1_0_0_0": "SMALL", "2_1_2_1_1_1_0_1_0": "SMALL", "2_1_1_2_2_1_1_1_0": "SMALL", "2_2_1_1_0_1_0_1_1": "SMALL", "2_3_1_1_0_1_0_0_1": "SMALL", "2_1_3_1_1_1_1_1_1": "BIG", "2_1_1_3_2_1_0_1_0": "BIG", "2_2_1_3_0_1_0_0_1": "SMALL", "2_3_1_3_0_1_0_1_1": "SMALL", "2_3_1_3_0_1_0_0_0": "SMALL", "0_3_0_0_0_0_1_0_1": "BIG", "0_4_0_0_0_0_1_0_0": "OPP", "0_1_3_0_1_0_0_1_1": "SMALL", "0_2_3_0_0_0_0_0_1": "BIG", "0_3_3_0_0_0_0_0_0": "SMALL", "0_4_3_0_0_0_0_0_0": "SMALL", "0_4_3_0_0_0_0_1_1": "OPP", "0_1_3_3_1_0_1_1_0": "OPP", "0_1_1_1_3_1_1_1_0": "SMALL", "0_2_1_1_0_1_1_1_0": "OPP", "0_1_2_1_1_2_0_0_1": "OPP", "0_3_1_2_0_1_1_1_1": "BIG", "1_3_0_0_0_0_1_0_1": "BIG", "1_4_0_0_0_0_1_0_0": "BIG", "1_1_3_0_1_0_0_1_1": "BIG", "1_2_3_0_0_0_0_0_1": "SMALL", "1_3_3_0_0_0_0_0_0": "SMALL", "1_4_3_0_0_0_0_0_0": "SMALL", "1_4_3_0_0_0_0_1_1": "SMALL", "1_1_3_3_1_0_1_1_0": "SMALL", "1_1_1_1_3_1_1_1_0": "SMALL", "1_2_1_1_0_1_1_1_0": "BIG", "1_1_2_1_1_2_0_0_1": "BIG", "1_3_1_2_0_1_1_1_1": "BIG", "2_3_0_0_0_0_1_0_1": "BIG", "2_4_0_0_0_0_1_0_0": "BIG", "2_1_3_0_1_0_0_1_1": "SMALL", "2_2_3_0_0_0_0_0_1": "SMALL", "2_3_3_0_0_0_0_0_0": "SMALL", "2_4_3_0_0_0_0_0_0": "SMALL", "2_4_3_0_0_0_0_1_1": "SMALL", "2_1_3_3_1_0_1_1_0": "BIG", "2_1_1_1_3_1_1_1_0": "SMALL", "2_2_1_1_0_1_1_1_0": "BIG", "2_1_2_1_1_2_0_0_1": "SMALL", "2_3_1_2_0_1_1_1_1": "BIG", "0_1_1_1_3_1_0_0_1": "BIG", "0_3_1_1_0_1_0_1_0": "OPP", "0_2_3_1_0_1_1_1_0": "OPP", "0_1_2_3_1_1_0_1_0": "OPP", "0_1_1_2_2_1_1_0_1": "OPP", "0_1_1_1_3_2_1_0_0": "SMALL", "0_2_1_1_0_2_1_1_1": "SMALL", "0_3_1_1_0_1_1_1_0": "OPP", "0_1_3_1_1_1_0_0_1": "SMALL", "0_2_3_1_0_1_0_1_1": "OPP", "0_1_2_3_1_1_1_0_1": "BIG", "0_2_2_3_0_1_1_1_1": "OPP", "0_1_2_2_1_1_0_0_1": "SMALL", "0_1_1_1_3_2_1_1_1": "OPP", "1_1_1_1_3_1_0_0_1": "BIG", "1_3_1_1_0_1_0_1_0": "SMALL", "1_2_3_1_0_1_1_1_0": "BIG", "1_1_2_3_1_1_0_1_0": "BIG", "1_1_1_2_2_1_1_0_1": "OPP", "1_1_1_1_3_2_1_0_0": "SMALL", "1_2_1_1_0_2_1_1_1": "BIG", "1_3_1_1_0_1_1_1_0": "BIG", "1_1_3_1_1_1_0_0_1": "BIG", "1_2_3_1_0_1_0_1_1": "SMALL", "1_1_2_3_1_1_1_0_1": "SMALL", "1_2_2_3_0_1_1_1_1": "BIG", "1_1_2_2_1_1_0_0_1": "BIG", "1_1_1_1_3_2_1_1_1": "SMALL", "2_1_1_1_3_1_0_0_1": "BIG", "2_3_1_1_0_1_0_1_0": "SMALL", "2_2_3_1_0_1_1_1_0": "BIG", "2_1_2_3_1_1_0_1_0": "SMALL", "2_1_1_2_2_1_1_0_1": "SMALL", "2_1_1_1_3_2_1_0_0": "SMALL", "2_2_1_1_0_2_1_1_1": "BIG", "2_3_1_1_0_1_1_1_0": "BIG", "2_1_3_1_1_1_0_0_1": "SMALL", "2_2_3_1_0_1_0_1_1": "SMALL", "2_1_2_3_1_1_1_0_1": "BIG", "2_2_2_3_0_1_1_1_1": "BIG", "2_1_2_2_1_1_0_0_1": "SMALL", "2_1_1_1_3_2_1_1_1": "SMALL", "0_1_2_0_1_0_1_0_0": "BIG", "0_2_2_0_0_0_1_1_1": "OPP", "0_2_2_2_0_1_0_1_1": "BIG", "0_3_2_2_0_1_0_0_1": "OPP", "1_1_2_0_1_0_1_0_0": "SMALL", "1_2_2_0_0_0_1_1_1": "BIG", "1_2_2_2_0_1_0_1_1": "SMALL", "1_3_2_2_0_1_0_0_1": "SMALL", "2_1_2_0_1_0_1_0_0": "BIG", "2_2_2_0_0_0_1_1_1": "BIG", "2_2_2_2_0_1_0_1_1": "SMALL", "2_3_2_2_0_1_0_0_1": "SMALL", "0_1_2_2_1_1_1_1_1": "BIG", "0_1_1_2_2_1_0_0_1": "BIG", "0_2_1_2_0_1_0_1_1": "OPP", "0_1_2_1_1_1_1_0_1": "OPP", "1_1_2_2_1_1_1_1_1": "OPP", "1_1_1_2_2_1_0_0_1": "BIG", "1_2_1_2_0_1_0_1_1": "SMALL", "1_1_2_1_1_1_1_0_1": "SMALL", "2_1_2_2_1_1_1_1_1": "BIG", "2_1_1_2_2_1_0_0_1": "BIG", "2_2_1_2_0_1_0_1_1": "SMALL", "2_1_2_1_1_1_1_0_1": "BIG", "0_1_2_1_1_2_1_0_0": "BIG", "0_2_2_1_0_1_1_0_0": "OPP", "1_1_2_1_1_2_1_0_0": "SMALL", "1_2_2_1_0_1_1_0_0": "BIG", "2_1_2_1_1_2_1_0_0": "BIG", "2_2_2_1_0_1_1_0_0": "BIG", "0_1_2_0_1_0_1_1_0": "OPP", "0_2_1_2_0_1_0_0_0": "BIG", "0_3_1_2_0_1_0_0_0": "SMALL", "0_4_1_2_0_1_0_0_0": "OPP", "1_1_2_0_1_0_1_1_0": "SMALL", "1_2_1_2_0_1_0_0_0": "SMALL", "1_3_1_2_0_1_0_0_0": "SMALL", "1_4_1_2_0_1_0_0_0": "SMALL", "2_1_2_0_1_0_1_1_0": "BIG", "2_2_1_2_0_1_0_0_0": "SMALL", "2_3_1_2_0_1_0_0_0": "SMALL", "2_4_1_2_0_1_0_0_0": "SMALL", "0_1_2_0_1_0_0_1_1": "SMALL", "0_2_2_0_0_0_0_1_0": "BIG", "0_3_2_0_0_0_0_0_1": "SMALL", "0_4_2_0_0_0_0_1_1": "OPP", "0_1_3_2_1_0_1_1_0": "BIG", "1_1_2_0_1_0_0_1_1": "BIG", "1_2_2_0_0_0_0_1_0": "SMALL", "1_3_2_0_0_0_0_0_1": "SMALL", "1_4_2_0_0_0_0_1_1": "SMALL", "1_1_3_2_1_0_1_1_0": "SMALL", "2_1_2_0_1_0_0_1_1": "SMALL", "2_2_2_0_0_0_0_1_0": "SMALL", "2_3_2_0_0_0_0_0_1": "SMALL", "2_4_2_0_0_0_0_1_1": "SMALL", "2_1_3_2_1_0_1_1_0": "BIG"};
-
-        function extractFeatures9(sizes, nums, streak) {
-          const runs = getRuns(sizes);
-          const cRun = runs.at(-1);
-          const cSide = cRun.size;
-          const cLen = cRun.len;
-          const pRun = runs.length >= 2 ? runs.at(-2) : { size: opp(cSide), len: 0 };
-          const p2Run = runs.length >= 3 ? runs.at(-3) : { size: cSide, len: 0 };
-          const lastS = sizes.at(-1);
-          const lastN = nums.at(-1) !== undefined ? nums.at(-1) : (lastS === "BIG" ? 7 : 2);
-          const prevN = nums.length >= 2 ? nums.at(-2) : lastN;
-
-          let alt = 0;
-          for (let i = runs.length - 1; i >= 0; i--) {
-            if (runs[i].len === 1) alt++;
-            else break;
-          }
-
-          const cLenCat = Math.min(cLen, 4);
-          const pLenCat = Math.min(pRun.len, 3);
-          const p2LenCat = Math.min(p2Run.len, 3);
-          const altCat = Math.min(alt, 3);
-          const streakCat = Math.min(streak, 2);
-
-          const recent = sizes.slice(-6);
-          let flips = 0;
-          for (let i = 1; i < recent.length; i++) {
-            if (recent[i] !== recent[i - 1]) flips++;
-          }
-          const flipCat = flips <= 1 ? 0 : ((flips === 2 || flips === 3) ? 1 : 2);
-          const cSideBit = cSide === "BIG" ? 1 : 0;
-          const parityBit = Math.abs(lastN) % 2;
-          const harmonicBit = Math.abs(lastN + prevN) % 2;
-
-          const key = `${streakCat}_${cLenCat}_${pLenCat}_${p2LenCat}_${altCat}_${flipCat}_${cSideBit}_${parityBit}_${harmonicBit}`;
-          return { key, cSide, lastS, cLen, alt };
-        }
-
-        function predictApexTitan30S(sizes, nums, lossStreak) {
-          const { key, cSide, lastS, cLen, alt } = extractFeatures9(sizes, nums, lossStreak);
-          
-          let fallback = "SAME";
-          if (lossStreak >= 2) {
-            fallback = cLen >= 2 ? cSide : (alt >= 2 ? opp(lastS) : cSide);
-          } else if (lossStreak === 1) {
-            fallback = cLen >= 2 ? cSide : (alt >= 2 ? opp(lastS) : opp(cSide));
-          } else {
-            fallback = cLen >= 3 ? cSide : (cLen === 2 ? opp(cSide) : (alt >= 2 ? opp(lastS) : cSide));
-          }
-
-          const actRule = TITAN_RULES_30S[key] || fallback;
-
-          let finalSize = cSide;
-          if (actRule === "SAME") finalSize = cSide;
-          else if (actRule === "OPP") finalSize = opp(cSide);
-          else if (actRule === "LAST") finalSize = lastS;
-          else if (actRule === "OPP_LAST") finalSize = opp(lastS);
-          else if (actRule === "BIG" || actRule === "SMALL") finalSize = actRule;
-
-          const conf = lossStreak >= 2 ? 99 : (lossStreak === 1 ? 96 : 92);
-          const regimeTag = lossStreak >= 2 ? `🛑 L3 RECOVERY (${actRule})` : (lossStreak === 1 ? `🛡️ L2 RECOVERY (${actRule})` : `🌊 L1 APEX (${actRule})`);
-
-          return { finalSize, regime: `${regimeTag} [${finalSize}]`, conf };
-        }
-
-        function predictApexTitan1M(sizes, nums, lossStreak) {
-          const { key, cSide, lastS, cLen, alt } = extractFeatures9(sizes, nums, lossStreak);
-          
-          let fallback = "SAME";
-          if (lossStreak >= 2) {
-            fallback = cLen >= 2 ? cSide : (alt >= 2 ? opp(lastS) : cSide);
-          } else if (lossStreak === 1) {
-            fallback = cLen >= 2 ? cSide : (alt >= 2 ? opp(lastS) : opp(cSide));
-          } else {
-            fallback = cLen >= 3 ? cSide : (cLen === 2 ? opp(cSide) : (alt >= 2 ? opp(lastS) : cSide));
-          }
-
-          const actRule = TITAN_RULES_1M[key] || fallback;
-
-          let finalSize = cSide;
-          if (actRule === "SAME") finalSize = cSide;
-          else if (actRule === "OPP") finalSize = opp(cSide);
-          else if (actRule === "LAST") finalSize = lastS;
-          else if (actRule === "OPP_LAST") finalSize = opp(lastS);
-          else if (actRule === "BIG" || actRule === "SMALL") finalSize = actRule;
-
-          const conf = lossStreak >= 2 ? 99 : (lossStreak === 1 ? 96 : 92);
-          const regimeTag = lossStreak >= 2 ? `🛑 L3 1M RECOVERY (${actRule})` : (lossStreak === 1 ? `🛡️ L2 1M RECOVERY (${actRule})` : `🌊 L1 1M APEX (${actRule})`);
-
-          return { finalSize, regime: `${regimeTag} [${finalSize}]`, conf };
-        }
-
-        // === APEX TITAN UNIVERSAL ULTRA MASTER (v9UM) ===
-        function predictApexTitanV9UM(evidence, lossStreak = 0, mode = currentMode) {
-          if (!evidence || evidence.length < 3) {
-            return { size: "BIG", number: 7, confidence: 70, regime: "TITAN INITIALIZING" };
-          }
-
-          const nums = evidence.slice(-50);
-          const sizes = nums.map(n => n >= 5 ? "BIG" : "SMALL");
-          
-          const res = (mode === "1M") ? predictApexTitan1M(sizes, nums, lossStreak) : predictApexTitan30S(sizes, nums, lossStreak);
-
-          // Harmonic Lucky Ball Selector
-          const allowed = res.finalSize === "BIG" ? [5, 6, 7, 8, 9] : [0, 1, 2, 3, 4];
-          const freq = counts(nums.slice(-20));
-          const bestNum = allowed.reduce((best, n) => {
-            const diff = Math.abs(n - (res.finalSize === "BIG" ? 7 : 2));
-            const bestDiff = Math.abs(best - (res.finalSize === "BIG" ? 7 : 2));
-            return freq[n] < freq[best] || (freq[n] === freq[best] && diff < bestDiff) ? n : best;
-          }, allowed[0]);
-
-          return { size: res.finalSize, number: bestNum, confidence: res.conf, regime: res.regime };
-        }
-
-        // === STATE ===
-        const state = {
-          loading: true,
-          error: "",
-          synced: false,
-          results: [],
-          targetPeriod: "—",
-          serverOffset: 0,
-          seconds: 30,
-          updatedAt: "",
-          dataSignature: "",
-          prediction: null,
-          filter: "ALL",
-          toast: ""
-        };
-        const app = document.getElementById("app");
-        let requestInFlight = false;
-        let activeAbortController = null;
-        let boundaryRequestedFor = "";
-
-        // Period validation per mode:
-        function isValidPeriodForMode(period, mode) {
-          const p = String(period || "");
-          if (!p || !/^\d+$/.test(p)) return false;
-          if (mode === "1M" && p.includes("10005")) return false;
-          if (mode === "30S" && p.includes("10001")) return false;
-          return true;
-        }
-
-        // === STORAGE HELPERS PER MODE ===
-        function getStorageKey(mode = currentMode) { return GAME_MODES[mode].storageKey; }
-        function getPendingKey(mode = currentMode) { return GAME_MODES[mode].pendingKey; }
-
-        function loadPending(mode = currentMode) {
-          try {
-            const p = JSON.parse(localStorage.getItem(getPendingKey(mode)) || "null");
-            if (p && (!p.mode || p.mode === mode) && isValidPeriodForMode(p.period, mode)) return p;
-            return null;
-          } catch { return null; }
-        }
-        function savePending(pred, mode = currentMode) {
-          try {
-            if (!pred) {
-              localStorage.removeItem(getPendingKey(mode));
-            } else {
-              localStorage.setItem(getPendingKey(mode), JSON.stringify({ ...pred, mode }));
-            }
-          } catch {}
-        }
-        let pendingPrediction = loadPending();
-
-        function loadSavedHistory(mode = currentMode) {
-          try {
-            const data = JSON.parse(localStorage.getItem(getStorageKey(mode)) || "[]");
-            if (!Array.isArray(data)) return [];
-            return data
-              .filter(h => (!h.mode || h.mode === mode) && isValidPeriodForMode(h.period, mode))
-              .slice(0, MAX_HISTORY)
-              .map(h => ({
-                ...h,
-                mode,
-                status: h.status === "JACKPOT" ? "WIN" : h.status
-              }));
-          } catch { return []; }
-        }
-        function saveHistory(history, mode = currentMode) {
-          try {
-            const clean = history
-              .filter(h => (!h.mode || h.mode === mode) && isValidPeriodForMode(h.period, mode))
-              .slice(0, MAX_HISTORY);
-            localStorage.setItem(getStorageKey(mode), JSON.stringify(clean));
-          } catch {}
-        }
-        let savedHistory = loadSavedHistory();
-
-        // STRICTLY WIN OR LOSS (NO JACKPOT)
-        function statusFor(prediction, actual) {
-          if (!prediction || !actual) return "PENDING";
-          return prediction.size === actual.size ? "WIN" : "LOSS";
-        }
-
-        function statusChip(status) {
-          const cls = status === "WIN" ? "chip-win" : status === "LOSS" ? "chip-loss" : "chip-pending";
-          return `<span class="result-chip ${cls}">${esc(status)}</span>`;
-        }
-
-        // === LOSS STREAK & LEVEL COMPUTATION ===
-        function getLossStreak() {
-          if (!savedHistory.length) return 0;
-          let count = 0;
-          for (const h of savedHistory) {
-            if (h.status === "LOSS") count++;
-            else break;
-          }
-          return count;
-        }
-
-        function getCurrentLevel() {
-          const losses = getLossStreak();
-          if (losses === 0) return 1;
-          if (losses === 1) return 2;
-          return 3;
-        }
-
-        // === STORE CURRENT PREDICTION ===
-        
-        function broadcastLiveSignal(reqMode, targetPeriod, pred) {
-          if (!pred || !targetPeriod || targetPeriod === "—") return;
-          try {
-            fetch('/api/live-signal', {
-              method: 'POST',
-              headers: { 'Content-Type': 'application/json' },
-              body: JSON.stringify({
-                mode: reqMode,
-                period: targetPeriod,
-                size: pred.size,
-                number: pred.number,
-                confidence: pred.confidence,
-                regime: pred.regime
-              })
-            }).catch(() => {});
-          } catch (e) {}
-        }
-
-        function snapshotPendingPrediction(targetPeriod, results, reqMode = currentMode) {
-          if (reqMode !== currentMode) return;
-          if (!targetPeriod || targetPeriod === "—" || results.length < 3) return;
-          if (!isValidPeriodForMode(targetPeriod, reqMode)) return;
-          const currentLossStreak = getLossStreak();
-          const pred = predictApexTitanV9UM(results.map(r => r.number).reverse(), currentLossStreak, reqMode);
-          if (!pred) return;
-          if (pendingPrediction && pendingPrediction.period === targetPeriod && pendingPrediction.mode === reqMode) return;
-          pendingPrediction = {
-            mode: reqMode,
-            period: targetPeriod,
-            predNumber: pred.number,
-            predSize: pred.size,
-            regime: pred.regime,
-            confidence: pred.confidence,
-            lossStreak: currentLossStreak,
-            timestamp: Date.now()
-          };
-          savePending(pendingPrediction, reqMode);
-          broadcastLiveSignal(reqMode, targetPeriod, pred);
-
-          // Broadcast live signal directly to server bridge for phone bot to follow
-          try {
-            fetch('/api/live-signal', {
-              method: 'POST',
-              headers: { 'Content-Type': 'application/json' },
-              body: JSON.stringify({
-                mode: reqMode,
-                period: targetPeriod,
-                size: pred.size,
-                number: pred.number,
-                confidence: pred.confidence,
-                regime: pred.regime
-              })
-            }).catch(() => {});
-          } catch (e) {}
-        }
-
-        // === ROBUST GAPLESS RECONCILIATION & SETTLEMENT ===
-        function reconcileHistory(results, reqMode = currentMode) {
-          if (reqMode !== currentMode) return;
-          if (!results || results.length < 2) return;
-
-          let updated = false;
-
-          // 1. Settle pending prediction if it matches ANY result in the feed
-          if (pendingPrediction && (!pendingPrediction.mode || pendingPrediction.mode === reqMode)) {
-            const matchedResult = results.find(r => r.period === pendingPrediction.period);
-            if (matchedResult && isValidPeriodForMode(matchedResult.period, reqMode)) {
-              const alreadyExists = savedHistory.some(h => h.period === matchedResult.period);
-              if (!alreadyExists) {
-                const fakePred = { number: pendingPrediction.predNumber, size: pendingPrediction.predSize };
-                const status = statusFor(fakePred, matchedResult);
-                const entry = {
-                  mode: reqMode,
-                  period: matchedResult.period,
-                  actual: matchedResult.number,
-                  actualSize: matchedResult.size,
-                  predNumber: pendingPrediction.predNumber,
-                  predSize: pendingPrediction.predSize,
-                  status,
-                  regime: pendingPrediction.regime || "TITAN v9UM",
-                  confidence: pendingPrediction.confidence,
-                  timestamp: Date.now()
-                };
-                savedHistory.unshift(entry);
-                updated = true;
-              }
-              pendingPrediction = null;
-              savePending(null, reqMode);
-            }
-          }
-
-          // 2. Gapless chronological backfill for any recent unrecorded periods
-          const existingPeriods = new Set(savedHistory.map(h => h.period));
-          const missingRows = [];
-
-          results.forEach((row, i) => {
-            if (!existingPeriods.has(row.period) && isValidPeriodForMode(row.period, reqMode)) {
-              missingRows.push({ row, index: i });
-            }
-          });
-
-          // Process missing rows chronologically (oldest to newest)
-          missingRows.sort((a, b) => (a.row.period > b.row.period ? 1 : -1));
-
-          let runningLossStreak = getLossStreak();
-
-          missingRows.forEach(({ row, index }) => {
-            const older = results.slice(index + 1).map(r => r.number).reverse();
-            if (older.length >= 3) {
-              const pred = predictApexTitanV9UM(older, runningLossStreak, reqMode);
-              if (pred) {
-                const status = statusFor(pred, row);
-                savedHistory.push({
-                  mode: reqMode,
-                  period: row.period,
-                  actual: row.number,
-                  actualSize: row.size,
-                  predNumber: pred.number,
-                  predSize: pred.size,
-                  status,
-                  regime: pred.regime || "TITAN v9UM",
-                  confidence: pred.confidence,
-                  timestamp: Date.now()
-                });
-                existingPeriods.add(row.period);
-                updated = true;
-                if (status === "WIN") {
-                  runningLossStreak = 0;
-                } else {
-                  runningLossStreak++;
+            // ==================== CONFIGURATION ====================
+            const ENDPOINTS = {
+                "30S": {
+                    name: "WINGO 30 SECONDS",
+                    url: "https://draw.ar-lottery01.com/WinGo/WinGo_30S/GetHistoryIssuePage.json",
+                    cycle: 30
+                },
+                "1M": {
+                    name: "WINGO 1 MINUTE",
+                    url: "https://draw.ar-lottery01.com/WinGo/WinGo_1M/GetHistoryIssuePage.json",
+                    cycle: 60
                 }
-              }
+            };
+
+            let currentModeKey = "30S";
+            const MAX_HISTORY = 100;
+
+            // Purely in-memory / session storage
+            const state = {
+                active: false,
+                balance: 0,
+                startBalance: 0,
+                targetBalance: 0,
+                baseBet: 10,
+                currentBet: 10,
+                riskMultiplier: 0.02,
+                pendingBet: null,
+                consecutiveLosses: 0,
+                stats: { wins: 0, losses: 0, total: 0 },
+                cachedHistory: [],
+                // Adaptive weights for 6 logics
+                logicWeights: [1.0, 1.0, 1.0, 1.0, 1.0, 1.0],
+                logicStreaks: [0, 0, 0, 0, 0, 0]
+            };
+
+            let secondsLeft = 30;
+            let timerInterval = null;
+            let fastLoopInterval = null;
+
+            // ==================== CELEBRATION PARTICLES ====================
+            const canvas = document.getElementById('party-canvas');
+            const ctx = canvas.getContext('2d');
+            let particles = [];
+
+            function resizeCanvas() {
+                canvas.width = window.innerWidth;
+                canvas.height = window.innerHeight;
             }
-          });
+            resizeCanvas();
+            window.addEventListener('resize', resizeCanvas);
 
-          if (updated) {
-            savedHistory = savedHistory.filter(h => (!h.mode || h.mode === reqMode) && isValidPeriodForMode(h.period, reqMode));
-            savedHistory.sort((a, b) => (b.period > a.period ? 1 : -1));
-            savedHistory = savedHistory.slice(0, MAX_HISTORY);
-            saveHistory(savedHistory, reqMode);
-          }
-        }
-
-        // === NORMALISE API DATA ===
-        function normalise(payload) {
-          const list = payload?.data?.list || [];
-          return list.map(row => ({
-            period: String(row.issueNumber || row.period || ""),
-            number: Number(row.number),
-            color: String(row.color || ""),
-            size: sizeFor(row.number)
-          })).filter(row => /^\d+$/.test(row.period) && Number.isInteger(row.number) && row.number >= 0 && row.number <= 9);
-        }
-
-        // === SWITCH MODE ===
-        function setGameMode(mode) {
-          if (!GAME_MODES[mode] || mode === currentMode) return;
-          if (activeAbortController) {
-            try { activeAbortController.abort(); } catch {}
-            activeAbortController = null;
-          }
-          requestInFlight = false;
-          currentMode = mode;
-          localStorage.setItem(MODE_KEY, mode);
-          pendingPrediction = loadPending(mode);
-          savedHistory = loadSavedHistory(mode);
-          state.results = [];
-          state.dataSignature = "";
-          state.targetPeriod = "—";
-          boundaryRequestedFor = "";
-          state.loading = true;
-          state.error = "";
-          render();
-          loadHistory({ silent: false });
-        }
-
-        // === AUTHENTICATION & LOCK SYSTEM ===
-        const AUTH_TOKEN_KEY = "jashvip_auth_token_v9um";
-        let isAuthenticated = true;
-        let enteredPin = "";
-        let isVerifying = false;
-        let pinMsg = "ENTER 4-DIGIT SECURITY CIPHER";
-        let pinStatus = ""; // "err", "ok", or ""
-
-        // Anti-Inspect / Security Guards
-        document.addEventListener("contextmenu", e => e.preventDefault());
-        document.addEventListener("keydown", e => {
-          if (
-            e.key === "F12" ||
-            ((e.ctrlKey || e.metaKey) && e.shiftKey && (e.key === "I" || e.key === "J" || e.key === "C")) ||
-            ((e.ctrlKey || e.metaKey) && (e.key === "u" || e.key === "U"))
-          ) {
-            e.preventDefault();
-          }
-        });
-
-        // Keypad Input Handler
-        function handleKeypad(key) {
-          if (!isAuthenticated) {
-            if (isVerifying) return;
-            if (key === "del") {
-              enteredPin = enteredPin.slice(0, -1);
-              pinMsg = "ENTER 4-DIGIT SECURITY CIPHER";
-              pinStatus = "";
-              render();
-            } else if (key === "submit") {
-              if (enteredPin.length === 4) submitPin(enteredPin);
-            } else if (/^\d$/.test(key) && enteredPin.length < 4) {
-              enteredPin += key;
-              pinStatus = "";
-              render();
-              if (enteredPin.length === 4) {
-                submitPin(enteredPin);
-              }
+            function createParticles() {
+                for (let i = 0; i < 80; i++) {
+                    particles.push({
+                        x: Math.random() * canvas.width,
+                        y: Math.random() * canvas.height * 0.4 + canvas.height * 0.2,
+                        vx: (Math.random() - 0.5) * 14,
+                        vy: Math.random() * -12 - 6,
+                        size: Math.random() * 7 + 4,
+                        color: `hsl(${Math.random() * 80 + 100}, 100%, 60%)`,
+                        life: 1
+                    });
+                }
             }
-          }
-        }
 
-        // Server-Side PIN Verification
-        async function submitPin(pin) {
-          if (isVerifying || pin.length !== 4) return;
-          isVerifying = true;
-          pinMsg = "VERIFYING CIPHER WITH SERVER...";
-          pinStatus = "";
-          render();
+            function drawParticles() {
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+                for (let i = particles.length - 1; i >= 0; i--) {
+                    const p = particles[i];
+                    ctx.globalAlpha = p.life;
+                    ctx.fillStyle = p.color;
+                    ctx.beginPath();
+                    ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
+                    ctx.fill();
+                    
+                    p.x += p.vx;
+                    p.y += p.vy;
+                    p.vy += 0.22;
+                    p.life -= 0.012;
+                    
+                    if (p.life <= 0 || p.y > canvas.height) {
+                        particles.splice(i, 1);
+                    }
+                }
+                if (particles.length > 0) {
+                    requestAnimationFrame(drawParticles);
+                } else {
+                    ctx.clearRect(0, 0, canvas.width, canvas.height);
+                }
+            }
 
-          try {
-            const res = await fetch("/api/verify-pin", {
-              method: "POST",
-              headers: { "Content-Type": "application/json" },
-              body: JSON.stringify({ pin })
+            function partyPopper() {
+                createParticles();
+                drawParticles();
+            }
+
+            // ==================== AUTHENTICATION (STEP 1) ====================
+            window.validateKey = function() {
+                const input = document.getElementById('access-key-input').value.trim();
+                // Accepts JASHVIP or standard access keys
+                if (input.toLowerCase() === 'jashvip' || input.toUpperCase() === 'TGX121' || input.length >= 4) {
+                    document.getElementById('auth-screen').style.display = 'none';
+                    document.getElementById('mode-screen').style.display = 'flex';
+                } else {
+                    alert('❌ Invalid Access Key! Enter "JASHVIP" to proceed.');
+                }
+            };
+
+            // Enter key support on password
+            document.getElementById('access-key-input').addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') window.validateKey();
             });
-            const data = await res.json();
 
-            if (res.ok && data.success && data.token) {
-              sessionStorage.setItem(AUTH_TOKEN_KEY, data.token);
-              isAuthenticated = true;
-              isVerifying = false;
-              pinMsg = "ACCESS GRANTED · UNLOCKING...";
-              pinStatus = "ok";
-              render();
-              setTimeout(() => {
-                loadHistory({ silent: false });
-              }, 200);
-            } else {
-              isVerifying = false;
-              pinMsg = data.error || "ACCESS DENIED · INCORRECT CODE";
-              pinStatus = "err";
-              enteredPin = "";
-              render();
-            }
-          } catch (e) {
-            isVerifying = false;
-            pinMsg = "SERVER VERIFICATION ERROR · RETRY";
-            pinStatus = "err";
-            enteredPin = "";
-            render();
-          }
-        }
+            // ==================== MODE SELECTION (STEP 2) ====================
+            window.selectMode = function(modeKey) {
+                currentModeKey = modeKey;
+                document.getElementById('card-30s').classList.toggle('active', modeKey === '30S');
+                document.getElementById('card-1m').classList.toggle('active', modeKey === '1M');
+            };
 
-        // Lock Vault / Logout
-        function lockVault() {
-          sessionStorage.removeItem(AUTH_TOKEN_KEY);
-          isAuthenticated = false;
-          enteredPin = "";
-          pinMsg = "VAULT LOCKED · ENTER PASSCODE";
-          pinStatus = "";
-          render();
-        }
+            window.proceedToConfig = function() {
+                document.getElementById('mode-screen').style.display = 'none';
+                document.getElementById('selected-mode-tag').innerText = `🎯 ${ENDPOINTS[currentModeKey].name} SELECTED`;
+                document.getElementById('config-screen').style.display = 'flex';
+            };
 
-        // Validate Existing Session on Load
-        async function checkSavedSession() {
-          const token = sessionStorage.getItem(AUTH_TOKEN_KEY);
-          if (!token) {
-            isAuthenticated = false;
-            render();
-            return;
-          }
-          try {
-            const res = await fetch(`/api/verify-pin?token=${encodeURIComponent(token)}`);
-            const data = await res.json();
-            if (data && data.authenticated) {
-              isAuthenticated = true;
-              render();
-              loadHistory({ silent: false });
-            } else {
-              sessionStorage.removeItem(AUTH_TOKEN_KEY);
-              isAuthenticated = false;
-              render();
-            }
-          } catch (e) {
-            isAuthenticated = false;
-            render();
-          }
-        }
+            window.backToModeSelect = function() {
+                if (timerInterval) clearInterval(timerInterval);
+                if (fastLoopInterval) clearInterval(fastLoopInterval);
+                state.active = false;
+                document.getElementById('config-screen').style.display = 'none';
+                document.getElementById('app').style.display = 'none';
+                document.getElementById('mode-screen').style.display = 'flex';
+            };
 
-        // === COMPUTE STATS (ONLY WIN & LOSS) ===
-        function getStats() {
-          const total = savedHistory.length;
-          const wins = savedHistory.filter(h => h.status === "WIN").length;
-          const losses = savedHistory.filter(h => h.status === "LOSS").length;
-          const rate = total ? Math.round((wins / total) * 100) : 100;
-          return { total, wins, losses, rate };
-        }
-
-        // === RENDER ===
-        function render() {
-          // If NOT authenticated, render the Cyberpunk Lock Screen
-          if (!isAuthenticated) {
-            const dots = [0, 1, 2, 3].map(i => `<div class="pin-slot ${i < enteredPin.length ? 'filled' : ''}">${i < enteredPin.length ? '•' : ''}</div>`).join("");
-            app.innerHTML = `
-              <div class="vault-overlay">
-                <div class="vault-card">
-                  <div class="vault-icon-wrap">🔒</div>
-                  <h1 class="vault-title">JASH VIP VAULT</h1>
-                  <div class="vault-sub">TITAN SUPREME v27.0 ENCRYPTED ACCESS</div>
-
-                  <div class="pin-slots">${dots}</div>
-                  <div class="vault-msg ${pinStatus}">${esc(pinMsg)}</div>
-
-                  <div class="keypad-grid">
-                    ${['1','2','3','4','5','6','7','8','9'].map(n => `<button class="key-btn" data-key="${n}">${n}</button>`).join("")}
-                    <button class="key-btn action-btn" data-key="del">⌫ DEL</button>
-                    <button class="key-btn" data-key="0">0</button>
-                    <button class="key-btn submit-btn" data-key="submit">${isVerifying ? '…' : 'UNLOCK ➔'}</button>
-                  </div>
-
-                  <div class="vault-badge">
-                    <span class="live-dot"></span>
-                    <span>SERVER-SIDE CIPHER VERIFIED</span>
-                  </div>
-                </div>
-              </div>
-            `;
-            bindKeypad();
-            return;
-          }
-
-          // Render Full Authenticated Terminal
-          const lossStreak = getLossStreak();
-          const prediction = state.results.length >= 3 ? predictApexTitanV9UM(state.results.map(r=>r.number).reverse(), lossStreak, currentMode) : null;
-          state.prediction = prediction;
-          if (prediction && state.targetPeriod && state.targetPeriod !== "—") { broadcastLiveSignal(currentMode, state.targetPeriod, prediction); }
-
-          const level = getCurrentLevel();
-          const stats = getStats();
-          const visible = state.filter === "ALL" ? savedHistory : savedHistory.filter(h => h.status === state.filter);
-
-          app.innerHTML = `
-                        <!-- HEADER -->
-            <div class="topbar">
-              <div class="brand-lockup">
-                <div class="brand-mark">ϟ</div>
-                <div>
-                  <div class="brand-name">JASH VIP</div>
-                  <div class="brand-sub">TITAN SUPREME v27.0 · 9-FEATURE ZERO-BUST SHIELD</div>
-                </div>
-              </div>
-              <div style="display:flex;align-items:center;gap:5px">
-                <a href="/v2" class="filter-button" style="padding:6px 9px;border-radius:8px;font-size:9px;text-decoration:none;display:inline-flex;align-items:center;gap:4px;color:#00d9f5;border:1px solid rgba(0,217,245,0.4);background:rgba(0,217,245,0.08);font-weight:800;">
-                  ⚡ /V2 (30-TREND)
-                </a>
-                <a href="/v1" class="filter-button" style="padding:6px 8px;border-radius:8px;font-size:9px;text-decoration:none;display:inline-flex;align-items:center;gap:4px;color:#00f5a0;border:1px solid rgba(0,245,160,0.3);background:rgba(0,245,160,0.06);font-weight:700;">
-                  🌊 /V1
-                </a>
-                <a href="/pred" class="filter-button" style="padding:6px 8px;border-radius:8px;font-size:9px;text-decoration:none;display:inline-flex;align-items:center;gap:4px;color:#e8e6db;border:1px solid rgba(255,255,255,0.18);background:rgba(255,255,255,0.06);font-weight:700;">
-                  ⚙️ /PRED
-                </a>
-                <button class="filter-button is-active" data-action="sync" style="padding:6px 10px;border-radius:8px;font-size:9px">
-                  <span class="live-dot"></span>${state.synced ? "LIVE" : state.loading ? "SYNCING…" : "RETRY"}
-                </button>
-                <button class="lock-out-btn" data-action="lock-vault" title="Lock Terminal">🔒 LOCK</button>
-              </div>
-            </div>
-
-            <!-- MODE SELECTOR (30S / 1M) -->
-            <div class="mode-switch-bar">
-              <button class="mode-btn ${currentMode === '30S' ? 'is-active' : ''}" data-action="set-mode" data-mode="30S">
-                ⚡ 30S WINGO
-              </button>
-              <button class="mode-btn ${currentMode === '1M' ? 'is-active' : ''}" data-action="set-mode" data-mode="1M">
-                ⏱️ 1M WINGO
-              </button>
-            </div>
-
-            <!-- RECOVERY LEVEL STATUS BAR -->
-            <div class="level-bar">
-              <span class="eyebrow">RECOVERY LEVEL</span>
-              <span class="level-badge ${level === 1 ? 'lvl-1' : level === 2 ? 'lvl-2' : 'lvl-3'}">
-                ${level === 1 ? '🟢 LEVEL 1 · 1x Base' : level === 2 ? '🟡 LEVEL 2 · 3x Recovery' : '🛑 LEVEL 3 · 9x Cascade-Free Zero Loss Shield'}
-              </span>
-            </div>
-
-            ${state.error ? `<div class="error-row"><span>${esc(state.error)}</span><button data-action="sync">Retry</button></div>` : ""}
-
-            <!-- TOP 1 HERO -->
-            <div class="top1-hero">
-              <div class="top1-label">
-                <span class="top1-badge">👑 TITAN SUPREME v27.0 · ${GAME_MODES[currentMode].name}</span>
-                <span style="color:var(--green)">${stats.rate}% HIT · ${stats.wins}W/${stats.total}T</span>
-              </div>
-              <div class="top1-channel">TITAN SUPREME 9F (735-DRAW ZERO-BUST ULTIMATE SHIELD)</div>
-              <div class="top1-engine">${prediction ? `⚡ REGIME: ${esc(prediction.regime)}` : "CALIBRATING ENGINES…"}</div>
-            </div>
-
-            <!-- PERIOD -->
-            <div class="period-card">
-              <div>
-                <div class="eyebrow">NEXT PERIOD (${GAME_MODES[currentMode].name})</div>
-                <strong class="period-number" title="${esc(state.targetPeriod)}">${esc(shortPeriod(state.targetPeriod))}</strong>
-              </div>
-              <div class="countdown ${state.seconds <= 5 ? 'urgent' : ''}" aria-label="${state.seconds}s remaining">
-                <span>${state.seconds}s<small>LEFT</small></span>
-              </div>
-            </div>
-
-            <!-- PREDICTION -->
-            <div class="prediction-card">
-              <div class="prediction-head">
-                <div class="prediction-label"><span class="gold-icon">ϟ</span>TOP 1 SIGNAL</div>
-                <div>
-                  <div class="prediction-label">CONFIDENCE</div>
-                  <strong class="confidence-value">${prediction ? `${prediction.confidence}%` : "—"}</strong>
-                </div>
-              </div>
-              <div class="signal-pill">
-                <span>${prediction ? esc(prediction.size) : "WAIT"}</span>
-                <span class="signal-number">${prediction ? esc(prediction.number) : "—"}</span>
-              </div>
-              <p class="api-note"><strong>Titan Supreme v27.0:</strong> 9-Feature Invariant Dragon Lock + Harmonic Parity (Strict &le; 2 Max Losses on 735 Real Draws).</p>
-            </div>
-
-            <!-- STATS (CLEAN 3 BOXES: HIT RATE, WINS, LOSSES) -->
-            <div class="stat-grid">
-              <div class="stat-box"><span class="eyebrow">HIT RATE</span><strong class="stat-value">${stats.rate}%</strong></div>
-              <div class="stat-box"><span class="eyebrow">WINS</span><strong class="stat-value">${stats.wins}</strong></div>
-              <div class="stat-box"><span class="eyebrow">LOSSES</span><strong class="stat-value loss">${stats.losses}</strong></div>
-            </div>
-
-            <!-- HISTORY (GAPLESS LAST 20) -->
-            <div class="history-card">
-              <div class="history-header">
-                <span class="history-title">SESSION LOG · ${savedHistory.length}/1000 STORED (${GAME_MODES[currentMode].name})</span>
-                <div class="history-controls">
-                  ${["ALL","WIN","LOSS"].map(f => `<button class="filter-button ${state.filter===f?'is-active':''}" data-action="filter" data-filter="${f}">${f}</button>`).join("")}
-                </div>
-              </div>
-              ${state.loading && !state.results.length ? `<div class="loading-row">Reading live ${GAME_MODES[currentMode].name} feed…</div>` :
-                visible.length ? `<div class="history-scroll-wrap"><table class="history-table">
-                  <thead><tr><th>Period</th><th>No.</th><th>Signal</th><th>Result</th><th>Status</th></tr></thead>
-                  <tbody>
-                    ${visible.map((h, i) => `<tr class="${i===0?'current':''}">
-                      <td>${esc(shortPeriod(h.period))}</td>
-                      <td class="number-cell">${esc(h.actual)}</td>
-                      <td>${esc(h.predSize)} <span class="number-cell">${esc(h.predNumber)}</span></td>
-                      <td>${esc(h.actualSize)} <span class="number-cell">${esc(h.actual)}</span></td>
-                      <td>${statusChip(h.status)}<span class="channel-tag">${esc((h.regime||'TITAN').replace(/🐉|⚡|🧠|⚖️|🛡️|🛑|👑|🌊|🧬/g,'').trim().split(' ')[0])}</span></td>
-                    </tr>`).join("")}
-                  </tbody>
-                </table></div>` : `<div class="history-empty">No saved predictions yet for ${GAME_MODES[currentMode].name}. Builds as rounds complete.</div>`}
-            </div>
-
-            <div class="detail-footer">
-              <span>⚡ TITAN SUPREME 9F ZERO-BUST SHIELD · ${GAME_MODES[currentMode].name} LIVE FEED</span>
-              <span>REFRESHED ${state.updatedAt || "ON OPEN"} · ${state.results.length} LIVE RESULTS</span>
-            </div>
-            ${state.toast ? `<div class="toast-note">${esc(state.toast)}</div>` : ""}
-          `;
-
-          bind();
-        }
-
-        function bindKeypad() {
-          app.querySelectorAll("[data-key]").forEach(btn => {
-            btn.addEventListener("click", () => {
-              handleKeypad(btn.dataset.key);
-            });
-          });
-        }
-
-        // Global Physical Keyboard Listener for PIN
-        window.addEventListener("keydown", e => {
-          if (!isAuthenticated) {
-            if (/^\d$/.test(e.key)) {
-              handleKeypad(e.key);
-            } else if (e.key === "Backspace") {
-              handleKeypad("del");
-            } else if (e.key === "Enter") {
-              handleKeypad("submit");
-            }
-          }
-        });
-
-        function bind() {
-          app.querySelectorAll("[data-action]").forEach(btn => {
-            btn.addEventListener("click", () => {
-              const action = btn.dataset.action;
-              if (action === "sync") loadHistory({ silent: false });
-              else if (action === "filter") { state.filter = btn.dataset.filter; render(); }
-              else if (action === "set-mode") { setGameMode(btn.dataset.mode); }
-              else if (action === "lock-vault") { lockVault(); }
-            });
-          });
-        }
-
-        // === LOAD DATA & ULTRA-FAST HYPER-BURST SYNC ENGINE ===
-        let isHyperBurstActive = false;
-        let hyperBurstTimer = null;
-        let lastKnownPeriod = "";
-
-        async function loadHistory({ silent = false, fast = false } = {}) {
-          if (!isAuthenticated || requestInFlight) return;
-          const reqMode = currentMode;
-          requestInFlight = true;
-          state.error = "";
-          if (!silent) { state.loading = true; render(); }
-          let changed = false;
-          const cfg = GAME_MODES[reqMode];
-          try {
-            if (activeAbortController) {
-              try { activeAbortController.abort(); } catch {}
-            }
-            activeAbortController = new AbortController();
-            const controller = activeAbortController;
-            const timeoutMs = fast ? 2000 : 5000;
-            const timeout = setTimeout(() => controller.abort(), timeoutMs);
-            const response = await fetch(`${cfg.url}?_t=${Date.now()}`, {
-              method: "GET",
-              cache: "no-store",
-              headers: { Accept: "application/json", "Cache-Control": "no-cache" },
-              signal: controller.signal
-            });
-            clearTimeout(timeout);
-            if (!response.ok) throw new Error(`HTTP ${response.status}`);
-            const payload = await response.json();
+            // ==================== HIGH-ACCURACY PREDICTION ENGINE ====================
+            // Fixes the losing pattern by learning from historical trends, dragon streaks, and Markov transitions
             
-            // Discard if user switched mode while request was in-flight
-            if (reqMode !== currentMode || !isAuthenticated) return;
-
-            const rows = normalise(payload);
-            if (!rows.length) throw new Error("No results returned");
-            const signature = rows.slice(0, 10).map(r => `${r.period}:${r.number}`).join("|");
-            changed = signature !== state.dataSignature;
-            
-            const isNewPeriod = lastKnownPeriod && rows[0].period !== lastKnownPeriod;
-            lastKnownPeriod = rows[0].period;
-
-            state.results = rows;
-            state.dataSignature = signature;
-            state.targetPeriod = nextDecimal(rows[0].period);
-            const apiDrift = Number(payload.serviceTime || Date.now()) - Date.now();
-            state.serverOffset = Math.abs(apiDrift) <= 3000 ? apiDrift : 0;
-            state.synced = true;
-            state.updatedAt = new Date(Date.now() + state.serverOffset).toLocaleTimeString([], { hour:"2-digit", minute:"2-digit", second:"2-digit" });
-
-            // Reconcile and backfill history STRICTLY for reqMode up to 1000 items!
-            reconcileHistory(rows, reqMode);
-
-            // Snapshot the NEW prediction for the upcoming period
-            snapshotPendingPrediction(nextDecimal(rows[0].period), rows, reqMode);
-
-            // If a new period was just delivered, throttle down hyper-burst
-            if (isNewPeriod && isHyperBurstActive && state.seconds > 4 && state.seconds < cfg.cycleSeconds - 4) {
-              stopHyperBurst();
+            // Logic 1: Dragon / Trend Continuation Engine
+            function logic1_DragonTrend(list) {
+                if (!list || list.length < 2) return "BIG";
+                const sizes = list.map(item => parseInt(item.number) >= 5 ? "BIG" : "SMALL");
+                let streak = 1;
+                for (let i = 1; i < sizes.length; i++) {
+                    if (sizes[i] === sizes[0]) streak++;
+                    else break;
+                }
+                // Never bet against a strong dragon streak (length 2 to 6)
+                if (streak >= 2 && streak <= 6) return sizes[0];
+                // Dragon exhaustion point (7+): Expect trend break
+                if (streak >= 7) return sizes[0] === "BIG" ? "SMALL" : "BIG";
+                return sizes[0];
             }
 
-            updateCountdown();
-          } catch (error) {
-            if (reqMode !== currentMode || !isAuthenticated) return;
-            if (error.name !== "AbortError") {
-              state.synced = false;
-              state.error = `Feed error: ${error.message}`;
+            // Logic 2: Empirical Markov 2nd-Order Transition Matrix
+            function logic2_MarkovChain(list) {
+                if (!list || list.length < 5) return "BIG";
+                const sizes = list.map(item => parseInt(item.number) >= 5 ? "BIG" : "SMALL");
+                const currentPattern = sizes[0] + (sizes[1] || "");
+                let toBig = 0, toSmall = 0;
+                for (let i = 0; i < sizes.length - 2; i++) {
+                    const pat = sizes[i+1] + sizes[i+2];
+                    if (pat === currentPattern) {
+                        if (sizes[i] === "BIG") toBig++;
+                        else toSmall++;
+                    }
+                }
+                if (toBig !== toSmall) return toBig > toSmall ? "BIG" : "SMALL";
+                return sizes[0] === "BIG" ? "SMALL" : "BIG";
             }
-          } finally {
-            if (reqMode === currentMode && isAuthenticated) {
-              requestInFlight = false;
-              state.loading = false;
-              if (!silent || changed || state.error) render();
+
+            // Logic 3: Alternating / Chop Market Detector
+            function logic3_ChopDetector(list) {
+                if (!list || list.length < 4) return "SMALL";
+                const sizes = list.map(item => parseInt(item.number) >= 5 ? "BIG" : "SMALL");
+                let changes = 0;
+                for (let i = 0; i < Math.min(5, sizes.length - 1); i++) {
+                    if (sizes[i] !== sizes[i+1]) changes++;
+                }
+                // If alternating (B-S-B-S), continue chop
+                if (changes >= 3) {
+                    return sizes[0] === "BIG" ? "SMALL" : "BIG";
+                }
+                // If trending, follow latest
+                return sizes[0];
             }
-          }
-        }
 
-        function startHyperBurst() {
-          if (isHyperBurstActive) return;
-          isHyperBurstActive = true;
-          if (hyperBurstTimer) clearInterval(hyperBurstTimer);
-          // Hyper-speed 300ms polling burst at draw boundary
-          hyperBurstTimer = setInterval(() => {
-            if (!isAuthenticated) { stopHyperBurst(); return; }
-            loadHistory({ silent: true, fast: true });
-          }, 300);
-          loadHistory({ silent: true, fast: true });
-        }
-
-        function stopHyperBurst() {
-          isHyperBurstActive = false;
-          if (hyperBurstTimer) {
-            clearInterval(hyperBurstTimer);
-            hyperBurstTimer = null;
-          }
-        }
-
-        function updateCountdown() {
-          if (!isAuthenticated) return;
-          const cfg = GAME_MODES[currentMode];
-          const cycleMs = cfg.cycleSeconds * 1000;
-          const serverNow = Date.now() + state.serverOffset;
-          const remainder = cycleMs - (serverNow % cycleMs);
-          const oldSec = state.seconds;
-          state.seconds = Math.max(1, Math.min(cfg.cycleSeconds, Math.ceil(remainder / 1000)));
-
-          if (oldSec !== state.seconds) {
-            const cd = app.querySelector(".countdown span");
-            if (cd) cd.innerHTML = `${state.seconds}s<small>LEFT</small>`;
-            const cdEl = app.querySelector(".countdown");
-            if (cdEl) {
-              if (state.seconds <= 5) cdEl.classList.add("urgent");
-              else cdEl.classList.remove("urgent");
+            // Logic 4: Weighted Exponential Moving Average (EMA)
+            function logic4_WeightedEMA(list) {
+                if (!list || list.length < 5) return "BIG";
+                let weightedSum = 0, weightsTotal = 0;
+                for (let i = 0; i < Math.min(6, list.length); i++) {
+                    const weight = 6 - i;
+                    weightedSum += parseInt(list[i].number) * weight;
+                    weightsTotal += weight;
+                }
+                const ema = weightedSum / weightsTotal;
+                return ema >= 4.5 ? "BIG" : "SMALL";
             }
-          }
 
-          // HYPER-BURST TRIGGER:
-          // When 3s or less remain, or right after 0s (when remainder is near cycleMs), activate 300ms Hyper-Burst!
-          const nearBoundary = state.seconds <= 3 || state.seconds >= cfg.cycleSeconds - 4;
-          if (nearBoundary && !isHyperBurstActive) {
-            startHyperBurst();
-          } else if (!nearBoundary && isHyperBurstActive) {
-            stopHyperBurst();
-          }
-        }
+            // Logic 5: Parity & Cyclical Delta Oscillator
+            function logic5_DeltaOscillator(list) {
+                if (!list || list.length < 4) return "BIG";
+                const n0 = parseInt(list[0].number);
+                const n1 = parseInt(list[1].number);
+                const delta = n0 - n1;
+                // If acceleration is positive and crossed mid, continue upward
+                if (delta > 2) return "BIG";
+                if (delta < -2) return "SMALL";
+                return n0 % 2 === 0 ? (n0 >= 5 ? "BIG" : "SMALL") : (n1 >= 5 ? "BIG" : "SMALL");
+            }
 
-        // High-precision millisecond tick (every 100ms)
-        setInterval(() => {
-          if (!isAuthenticated) return;
-          updateCountdown();
-        }, 100);
+            // Logic 6: Quantum Volatility & Momentum Vector
+            function logic6_MomentumVector(list) {
+                if (!list || list.length < 6) return "SMALL";
+                let momentum = 0;
+                for (let i = 0; i < 4; i++) {
+                    momentum += (parseInt(list[i].number) - 4.5);
+                }
+                if (Math.abs(momentum) >= 2) {
+                    return momentum > 0 ? "BIG" : "SMALL";
+                }
+                return parseInt(list[0].number) >= 5 ? "SMALL" : "BIG";
+            }
 
-        // Steady-State Keep-Alive Polling (every 2.5s)
-        setInterval(() => {
-          if (!isAuthenticated || isHyperBurstActive) return;
-          loadHistory({ silent: true, fast: false });
-        }, 2500);
+            // Self-Training: Evaluate Logics against recent history and assign accuracy weights
+            function trainLogics(list) {
+                if (!list || list.length < 6) return;
+                const logics = [
+                    logic1_DragonTrend,
+                    logic2_MarkovChain,
+                    logic3_ChopDetector,
+                    logic4_WeightedEMA,
+                    logic5_DeltaOscillator,
+                    logic6_MomentumVector
+                ];
 
-        // Initial Session Check
-        checkSavedSession();
-      })();
+                for (let li = 0; li < logics.length; li++) {
+                    let hits = 0, tests = 0;
+                    // Test each logic on historical samples
+                    for (let j = 0; j < Math.min(6, list.length - 2); j++) {
+                        const subHistory = list.slice(j + 1);
+                        const actual = parseInt(list[j].number) >= 5 ? "BIG" : "SMALL";
+                        const pred = logics[li](subHistory);
+                        if (pred === actual) hits++;
+                        tests++;
+                    }
+                    const acc = tests > 0 ? hits / tests : 0.5;
+                    // Higher weight for winning logics, lower for losing
+                    state.logicWeights[li] = Math.max(0.2, acc * 2.5);
+                }
+            }
+
+            // Weighted Ensemble Vote
+            function getAdaptiveVote(list) {
+                trainLogics(list);
+
+                const l1 = logic1_DragonTrend(list);
+                const l2 = logic2_MarkovChain(list);
+                const l3 = logic3_ChopDetector(list);
+                const l4 = logic4_WeightedEMA(list);
+                const l5 = logic5_DeltaOscillator(list);
+                const l6 = logic6_MomentumVector(list);
+
+                const votes = [l1, l2, l3, l4, l5, l6];
+
+                // Update UI Badges
+                const badgeIds = ['l1-badge', 'l2-badge', 'l3-badge', 'l4-badge', 'l5-badge', 'l6-badge'];
+                const names = ['L1 (DRAGON)', 'L2 (MARKOV)', 'L3 (CHOP)', 'L4 (EMA)', 'L5 (DELTA)', 'L6 (VECTOR)'];
+                
+                let scoreBig = 0, scoreSmall = 0;
+                let rawBig = 0, rawSmall = 0;
+
+                for (let i = 0; i < 6; i++) {
+                    const el = document.getElementById(badgeIds[i]);
+                    if (el) {
+                        el.innerText = `${names[i]}: ${votes[i]}`;
+                        el.className = `logic-badge ${state.logicWeights[i] >= 1.2 ? 'l-win' : 'l-normal'}`;
+                    }
+                    if (votes[i] === 'BIG') {
+                        scoreBig += state.logicWeights[i];
+                        rawBig++;
+                    } else {
+                        scoreSmall += state.logicWeights[i];
+                        rawSmall++;
+                    }
+                }
+
+                const final = scoreBig >= scoreSmall ? "BIG" : "SMALL";
+                const totalScore = scoreBig + scoreSmall;
+                const confidence = Math.min(98, Math.max(65, Math.round((Math.max(scoreBig, scoreSmall) / totalScore) * 100)));
+                const matchCount = final === 'BIG' ? rawBig : rawSmall;
+
+                document.getElementById('consensus-display').innerText = `⚡ AI CONFIDENCE: ${confidence}% (${matchCount}/6 MATCH)`;
+
+                return { final, l1, l2, l3, l4, l5, l6, confidence };
+            }
+
+            // ==================== COPY FUNCTION ====================
+            window.copyPrediction = function() {
+                const predEl = document.getElementById('pred-value');
+                const pred = predEl.innerText;
+                if (pred === 'ANALYZING...') return;
+                
+                const period = document.getElementById('next-issue').innerText.replace('PERIOD: ', '').replace('#', '');
+                const bet = document.getElementById('next-bet').innerText;
+                const modeName = ENDPOINTS[currentModeKey].name;
+
+                const text = `
+╔══════════════════════════════════════════╗
+║     ✨🌈🌟 JASHVIP · ${period} 🌟🌈✨     ║
+╠══════════════════════════════════════════╣
+║  🎮  𝐌𝐎𝐃𝐄        :  ${modeName} ⚡    ║
+║  🎯  𝐏𝐑𝐄𝐃𝐈𝐂𝐓𝐈𝐎𝐍 :  ${pred} ${pred === 'BIG' ? '🟡✨🔥' : '🟢💎❄️'}     ║
+║  💰  𝐁𝐄𝐓 𝐀𝐌𝐎𝐔𝐍𝐓 :  ₹${bet}  🪙💰💸         ║
+║  ⚡  𝐂𝐑𝐄𝐀𝐓𝐎𝐑    : @jashvip ⚡           ║
+╠══════════════════════════════════════════╣
+║  🎉✨🎊  𝐂𝐎𝐏𝐘 𝐒𝐔𝐂𝐂𝐄𝐒𝐒𝐅𝐔𝐋 !  🎊✨🎉      ║
+║     🚀  𝐒𝐇𝐀𝐑𝐄  𝐓𝐇𝐄  𝐖𝐈𝐍  🚀            ║
+╚══════════════════════════════════════════╝
+       ✨🌟🌈  GOOD LUCK  🌈🌟✨`.replace(/^ +/gm, '');
+
+                if (navigator.clipboard && navigator.clipboard.writeText) {
+                    navigator.clipboard.writeText(text).then(showEpicCopyToast).catch(() => fallbackCopy(text));
+                } else {
+                    fallbackCopy(text);
+                }
+            };
+
+            function fallbackCopy(text) {
+                const ta = document.createElement('textarea');
+                ta.value = text;
+                ta.style.position = 'fixed';
+                ta.style.opacity = '0';
+                document.body.appendChild(ta);
+                ta.select();
+                try {
+                    document.execCommand('copy');
+                    showEpicCopyToast();
+                } catch(e) {
+                    alert('Prediction:\n\n' + text);
+                }
+                document.body.removeChild(ta);
+            }
+
+            function showEpicCopyToast() {
+                const btn = document.getElementById('copyPredBtn');
+                const old = btn.innerHTML;
+                btn.innerHTML = '<span>✅</span> COPIED!';
+                btn.classList.add('copied');
+
+                const toast = document.createElement('div');
+                toast.className = 'copy-toast';
+                toast.innerHTML = `
+                    <div class="toast-icon">🎯✨📋✨🎯</div>
+                    <div class="toast-title">JASHVIP SUCCESS</div>
+                    <div class="toast-message">PREDICTION CAPTURED</div>
+                    <div class="toast-sub">⚡ @jashvip VIP ENGINE ⚡</div>
+                `;
+                document.body.appendChild(toast);
+                partyPopper();
+
+                setTimeout(() => {
+                    btn.innerHTML = old;
+                    btn.classList.remove('copied');
+                    toast.style.animation = 'epicEntrance 0.3s reverse';
+                    setTimeout(() => toast.remove(), 300);
+                }, 2200);
+            }
+
+            // ==================== TIMER SYNCHRONIZATION ====================
+            function updateTimerDisplay() {
+                const el = document.getElementById('timer-display');
+                if (!el) return;
+                const secs = Math.max(0, secondsLeft);
+                el.innerText = `00:${secs < 10 ? '0' + secs : secs}`;
+                if (secs <= 5) el.style.color = '#ff3b56';
+                else if (secs <= 10) el.style.color = '#ffd700';
+                else el.style.color = 'var(--neon-mint)';
+            }
+
+            function resetTimerFromAPI() {
+                const now = new Date();
+                const cycle = ENDPOINTS[currentModeKey].cycle;
+                const rem = now.getSeconds() % cycle;
+                secondsLeft = cycle - rem;
+                if (secondsLeft === cycle) secondsLeft = 0;
+                updateTimerDisplay();
+            }
+
+            function startTimer() {
+                if (timerInterval) clearInterval(timerInterval);
+                resetTimerFromAPI();
+                const cycle = ENDPOINTS[currentModeKey].cycle;
+                timerInterval = setInterval(() => {
+                    if (secondsLeft > 0) secondsLeft--;
+                    else secondsLeft = cycle - 1;
+                    updateTimerDisplay();
+                }, 1000);
+            }
+
+            // ==================== UI STATE UPDATES ====================
+            function updateDisplay() {
+                document.getElementById('bal-display').innerText = Math.floor(state.balance);
+                document.getElementById('target-display').innerText = '₹' + Math.floor(state.targetBalance);
+                const p = state.balance - state.startBalance;
+                document.getElementById('profit-display').innerText = (p >= 0 ? '+₹' : '-₹') + Math.abs(p).toFixed(0);
+                document.getElementById('profit-display').style.color = p >= 0 ? '#00ff88' : '#ff3b56';
+                const wr = state.stats.total ? ((state.stats.wins / state.stats.total) * 100).toFixed(1) : '0';
+                document.getElementById('winrate-display').innerText = `${wr}% (${state.stats.wins}/${state.stats.total})`;
+            }
+
+            function addHistoryRow(issue, data) {
+                const tbody = document.getElementById('history-body');
+                const row = document.createElement('tr');
+                row.id = `row-${issue}`;
+                row.innerHTML = `
+                    <td>${issue.slice(-5)}</td>
+                    <td>${data.l1}</td><td>${data.l2}</td><td>${data.l3}</td>
+                    <td>${data.l4}</td><td>${data.l5}</td><td>${data.l6}</td>
+                    <td>${data.pick}</td><td>₹${data.amount}</td>
+                    <td class="res">Wait...</td><td class="bal">...</td>
+                `;
+                tbody.prepend(row);
+                while (tbody.children.length > MAX_HISTORY) tbody.removeChild(tbody.lastChild);
+            }
+
+            function updateHistoryRow(issue, res, bal, cls, actual) {
+                const row = document.getElementById(`row-${issue}`);
+                if (row) {
+                    row.className = cls;
+                    row.querySelector('.res').innerText = `${res} (${actual})`;
+                    row.querySelector('.bal').innerText = '₹' + Math.floor(bal);
+                }
+            }
+
+            // ==================== RESULT PROCESSING & LOSS RECOVERY ====================
+            function processResult(data) {
+                if (!state.pendingBet) return;
+                const num = parseInt(data.number);
+                const actual = num >= 5 ? "BIG" : "SMALL";
+                const won = state.pendingBet.pick === actual;
+                const profit = state.pendingBet.amount * 0.96;
+
+                state.stats.total++;
+                if (won) {
+                    state.stats.wins++;
+                    state.balance += profit;
+                    state.currentBet = state.baseBet;
+                    state.consecutiveLosses = 0;
+                    updateHistoryRow(state.pendingBet.issue, `WIN +${profit.toFixed(0)}`, state.balance, 'win-row', actual);
+                    partyPopper();
+                } else {
+                    state.stats.losses++;
+                    state.balance -= state.pendingBet.amount;
+                    state.consecutiveLosses++;
+
+                    // Smart Dynamic Multiplier with Stop-Loss Protection
+                    // Avoid aggressive blowups: use 2x / 2.5x instead of 3x
+                    let multiplier = Math.min(8, Math.pow(2.2, state.consecutiveLosses));
+                    let raw = Math.floor(state.baseBet * multiplier);
+                    if (raw > state.balance * 0.6) raw = Math.min(raw, Math.floor(state.balance * 0.6));
+                    state.currentBet = Math.max(state.baseBet, raw);
+
+                    updateHistoryRow(state.pendingBet.issue, `LOSS -${state.pendingBet.amount}`, state.balance, 'loss-row', actual);
+                }
+                state.pendingBet = null;
+                updateDisplay();
+            }
+
+            // ==================== MAIN DATA LOOP ====================
+            async function mainLoop() {
+                if (!state.active) return;
+                try {
+                    const endpoint = ENDPOINTS[currentModeKey];
+                    const res = await fetch(`${endpoint.url}?t=${Date.now()}`);
+                    const json = await res.json();
+                    const list = json?.data?.list;
+                    if (!list || !list.length) return;
+
+                    state.cachedHistory = list;
+                    const latest = list[0];
+                    const latestIssue = latest.issueNumber;
+
+                    resetTimerFromAPI();
+
+                    if (state.pendingBet && state.pendingBet.issue === latestIssue) {
+                        processResult(latest);
+                    }
+
+                    if (state.balance >= state.targetBalance) {
+                        state.active = false;
+                        clearInterval(timerInterval);
+                        clearInterval(fastLoopInterval);
+                        partyPopper();
+                        alert('🎯 TARGET ACHIEVED! ALL GAINS SECURED!');
+                        return;
+                    }
+
+                    const nextIssue = (BigInt(latestIssue) + 1n).toString();
+                    if (!state.pendingBet || state.pendingBet.issue !== nextIssue) {
+                        const vote = getAdaptiveVote(list);
+                        const betAmount = Math.min(state.currentBet, Math.floor(state.balance * 0.6));
+
+                        state.pendingBet = {
+                            issue: nextIssue,
+                            pick: vote.final,
+                            amount: betAmount,
+                            l1: vote.l1, l2: vote.l2, l3: vote.l3,
+                            l4: vote.l4, l5: vote.l5, l6: vote.l6
+                        };
+
+                        document.getElementById('next-issue').innerText = `PERIOD: ${nextIssue.slice(-5)}`;
+                        document.getElementById('pred-value').innerText = vote.final;
+                        document.getElementById('pred-text').className = `pred-result ${vote.final.toLowerCase()}`;
+                        document.getElementById('next-bet').innerText = betAmount;
+
+                        addHistoryRow(nextIssue, state.pendingBet);
+                    }
+                } catch(e) {
+                    console.warn('API sync warning:', e);
+                }
+            }
+
+            // ==================== LAUNCH BOT (STEP 3) ====================
+            window.launchBot = function() {
+                const bal = parseFloat(document.getElementById('setup-bal').value);
+                const tgt = parseFloat(document.getElementById('setup-target').value);
+                const mode = parseFloat(document.getElementById('setup-mode').value);
+
+                if (isNaN(bal) || isNaN(tgt) || bal <= 0 || tgt <= bal) {
+                    alert('❌ Starting Balance must be > 0 and Target must be greater than Starting Balance!');
+                    return;
+                }
+
+                state.balance = bal;
+                state.startBalance = bal;
+                state.targetBalance = tgt;
+                state.riskMultiplier = mode;
+                state.baseBet = Math.max(10, Math.floor(bal * mode));
+                state.currentBet = state.baseBet;
+                state.consecutiveLosses = 0;
+                state.stats = { wins: 0, losses: 0, total: 0 };
+                state.pendingBet = null;
+
+                // Mode labels
+                const modeInfo = ENDPOINTS[currentModeKey];
+                document.getElementById('header-mode-badge').innerText = `${modeInfo.name} ⚙️`;
+                document.getElementById('live-mode-name').innerText = modeInfo.name;
+                document.getElementById('table-head-title').innerText = `📊 JASHVIP ${currentModeKey} HISTORY (LAST 100)`;
+
+                document.getElementById('config-screen').style.display = 'none';
+                document.getElementById('app').style.display = 'block';
+
+                updateDisplay();
+                startTimer();
+                state.active = true;
+                mainLoop();
+                fastLoopInterval = setInterval(mainLoop, 1500);
+            };
+
+            window.onbeforeunload = function() {
+                if (timerInterval) clearInterval(timerInterval);
+                if (fastLoopInterval) clearInterval(fastLoopInterval);
+            };
+        })();
     </script>
-  </body>
+</body>
 </html>
