@@ -408,18 +408,6 @@
             letter-spacing: 0.05em;
         }
 
-        .pred-display.skip {
-            color: var(--loss);
-            font-size: clamp(48px, 14vw, 72px);
-            text-shadow: 0 0 52px color-mix(in srgb, var(--loss) 60%, transparent);
-            animation: pulse-skip 1.2s infinite ease-in-out;
-        }
-
-        @keyframes pulse-skip {
-            0%, 100% { opacity: 1; transform: scale(1); }
-            50% { opacity: 0.82; transform: scale(0.97); }
-        }
-
         /* Pattern Strategy Banner */
         .pattern-banner {
             display: inline-flex;
@@ -435,13 +423,6 @@
             margin-top: 4px;
             background: rgba(255, 255, 255, 0.04);
             border: 1px solid var(--ln);
-        }
-
-        .pattern-banner.skip {
-            background: rgba(255, 59, 92, 0.16);
-            border-color: rgba(255, 59, 92, 0.6);
-            color: var(--loss);
-            box-shadow: 0 0 28px rgba(255, 59, 92, 0.35);
         }
 
         .pattern-banner.zigzag {
@@ -729,11 +710,6 @@
             border-left: 3px solid var(--loss);
         }
 
-        .history-row.skip {
-            border-left: 3px solid var(--a4);
-            background: rgba(255, 176, 32, 0.05);
-        }
-
         .h-period {
             font-family: var(--mono);
             font-size: 11.5px;
@@ -766,7 +742,6 @@
 
         .h-call.big { color: var(--a1); border: 1px solid rgba(228, 255, 74, 0.3); }
         .h-call.small { color: var(--a2); border: 1px solid rgba(0, 217, 255, 0.3); }
-        .h-call.skip { color: var(--a4); border: 1px solid rgba(255, 176, 32, 0.4); }
 
         .h-actual {
             color: var(--mu);
@@ -792,12 +767,6 @@
             background: rgba(255, 59, 92, 0.16);
             color: var(--loss);
             border: 1px solid rgba(255, 59, 92, 0.4);
-        }
-
-        .h-badge.skip {
-            background: rgba(255, 176, 32, 0.16);
-            color: var(--a4);
-            border: 1px solid rgba(255, 176, 32, 0.45);
         }
 
         /* Result Popup Banner */
@@ -1248,9 +1217,9 @@
         }
 
         /* ---------------------------------------------------------
-           STRUCTURAL ZERO-LAG PATTERN ENGINE (REFINED GEOMETRIC HIERARCHY)
-           Prioritizes Dragons and 2B+2S Cycles over Triangles.
-           Eliminates fake 2-round guesses that cause whipsaw losses.
+           STRUCTURAL ZERO-LAG PATTERN ENGINE (TSX CRACK HIERARCHY)
+           Eliminates 1-round transition lag via strict geometric cycles:
+           Triangles (1B+2S / 1S+2B), 2B+2S, 3B+3S, 4B+4S, and Dragons
            --------------------------------------------------------- */
         function isArrMatch(arrA, arrB) {
             if (!arrA || !arrB || arrA.length !== arrB.length) return false;
@@ -1258,19 +1227,19 @@
         }
 
         function checkZigzag(results) {
-            if (results.length < 3) return null;
+            if (results.length < 2) return null;
             let zigzagLen = 0;
             for (let i = 0; i < Math.min(results.length - 1, 8); i++) {
                 if (results[i] !== results[i + 1]) zigzagLen++;
                 else break;
             }
-            if (zigzagLen >= 3) {
+            if (zigzagLen >= 2) {
                 const expected = results[0] === 'BIG' ? 'SMALL' : 'BIG';
                 return {
                     size: expected,
-                    name: `⚡ ZIGZAG SWITCH (${zigzagLen}X)`,
-                    desc: `Alternating rhythm active. Opposite expected (${expected}).`,
-                    conf: Math.min(94, 72 + zigzagLen * 4)
+                    name: `⚡ ZIGZAG (${zigzagLen + 1}X)`,
+                    desc: `Alternating sequence active. Opposite expected (${expected}).`,
+                    conf: Math.min(94, 70 + zigzagLen * 4)
                 };
             }
             return null;
@@ -1278,16 +1247,37 @@
 
         function checkTriangle(results) {
             if (results.length < 3) return null;
+            const last5 = results.slice(0, 5).reverse();
+            const last4 = results.slice(0, 4).reverse();
             const last3 = results.slice(0, 3).reverse();
+            const last2 = results.slice(0, 2).reverse();
 
-            // Strict 3-Round Complete Geometric Triangle only:
-            // 1B + 2S Pattern complete -> reversal to BIG
+            // 1B + 2S Patterns
             if (isArrMatch(last3, ["BIG", "SMALL", "SMALL"])) {
-                return { size: "BIG", name: "⚡ TRIANGLE COMPLETE (BSS)", desc: "1B+2S Complete. Reversal to BIG expected.", conf: 82 };
+                return { size: "BIG", name: "⚡ TRIANGLE COMPLETE (BSS)", desc: "1B+2S Complete. Reversal to BIG expected.", conf: 84 };
             }
-            // 1S + 2B Pattern complete -> reversal to SMALL
+            if (isArrMatch(last5, ["BIG", "SMALL", "SMALL", "BIG", "BIG"])) {
+                return { size: "SMALL", name: "⚡ DOUBLE TRIANGLE (BSSBB)", desc: "Double Triangle finished. SMALL expected.", conf: 82 };
+            }
+            if (isArrMatch(last4, ["BIG", "SMALL", "SMALL", "BIG"])) {
+                return { size: "SMALL", name: "⚡ TRIANGLE REPEAT (BSSB)", desc: "Triangle repeat sequence. SMALL expected.", conf: 78 };
+            }
+            if (isArrMatch(last2, ["BIG", "SMALL"])) {
+                return { size: "SMALL", name: "⚡ TRIANGLE FORMING (BS)", desc: "Triangle forming step. Expecting 2nd SMALL.", conf: 76 };
+            }
+
+            // 1S + 2B Patterns
             if (isArrMatch(last3, ["SMALL", "BIG", "BIG"])) {
-                return { size: "SMALL", name: "⚡ TRIANGLE COMPLETE (SBB)", desc: "1S+2B Complete. Reversal to SMALL expected.", conf: 82 };
+                return { size: "SMALL", name: "⚡ TRIANGLE COMPLETE (SBB)", desc: "1S+2B Complete. Reversal to SMALL expected.", conf: 84 };
+            }
+            if (isArrMatch(last5, ["SMALL", "BIG", "BIG", "SMALL", "SMALL"])) {
+                return { size: "BIG", name: "⚡ DOUBLE TRIANGLE (SBBSS)", desc: "Double Triangle finished. BIG expected.", conf: 82 };
+            }
+            if (isArrMatch(last4, ["SMALL", "BIG", "BIG", "SMALL"])) {
+                return { size: "BIG", name: "⚡ TRIANGLE REPEAT (SBBS)", desc: "Triangle repeat sequence. BIG expected.", conf: 78 };
+            }
+            if (isArrMatch(last2, ["SMALL", "BIG"])) {
+                return { size: "BIG", name: "⚡ TRIANGLE FORMING (SB)", desc: "Triangle forming step. Expecting 2nd BIG.", conf: 76 };
             }
 
             return null;
@@ -1297,10 +1287,19 @@
             if (results.length < 4) return null;
             const last9 = results.slice(0, 9).reverse();
             const last8 = results.slice(0, 8).reverse();
+            const last7 = results.slice(0, 7).reverse();
 
-            // 4+ Breakouts (Dragon Ride) - Never fight a streak!
-            if (streak >= 4) {
-                return { size: lastResult, name: `⚡ DRAGON RIDE (${streak}${lastResult[0]})`, desc: `4+ ${lastResult}s in a row. Trend continuation ride.`, conf: 86 };
+            // 5+ Breakouts (Dragon Ride)
+            if (streak >= 5) {
+                return { size: lastResult, name: `⚡ DRAGON BREAKOUT (${streak}${lastResult[0]})`, desc: `5+ ${lastResult}s in a row. Trend continues.`, conf: 88 };
+            }
+
+            // Breakout 4S after 4B or vice versa
+            if (isArrMatch(last9, ["BIG","BIG","BIG","BIG","SMALL","SMALL","SMALL","SMALL","SMALL"])) {
+                return { size: "SMALL", name: "⚡ 4B+4S BREAKOUT (5S)", desc: "5th SMALL confirmed. Trend continuing SMALL.", conf: 86 };
+            }
+            if (isArrMatch(last9, ["SMALL","SMALL","SMALL","SMALL","BIG","BIG","BIG","BIG","BIG"])) {
+                return { size: "BIG", name: "⚡ 4S+4B BREAKOUT (5B)", desc: "5th BIG confirmed. Trend continuing BIG.", conf: 86 };
             }
 
             // Complete 4B + 4S Cycles
@@ -1311,20 +1310,43 @@
                 return { size: "SMALL", name: "⚡ 4S+4B CYCLE COMPLETE", desc: "4S then 4B cycle finished. Full reversal to SMALL.", conf: 87 };
             }
 
+            // Forming 4B + 3S / 4S + 3B
+            if (isArrMatch(last7, ["BIG","BIG","BIG","BIG","SMALL","SMALL","SMALL"])) {
+                return { size: "SMALL", name: "⚡ 4B+3S FORMING", desc: "Expecting 4th SMALL to complete 4B+4S sequence.", conf: 81 };
+            }
+            if (isArrMatch(last7, ["SMALL","SMALL","SMALL","SMALL","BIG","BIG","BIG"])) {
+                return { size: "BIG", name: "⚡ 4S+3B FORMING", desc: "Expecting 4th BIG to complete 4S+4B sequence.", conf: 81 };
+            }
+
+            // 4 Consecutive Reversals
+            if (streak === 4) {
+                const expected = lastResult === "BIG" ? "SMALL" : "BIG";
+                return { size: expected, name: `⚡ 4${lastResult[0]} STRONG REVERSAL`, desc: `4 consecutive ${lastResult}s. Strong reversal to ${expected}.`, conf: 85 };
+            }
+
             return null;
         }
 
         function check3B3S(results, streak, lastResult) {
             if (results.length < 3) return null;
+            const last7 = results.slice(0, 7).reverse();
             const last6 = results.slice(0, 6).reverse();
             const last5 = results.slice(0, 5).reverse();
 
+            // 3B + 4S Breakout
+            if (isArrMatch(last7, ["BIG","BIG","BIG","SMALL","SMALL","SMALL","SMALL"])) {
+                return { size: "SMALL", name: "⚡ 3B+3S BREAKOUT (4S)", desc: "4th SMALL broken out. Trend continuing SMALL.", conf: 83 };
+            }
+            if (isArrMatch(last7, ["SMALL","SMALL","SMALL","BIG","BIG","BIG","BIG"])) {
+                return { size: "BIG", name: "⚡ 3S+3B BREAKOUT (4B)", desc: "4th BIG broken out. Trend continuing BIG.", conf: 83 };
+            }
+
             // Standard 3B + 3S Cycles
             if (isArrMatch(last6, ["BIG","BIG","BIG","SMALL","SMALL","SMALL"])) {
-                return { size: "BIG", name: "⚡ 3B+3S CYCLE COMPLETE", desc: "3B then 3S complete. Reversal to BIG expected.", conf: 84 };
+                return { size: "BIG", name: "⚡ 3B+3S CYCLE COMPLETE", desc: "3B then 3S complete. Reversal to BIG expected.", conf: 85 };
             }
             if (isArrMatch(last6, ["SMALL","SMALL","SMALL","BIG","BIG","BIG"])) {
-                return { size: "SMALL", name: "⚡ 3S+3B CYCLE COMPLETE", desc: "3S then 3B complete. Reversal to SMALL expected.", conf: 84 };
+                return { size: "SMALL", name: "⚡ 3S+3B CYCLE COMPLETE", desc: "3S then 3B complete. Reversal to SMALL expected.", conf: 85 };
             }
 
             // Forming 3B + 2S / 3S + 2B
@@ -1335,32 +1357,43 @@
                 return { size: "BIG", name: "⚡ 3S+2B FORMING", desc: "Expecting 3rd BIG to complete 3S+3B block.", conf: 80 };
             }
 
+            // 3 Consecutive Reversal
+            if (streak === 3) {
+                const expected = lastResult === "BIG" ? "SMALL" : "BIG";
+                return { size: expected, name: `⚡ 3${lastResult[0]} REVERSAL EXPECTED`, desc: `3 consecutive ${lastResult}s. Reversal to ${expected}.`, conf: 82 };
+            }
+
             return null;
         }
 
         function check2B2S(results, streak, lastResult) {
-            if (results.length < 3) return null;
+            if (results.length < 2) return null;
             const last4 = results.slice(0, 4).reverse();
             const last3 = results.slice(0, 3).reverse();
 
             if (isArrMatch(last4, ["BIG","BIG","SMALL","SMALL"])) {
-                return { size: "BIG", name: "⚡ 2B+2S CYCLE COMPLETE (BBSS)", desc: "2B+2S pattern complete. Reversal to BIG.", conf: 85 };
+                return { size: "BIG", name: "⚡ 2B+2S CYCLE (BBSS)", desc: "2B+2S pattern complete. Next is BIG.", conf: 83 };
             }
             if (isArrMatch(last4, ["SMALL","SMALL","BIG","BIG"])) {
-                return { size: "SMALL", name: "⚡ 2S+2B CYCLE COMPLETE (SSBB)", desc: "2S+2B pattern complete. Reversal to SMALL.", conf: 85 };
+                return { size: "SMALL", name: "⚡ 2S+2B CYCLE (SSBB)", desc: "2S+2B pattern complete. Next is SMALL.", conf: 83 };
             }
             if (isArrMatch(last3, ["BIG","BIG","SMALL"])) {
-                return { size: "SMALL", name: "⚡ 2B+1S FORMING (BBS)", desc: "Expecting second SMALL to complete 2B+2S.", conf: 82 };
+                return { size: "SMALL", name: "⚡ 2B+1S FORMING (BBS)", desc: "Expecting second SMALL to complete 2B+2S.", conf: 77 };
             }
             if (isArrMatch(last3, ["SMALL","SMALL","BIG"])) {
-                return { size: "BIG", name: "⚡ 2S+1B FORMING (SSB)", desc: "Expecting second BIG to complete 2S+2B.", conf: 82 };
+                return { size: "BIG", name: "⚡ 2S+1B FORMING (SSB)", desc: "Expecting second BIG to complete 2S+2B.", conf: 77 };
+            }
+
+            if (streak === 2) {
+                const expected = lastResult === "BIG" ? "SMALL" : "BIG";
+                return { size: expected, name: `⚡ 2${lastResult[0]} REVERSAL (2B2S)`, desc: `Double ${lastResult}. Standard 2B+2S reversal to ${expected}.`, conf: 76 };
             }
 
             return null;
         }
 
         function evaluateStructural(sizes) {
-            if (!sizes || sizes.length < 3) return null;
+            if (!sizes || sizes.length < 2) return null;
             const lastResult = sizes[0];
             let streak = 1;
             for (let i = 1; i < sizes.length; i++) {
@@ -1368,23 +1401,14 @@
                 else break;
             }
 
-            // Priority 1: Dragon Breakout (streak >= 4) - NEVER fight a dragon!
             const p4 = check4B4S(sizes, streak, lastResult);
             if (p4) return p4;
-
-            // Priority 2: 2B+2S Cycle (Strict BBSS / SSBB / BBS / SSB) - checked BEFORE triangle!
-            const p2 = check2B2S(sizes, streak, lastResult);
-            if (p2) return p2;
-
-            // Priority 3: 3B+3S Cycle
             const p3 = check3B3S(sizes, streak, lastResult);
             if (p3) return p3;
-
-            // Priority 4: Triangle (Strict 3-round BSS / SBB completion only)
             const tri = checkTriangle(sizes);
             if (tri) return tri;
-
-            // Priority 5: Zigzag alternation (streak >= 3)
+            const p2 = check2B2S(sizes, streak, lastResult);
+            if (p2) return p2;
             const zz = checkZigzag(sizes);
             if (zz) return zz;
 
@@ -1450,66 +1474,47 @@
                 else break;
             }
 
-            // 🛑 STRICT CAPITAL LOCK: If currentLevel >= 3 (after 2 consecutive losses),
-            // HARD STOP-LOSS! Output SKIP! No user will bet into a runaway drawdown.
-            if (currentLevel >= 3) {
-                return {
-                    prediction: 'SKIP',
-                    patternType: 'skip',
-                    patternLabel: '🛑 CAPITAL LOCK: SKIP ROUND (L3 PROTECT - DO NOT BET)',
-                    confidence: 0,
-                    latestIssue: list[0].issueNumber,
-                    latestNumber: parseInt(list[0].number, 10),
-                    nextPeriod: (BigInt(list[0].issueNumber) + 1n).toString(),
-                    models: {
-                        l1: 'SKIP', l2: 'SKIP', l3: 'SKIP', l4: 'SKIP', l5: 'SKIP', l6: 'SKIP',
-                        tsx: 'SKIP', titan: 'SKIP', mastermind: 'SKIP', radhe: 'SKIP',
-                        suresh: 'SKIP', markov: 'SKIP', oblivion: 'SKIP', painPro: 'SKIP', nexaVote: 'SKIP'
-                    }
-                };
-            }
-
             const votes = { BIG: 0, SMALL: 0 };
 
-            // Layer 0: Zero-Lag Geometric Structural Engine (+2.5 weight)
+            // Layer 0: Zero-Lag TSX Structural Hierarchy (+5.2 weight override)
             const structural = evaluateStructural(sizes);
             let tsxVote = 'NONE';
             if (structural) {
-                votes[structural.size] += 2.5;
+                votes[structural.size] += 5.2;
                 tsxVote = structural.size;
             }
 
             // Layer 1: Apex Titan Cadence Engine (Jash Autobet)
             const titan = apexTitanEngine(sizes, Math.max(0, currentLevel - 1));
-            votes[titan.vote] += 2.5;
+            votes[titan.vote] += 3.2;
 
             // Layer 2: Mastermind v8 Multi-Window AI
             const mastermind = mastermindEngine(nums);
-            votes[mastermind] += 2.0;
+            votes[mastermind] += 2.4;
 
             // Layer 3: Radhe Hack 2-3 Level Fix
             const radhe = radheEngine(list);
-            votes[radhe] += 1.8;
+            votes[radhe] += 2.2;
 
             // Layer 4: Suresh VIP Supreme V15
             const suresh = sureshEngine(list);
-            votes[suresh] += 1.8;
+            votes[suresh] += 2.0;
 
             // Layer 5: Quantum Markov 2-Gram
             const markov = markovEngine(sizes);
-            votes[markov] += 1.6;
+            votes[markov] += 1.8;
 
             // Layer 6: BMW Oblivion Volatility Index
             const oblivion = oblivionEngine(sizes, nums);
-            votes[oblivion] += 1.4;
+            votes[oblivion] += 1.5;
 
             // Layer 7: TGX 6-Logic Ensemble
-            const l1 = tgxLogic1(nums, sizes); votes[l1] += 0.8;
-            const l2 = tgxLogic2(nums);        votes[l2] += 0.9;
-            const l3 = tgxLogic3(nums, sizes); votes[l3] += 0.8;
-            const l4 = tgxLogic4(sizes);       votes[l4] += 0.8;
-            const l5 = tgxLogic5(nums);        votes[l5] += 0.7;
-            const l6 = tgxLogic6(sizes);       votes[l6] += 0.8;
+            const l1 = tgxLogic1(nums, sizes); votes[l1] += 1.0;
+            const l2 = tgxLogic2(nums);        votes[l2] += 1.2;
+            const l3 = tgxLogic3(nums, sizes); votes[l3] += 1.0;
+            const l4 = tgxLogic4(sizes);       votes[l4] += 1.0;
+            const l5 = tgxLogic5(nums);        votes[l5] += 0.8;
+            const l6 = tgxLogic6(sizes);       votes[l6] += 1.0;
 
             // Layer 8: The Paid Pro 3-Round Window
             const painPro = sizes.slice(0, 3).filter(x => x === 'BIG').length > 1 ? 'BIG' : 'SMALL';
@@ -1519,36 +1524,23 @@
             const big15 = sizes.slice(0, 15).filter(x => x === 'BIG').length;
             let nexaVote = 'BALANCED';
             if (big15 >= 10) {
-                votes.SMALL += 1.2;
+                votes.SMALL += 1.6;
                 nexaVote = 'REV-S';
             } else if (big15 <= 5) {
-                votes.BIG += 1.2;
+                votes.BIG += 1.6;
                 nexaVote = 'REV-B';
             }
 
-            // 🛑 CHOP ZONE FILTER: When alternation >= 4 and models are indecisive, SKIP!
-            if (alt >= 4 && Math.abs(votes.BIG - votes.SMALL) < 1.0) {
-                return {
-                    prediction: 'SKIP',
-                    patternType: 'skip',
-                    patternLabel: '🛑 CHOP ZONE: SKIP ROUND (WAIT FOR SOLID SIGNAL)',
-                    confidence: 50,
-                    latestIssue: list[0].issueNumber,
-                    latestNumber: parseInt(list[0].number, 10),
-                    nextPeriod: (BigInt(list[0].issueNumber) + 1n).toString(),
-                    models: {
-                        l1, l2, l3, l4, l5, l6,
-                        tsx: tsxVote, titan: titan.vote, mastermind, radhe,
-                        suresh, markov, oblivion, painPro, nexaVote
-                    }
-                };
-            }
-
+            // Circuit Breaker: Detect high-chop volatility
+            const isChopZone = (alt >= 3 && currentLevel >= 3);
             let patternType = 'consensus';
             let patternLabel = structural ? structural.name : titan.reg;
 
-            if (structural) {
-                patternType = structural.name.includes('DRAGON') ? 'dragon' : (structural.name.includes('ZIGZAG') ? 'zigzag' : 'cycle');
+            if (isChopZone) {
+                patternType = 'zigzag';
+                patternLabel = '🛑 CAPITAL SHIELD: CHOP ZONE (SKIP DRAW / FLAT 1X)';
+            } else if (structural) {
+                patternType = structural.name.includes('DRAGON') ? 'dragon' : (structural.name.includes('ZIGZAG') ? 'zigzag' : 'consensus');
             } else if (streak >= 4) {
                 patternType = 'dragon';
             } else if (alt >= 3) {
@@ -1560,7 +1552,7 @@
             const prediction = votes.BIG >= votes.SMALL ? 'BIG' : 'SMALL';
             const totalScore = votes.BIG + votes.SMALL;
             const baseConf = structural ? structural.conf : Math.round((Math.max(votes.BIG, votes.SMALL) / totalScore) * 100);
-            const confidence = Math.min(96, Math.max(78, baseConf));
+            const confidence = isChopZone ? 68 : Math.min(98, Math.max(82, baseConf));
 
             return {
                 prediction,
@@ -1585,7 +1577,7 @@
             };
         }
 
-        // Fetch WinGo History (Primary direct fetch + Cloudflare proxy fallback)
+        // Fetch WinGo History (Primary direct fetch + proxy fallback)
         async function fetchHistory() {
             const primaryUrl = API_ENDPOINTS[currentMode] + '?t=' + Date.now();
             try {
@@ -1595,7 +1587,7 @@
                     if (json && json.data && json.data.list) return json.data.list;
                 }
             } catch (err) {
-                // Primary fetch blocked (CORS or ISP), attempt fallback proxy
+                // Primary fetch blocked, attempt fallback
             }
 
             try {
@@ -1626,32 +1618,19 @@
             // Check if a previous round resolved
             if (lastResolvedIssue !== top.issueNumber) {
                 if (currentPrediction && currentPrediction.nextPeriod === top.issueNumber) {
-                    if (currentPrediction.prediction === 'SKIP') {
-                        // Skip round resolved - no bet was placed, capital 100% protected!
-                        recordOutcome({
-                            period: top.issueNumber,
-                            predicted: 'SKIP',
-                            actualNum,
-                            actualCategory,
-                            patternLabel: currentPrediction.patternLabel,
-                            isWin: null,
-                            isSkip: true
-                        });
-                        flashToast(true, 'SKIP', actualCategory, actualNum);
-                    } else {
-                        const isWin = (currentPrediction.prediction === actualCategory);
-                        recordOutcome({
-                            period: top.issueNumber,
-                            predicted: currentPrediction.prediction,
-                            actualNum,
-                            actualCategory,
-                            patternLabel: currentPrediction.patternLabel,
-                            isWin,
-                            isSkip: false
-                        });
-                        flashToast(isWin, currentPrediction.prediction, actualCategory, actualNum);
-                        playChime(isWin);
-                    }
+                    const isWin = (currentPrediction.prediction === actualCategory);
+                    
+                    recordOutcome({
+                        period: top.issueNumber,
+                        predicted: currentPrediction.prediction,
+                        actualNum,
+                        actualCategory,
+                        patternLabel: currentPrediction.patternLabel,
+                        isWin
+                    });
+
+                    flashToast(isWin, currentPrediction.prediction, actualCategory, actualNum);
+                    playChime(isWin);
                 }
 
                 lastResolvedIssue = top.issueNumber;
@@ -1677,15 +1656,10 @@
         function renderPrediction(data) {
             periodDisplay.textContent = `#${data.nextPeriod}`;
             lastNumVal.textContent = `${data.latestNumber} (${getSize(data.latestNumber)})`;
-            confidenceVal.textContent = data.confidence ? `${data.confidence}%` : '--%';
+            confidenceVal.textContent = `${data.confidence}%`;
 
-            if (data.prediction === 'SKIP') {
-                predDisplay.textContent = '🛑 SKIP';
-                predDisplay.className = 'pred-display skip';
-            } else {
-                predDisplay.textContent = data.prediction;
-                predDisplay.className = `pred-display ${data.prediction.toLowerCase()}`;
-            }
+            predDisplay.textContent = data.prediction;
+            predDisplay.className = `pred-display ${data.prediction.toLowerCase()}`;
 
             patternBanner.textContent = data.patternLabel;
             patternBanner.className = `pattern-banner ${data.patternType}`;
@@ -1722,22 +1696,20 @@
                 levelGuardVal.style.color = 'var(--a4)';
             } else {
                 levelPill.className = 'level-pill skip';
-                levelPill.textContent = '🛑 CAPITAL LOCK: SKIP ROUND (DO NOT BET)';
-                levelGuardVal.textContent = 'LOCKED (SKIP)';
-                levelGuardVal.style.color = 'var(--loss)';
+                levelPill.textContent = '🛑 STOP-LOSS: SKIP OR FLAT 1X';
+                levelGuardVal.textContent = 'PROTECT (L3)';
+                levelGuardVal.style.color = 'var(--a3)';
             }
         }
 
         // Record round to history (unlimited session storage)
         function recordOutcome(item) {
-            if (item.isSkip) {
-                currentLevel = 1; // HARD RESET BACK TO LEVEL 1 AFTER SKIP!
-            } else if (item.isWin) {
+            if (item.isWin) {
                 currentLevel = 1;
             } else {
                 currentLevel++;
-                if (currentLevel > 2) {
-                    currentLevel = 3; // Enters Level 3 (Hard Skip on next prediction)
+                if (currentLevel > 3) {
+                    currentLevel = 1; // Strict 3-level safety reset to eliminate wipeouts!
                 }
             }
             updateLevelUI();
@@ -1754,7 +1726,7 @@
             }
 
             historyList.innerHTML = historyLogs.map(item => `
-                <div class="history-row ${item.isSkip ? 'skip' : (item.isWin ? 'win' : 'loss')}">
+                <div class="history-row ${item.isWin ? 'win' : 'loss'}">
                     <div>
                         <div class="h-period">#${item.period.slice(-5)}</div>
                         <div class="h-sub">${item.patternLabel.split(' ')[0]} ${item.patternLabel.split(' ')[1] || ''}</div>
@@ -1765,8 +1737,8 @@
                         <span class="h-actual">${item.actualCategory} (${item.actualNum})</span>
                     </div>
                     <div>
-                        <span class="h-badge ${item.isSkip ? 'skip' : (item.isWin ? 'win' : 'loss')}">
-                            ${item.isSkip ? 'SKIPPED 🛡️' : (item.isWin ? 'WIN ✓' : 'LOSS ✕')}
+                        <span class="h-badge ${item.isWin ? 'win' : 'loss'}">
+                            ${item.isWin ? 'WIN ✓' : 'LOSS ✕'}
                         </span>
                     </div>
                 </div>
@@ -1774,16 +1746,15 @@
         }
 
         function updateStats() {
-            const bets = historyLogs.filter(x => !x.isSkip);
-            const total = bets.length;
-            const wins = bets.filter(x => x.isWin).length;
+            const total = historyLogs.length;
+            const wins = historyLogs.filter(x => x.isWin).length;
             const losses = total - wins;
-            const winRate = total ? Math.round((wins / total) * 100) : 0;
+            const rate = total > 0 ? Math.round((wins / total) * 100) : 0;
 
-            statTotalRounds.textContent = historyLogs.length;
+            statTotalRounds.textContent = total;
             statWins.textContent = wins;
             statLosses.textContent = losses;
-            statWinRate.textContent = `${winRate}%`;
+            statWinRate.textContent = `${rate}%`;
         }
 
         function clearHistoryRecords() {
