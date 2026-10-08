@@ -127,7 +127,11 @@
         }
 
         if (lossStreak >= 2) {
-            return { vote: cSide, reg: '🛡️ L3 DRAGON LOCK' };
+            if (cLen >= 4) return { vote: cSide, reg: '🛑 L3 DRAGON EXT' };
+            if (cLen === 3) return { vote: opp(cSide), reg: '🛑 L3 DRAGON CUT' };
+            if (cLen === 2) return { vote: opp(cSide), reg: '🛑 L3 DOUBLET CUT' };
+            if (alt >= 3) return { vote: opp(lastS), reg: '🛑 L3 CHOP OSC' };
+            return { vote: cSide, reg: '🛑 L3 MOMENTUM LOCK' };
         } else if (lossStreak === 1) {
             if (cLen >= 3) return { vote: cSide, reg: '🛡️ L2 DRAGON RIDE' };
             if (cLen === 2) return { vote: cSide, reg: '🛡️ L2 DOUBLET RIDE' };
@@ -221,17 +225,22 @@
         vol = vol / 5;
         let streak = 1;
         for (let i = 1; i < Math.min(5, sizes.length); i++) if (sizes[i] === sizes[0]) streak++; else break;
-        if (vol >= 3.5) return streak >= 3 ? opp(sizes[0]) : sizes[0];
-        return streak >= 2 ? sizes[0] : opp(sizes[0]);
+        let streakScore = streak >= 3 ? -25 : (streak === 2 ? -15 : (vol > 3 ? 10 : 5));
+        let bigCnt = sizes.slice(0, 8).filter(x => x === 'BIG').length;
+        let imbalance = ((bigCnt - 4) / 8) * 100;
+        let pattern = (sizes[0] === sizes[1] && sizes[1] === sizes[2]) ? -35 : (sizes[0] === sizes[1] ? -20 : 25);
+        let total = (streakScore * 0.3) + (imbalance * 0.4) + (pattern * 0.3);
+        return total >= 0 ? 'BIG' : 'SMALL';
     }
 
     function tgxLogic4(sizes) {
-        let b = 0, s = 0;
-        for (let i = 0; i < Math.min(8, sizes.length); i++) {
-            if (sizes[i] === 'BIG') b += (8 - i);
-            else s += (8 - i);
-        }
-        return b >= s ? 'BIG' : 'SMALL';
+        let streak = 1;
+        for (let i = 1; i < sizes.length; i++) if (sizes[i] === sizes[0]) streak++; else break;
+        if (streak >= 3) return sizes[0] === 'BIG' ? 'SMALL' : 'BIG';
+        let changes = 0;
+        for (let i = 0; i < Math.min(5, sizes.length - 1); i++) if (sizes[i] !== sizes[i + 1]) changes++;
+        if (changes >= 3) return sizes[0] === 'BIG' ? 'SMALL' : 'BIG';
+        return sizes[0];
     }
 
     function tgxLogic5(nums) {
@@ -266,62 +275,64 @@
 
         const votes = { BIG: 0, SMALL: 0 };
 
+        // Layer 1: Apex Titan Cadence Engine (Jash Autobet)
         const titan = apexTitanEngine(sizes, Math.max(0, currentLevel - 1));
         votes[titan.vote] += 3.2;
 
+        // Layer 2: Radhe Hack 2-3 Level Fix
         const radhe = radheEngine(list);
         votes[radhe] += 2.4;
 
+        // Layer 3: Suresh VIP Supreme V15
         const suresh = sureshEngine(list);
-        votes[suresh] += 2.2;
+        votes[suresh] += 2.0;
 
+        // Layer 4: Quantum Markov 2-Gram
         const markov = markovEngine(sizes);
-        votes[markov] += 2.0;
+        votes[markov] += 1.8;
 
+        // Layer 5: TGX 6-Logic Ensemble
         const l1 = tgxLogic1(nums, sizes); votes[l1] += 1.0;
-        const l2 = tgxLogic2(nums);        votes[l2] += 1.0;
-        const l3 = tgxLogic3(nums, sizes); votes[l3] += 0.9;
-        const l4 = tgxLogic4(sizes);       votes[l4] += 0.9;
+        const l2 = tgxLogic2(nums);        votes[l2] += 1.2;
+        const l3 = tgxLogic3(nums, sizes); votes[l3] += 1.0;
+        const l4 = tgxLogic4(sizes);       votes[l4] += 1.0;
         const l5 = tgxLogic5(nums);        votes[l5] += 0.8;
-        const l6 = tgxLogic6(sizes);       votes[l6] += 0.9;
+        const l6 = tgxLogic6(sizes);       votes[l6] += 1.0;
 
+        // Layer 6: The Paid Pro 3-Round Window
         const painPro = sizes.slice(0, 3).filter(x => x === 'BIG').length > 1 ? 'BIG' : 'SMALL';
-        votes[painPro] += 1.2;
+        votes[painPro] += 1.0;
 
+        // Layer 7: Nexa Pro 15-Round Skew Reversion
         const big15 = sizes.slice(0, 15).filter(x => x === 'BIG').length;
         let nexaVote = 'BALANCED';
         if (big15 >= 10) {
-            votes.SMALL += 1.5;
+            votes.SMALL += 1.6;
             nexaVote = 'REV-S';
         } else if (big15 <= 5) {
-            votes.BIG += 1.5;
+            votes.BIG += 1.6;
             nexaVote = 'REV-B';
         }
 
+        // Circuit Breaker: Detect high-chop volatility
+        const isChopZone = (alt >= 3 && currentLevel >= 3);
         let patternType = 'consensus';
         let patternLabel = titan.reg;
 
-        const isChopZone = alt >= 4 && Math.abs(votes.BIG - votes.SMALL) < 0.8;
         if (isChopZone) {
             patternType = 'zigzag';
             patternLabel = '🛑 CAPITAL SHIELD: CHOP ZONE (SKIP DRAW / FLAT 1X)';
         } else if (streak >= 4) {
             patternType = 'dragon';
-            patternLabel = `⚡ DRAGON RIDE (${streak}${sizes[0][0]})`;
         } else if (alt >= 3) {
             patternType = 'zigzag';
-            patternLabel = `⚡ ZIGZAG SWITCH (${alt}X)`;
-        } else if (sizes.length >= 4 && sizes[0] === sizes[1] && sizes[2] === sizes[3] && sizes[0] !== sizes[2]) {
-            patternType = 'cycle';
-            patternLabel = '⚡ 2B+2S PAIR SYNC';
-        } else if (sizes.length >= 6 && sizes[0] === sizes[1] && sizes[1] === sizes[2] && sizes[3] === sizes[4] && sizes[4] === sizes[5] && sizes[0] !== sizes[3]) {
-            patternType = 'cycle';
-            patternLabel = '⚡ 3B+3S BLOCK HARMONIC';
+        } else {
+            patternType = 'consensus';
         }
 
         const prediction = votes.BIG >= votes.SMALL ? 'BIG' : 'SMALL';
         const totalScore = votes.BIG + votes.SMALL;
-        const confidence = isChopZone ? 68 : Math.min(94, Math.max(76, Math.round((Math.max(votes.BIG, votes.SMALL) / totalScore) * 100)));
+        const confidence = isChopZone ? 68 : Math.min(98, Math.max(82, Math.round((Math.max(votes.BIG, votes.SMALL) / totalScore) * 100)));
 
         return {
             prediction,
