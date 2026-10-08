@@ -1078,20 +1078,16 @@
             }
 
             if (lossStreak >= 2) {
-                if (cLen >= 4) return { vote: cSide, reg: '🛑 L3 DRAGON EXT' };
-                if (cLen === 3) return { vote: opp(cSide), reg: '🛑 L3 DRAGON CUT' };
-                if (cLen === 2) return { vote: opp(cSide), reg: '🛑 L3 DOUBLET CUT' };
-                if (alt >= 3) return { vote: opp(lastS), reg: '🛑 L3 CHOP OSC' };
+                if (cLen >= 2) return { vote: cSide, reg: '🛑 L3 DRAGON LOCK' };
+                if (alt >= 2) return { vote: opp(lastS), reg: '🛑 L3 CHOP FLIP' };
                 return { vote: cSide, reg: '🛑 L3 MOMENTUM LOCK' };
             } else if (lossStreak === 1) {
-                if (cLen >= 3) return { vote: cSide, reg: '🛡️ L2 DRAGON RIDE' }; // Key fix: never fight a 3-streak at L2!
-                if (cLen === 2) return { vote: cSide, reg: '🛡️ L2 DOUBLET RIDE' };
+                if (cLen >= 2) return { vote: cSide, reg: '🛡️ L2 DRAGON RIDE' };
                 if (alt >= 2) return { vote: opp(lastS), reg: '🛡️ L2 CHOP FLIP' };
                 return { vote: cSide, reg: '🛡️ L2 MOMENTUM LOCK' };
             } else {
-                if (cLen >= 4) return { vote: cSide, reg: '🌊 L1 DRAGON EXT' };
-                if (cLen === 3) return { vote: opp(cSide), reg: '🐉 L1 DRAGON CUT' };
-                if (cLen === 2) return { vote: opp(cSide), reg: '🌊 L1 DOUBLET CUT' };
+                if (cLen >= 3) return { vote: cSide, reg: '🌊 L1 DRAGON RIDE' };
+                if (cLen === 2) return { vote: cSide, reg: '🌊 L1 DOUBLET RIDE' };
                 if (alt >= 3) return { vote: opp(lastS), reg: '⚡ L1 CHOP OSC' };
                 if (cLen === 1) return { vote: opp(cSide), reg: '🌊 L1 SINGLE CUT' };
                 return { vote: cSide, reg: '🌊 L1 MOMENTUM' };
@@ -1134,7 +1130,7 @@
             }
             const last3 = list.slice(0, 3).map(x => getSize(x.number));
             if (last3[0] === last3[1] && last3[1] === last3[2]) {
-                return last3[0] === 'BIG' ? 'SMALL' : 'BIG';
+                return last3[0];
             }
             return bigs >= smalls ? 'BIG' : 'SMALL';
         }
@@ -1195,7 +1191,7 @@
         function tgxLogic4(sizes) {
             let streak = 1;
             for (let i = 1; i < sizes.length; i++) if (sizes[i] === sizes[0]) streak++; else break;
-            if (streak >= 3) return sizes[0] === 'BIG' ? 'SMALL' : 'BIG';
+            if (streak >= 2) return sizes[0]; // Ride streak!
             let changes = 0;
             for (let i = 0; i < Math.min(5, sizes.length - 1); i++) if (sizes[i] !== sizes[i + 1]) changes++;
             if (changes >= 3) return sizes[0] === 'BIG' ? 'SMALL' : 'BIG';
@@ -1265,29 +1261,38 @@
             const painPro = sizes.slice(0, 3).filter(x => x === 'BIG').length > 1 ? 'BIG' : 'SMALL';
             votes[painPro] += 1.0;
 
-            // Layer 7: Nexa Pro 15-Round Skew Reversion
+            // Layer 7: Nexa Pro 15-Round Skew Reversion (only in non-streak L1)
             const big15 = sizes.slice(0, 15).filter(x => x === 'BIG').length;
             let nexaVote = 'BALANCED';
-            if (big15 >= 10) {
-                votes.SMALL += 1.6;
-                nexaVote = 'REV-S';
-            } else if (big15 <= 5) {
-                votes.BIG += 1.6;
-                nexaVote = 'REV-B';
+            if (streak < 2 && currentLevel === 1) {
+                if (big15 >= 10) {
+                    votes.SMALL += 1.6;
+                    nexaVote = 'REV-S';
+                } else if (big15 <= 5) {
+                    votes.BIG += 1.6;
+                    nexaVote = 'REV-B';
+                }
             }
 
-            // Circuit Breaker: Detect high-chop volatility
+            // Circuit Breaker & Strict Level Protection
             const isChopZone = (alt >= 3 && currentLevel >= 3);
             let patternType = 'consensus';
             let patternLabel = titan.reg;
 
-            if (isChopZone) {
-                patternType = 'zigzag';
-                patternLabel = '🛑 CAPITAL SHIELD: CHOP ZONE (SKIP DRAW / FLAT 1X)';
-            } else if (streak >= 4) {
+            if (streak >= 3) {
+                votes[sizes[0]] += 5.5; // Irresistible Dragon Ride
                 patternType = 'dragon';
+                patternLabel = `⚡ DRAGON RIDE (${streak}X)`;
+            } else if (streak === 2 && currentLevel >= 2) {
+                votes[sizes[0]] += 4.0; // Pair Lock during L2/L3 Recovery
+                patternType = 'cycle';
+                patternLabel = `🛡️ L${currentLevel} DOUBLET RIDE`;
+            } else if (isChopZone) {
+                patternType = 'zigzag';
+                patternLabel = '🛑 CAPITAL SHIELD: CHOP ZONE (FLAT 1X)';
             } else if (alt >= 3) {
                 patternType = 'zigzag';
+                patternLabel = `⚡ ZIGZAG SWITCH (${alt}X)`;
             } else {
                 patternType = 'consensus';
             }
