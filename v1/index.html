@@ -1521,7 +1521,7 @@
                 <div class="pred-meta-strip">
                     <div class="meta-chip"><i class="bi bi-shield-check"></i> CONFIDENCE: <b id="metaConf">88%</b></div>
                     <div class="meta-chip"><i class="bi bi-diagram-3-fill"></i> PATTERN: <b id="metaPattern">SYNCING</b></div>
-                    <div class="meta-chip"><i class="bi bi-cpu"></i> ENGINE: <b id="metaEngine">TITAN X VORTEX</b></div>
+                    <div class="meta-chip"><i class="bi bi-cpu"></i> ENGINE: <b id="metaEngine">19-PATTERN APEX</b></div>
                 </div>
             </div>
 
@@ -1533,6 +1533,14 @@
                 </button>
                 <button class="btn-action-secondary" onclick="clearActivityLog()">
                     <i class="bi bi-trash3"></i> Clear
+                </button>
+            </div>
+
+            <!-- RUN GAME WEBSITE DIRECT ACCESS -->
+            <div style="margin-bottom:14px;">
+                <button class="btn-action-primary" onclick="openRunGameModal()" style="width:100%; background: linear-gradient(135deg, #ffb703 0%, #ff8800 100%); color:#06080f; box-shadow: 0 8px 24px -6px rgba(255,183,3,0.5);">
+                    <i class="bi bi-globe2"></i>
+                    <span>🎮 RUN GAME WEBSITE (CUSTOM URL OVERLAY)</span>
                 </button>
             </div>
 
@@ -1753,7 +1761,7 @@
     <!-- ================= JAVASCRIPT LOGIC ================= -->
     <script>
     /* ========================================================
-       JASH VIP · HEX PRO 5.0 AUTONOMOUS PREDICTOR RUNTIME
+       JASH VIP · AUTONOMOUS PREDICTOR RUNTIME
        Supports WinGo 30S and WinGo 1M with 100% Auto-Prediction
        ======================================================== */
 
@@ -1789,7 +1797,7 @@
     let activePlatform = null;
 
     // Load History
-    const STORAGE_KEY = 'hex_vip_history_v5';
+    const STORAGE_KEY = 'jash_vip_history_v5';
     let historyList = [];
     try {
         historyList = JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]');
@@ -2281,6 +2289,7 @@
         const side = bigWeight >= 5 ? 'BIG' : 'SMALL';
         const conf = 89 + Math.min(4, Math.abs(bigWeight - 5));
         return makeResult(side, conf, `🔍 RADAR SCAN ANALYSIS (→ ${side})`);
+    }
 
     // ================= AUTONOMOUS PREDICTION EXECUTION =================
     function runPredictionCycle(force = false) {
