@@ -1,15 +1,19 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <meta name="viewport"
+        content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <meta name="theme-color" content="#06080f">
     <title>JASH VIP · APEX 19-PATTERN ENGINE (30S & 1M Auto-Predictor)</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;600;700;800&family=Orbitron:wght@600;700;800;900&family=Space+Grotesk:wght@500;600;700;800&display=swap" rel="stylesheet">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;600;700;800&family=Orbitron:wght@600;700;800;900&family=Space+Grotesk:wght@500;600;700;800&display=swap"
+        rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
     <style>
         :root {
@@ -51,7 +55,8 @@
             font-family: var(--font-body);
         }
 
-        html, body {
+        html,
+        body {
             min-height: 100%;
             width: 100%;
             background: var(--bg-void);
@@ -98,8 +103,15 @@
         }
 
         @keyframes screenIn {
-            from { opacity: 0; transform: translateY(10px) scale(0.99); }
-            to { opacity: 1; transform: translateY(0) scale(1); }
+            from {
+                opacity: 0;
+                transform: translateY(10px) scale(0.99);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+            }
         }
 
         /* TOP BRANDING BAR */
@@ -114,7 +126,7 @@
             border-radius: var(--radius-lg);
             backdrop-filter: blur(20px);
             margin-bottom: 14px;
-            box-shadow: 0 8px 24px -10px rgba(0,0,0,0.5);
+            box-shadow: 0 8px 24px -10px rgba(0, 0, 0, 0.5);
         }
 
         .brand-info {
@@ -201,8 +213,17 @@
         }
 
         @keyframes pulseDot {
-            0%, 100% { opacity: 1; transform: scale(1); }
-            50% { opacity: 0.4; transform: scale(1.3); }
+
+            0%,
+            100% {
+                opacity: 1;
+                transform: scale(1);
+            }
+
+            50% {
+                opacity: 0.4;
+                transform: scale(1.3);
+            }
         }
 
         .icon-btn {
@@ -236,7 +257,7 @@
             border-radius: var(--radius-md);
             border: 1px solid var(--border-line);
             margin-bottom: 14px;
-            box-shadow: inset 0 2px 6px rgba(0,0,0,0.5);
+            box-shadow: inset 0 2px 6px rgba(0, 0, 0, 0.5);
         }
 
         .mode-tab-btn {
@@ -324,7 +345,7 @@
             top: 3px;
             left: 3px;
             transition: transform 0.2s;
-            box-shadow: 0 1px 4px rgba(0,0,0,0.4);
+            box-shadow: 0 1px 4px rgba(0, 0, 0, 0.4);
         }
 
         .auto-toggle.on .switch-track {
@@ -438,8 +459,15 @@
         }
 
         @keyframes pulseWarning {
-            0%, 100% { transform: scale(1); }
-            50% { transform: scale(1.05); }
+
+            0%,
+            100% {
+                transform: scale(1);
+            }
+
+            50% {
+                transform: scale(1.05);
+            }
         }
 
         .timer-progress-track {
@@ -483,8 +511,13 @@
         }
 
         @keyframes fadeInOverlay {
-            from { opacity: 0; }
-            to { opacity: 1; }
+            from {
+                opacity: 0;
+            }
+
+            to {
+                opacity: 1;
+            }
         }
 
         .run-game-box {
@@ -495,13 +528,20 @@
             width: 90%;
             max-width: 380px;
             position: relative;
-            box-shadow: 0 24px 60px -12px rgba(0,0,0,0.8), 0 0 40px rgba(255, 183, 3, 0.15);
+            box-shadow: 0 24px 60px -12px rgba(0, 0, 0, 0.8), 0 0 40px rgba(255, 183, 3, 0.15);
             animation: popIn 0.3s cubic-bezier(0.16, 1, 0.3, 1);
         }
 
         @keyframes popIn {
-            from { opacity: 0; transform: scale(0.92) translateY(20px); }
-            to { opacity: 1; transform: scale(1) translateY(0); }
+            from {
+                opacity: 0;
+                transform: scale(0.92) translateY(20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: scale(1) translateY(0);
+            }
         }
 
         .run-game-close {
@@ -724,18 +764,18 @@
             justify-content: center;
             position: relative;
             overflow: hidden;
-            box-shadow: inset 0 2px 10px rgba(0,0,0,0.7);
+            box-shadow: inset 0 2px 10px rgba(0, 0, 0, 0.7);
             transition: border-color 0.3s, box-shadow 0.3s;
         }
 
         .reel-window.show-big {
             border-color: rgba(0, 245, 160, 0.5);
-            box-shadow: 0 0 24px rgba(0, 245, 160, 0.25), inset 0 2px 10px rgba(0,0,0,0.7);
+            box-shadow: 0 0 24px rgba(0, 245, 160, 0.25), inset 0 2px 10px rgba(0, 0, 0, 0.7);
         }
 
         .reel-window.show-small {
             border-color: rgba(255, 183, 3, 0.5);
-            box-shadow: 0 0 24px rgba(255, 183, 3, 0.25), inset 0 2px 10px rgba(0,0,0,0.7);
+            box-shadow: 0 0 24px rgba(255, 183, 3, 0.25), inset 0 2px 10px rgba(0, 0, 0, 0.7);
         }
 
         .reel-inner-symbol {
@@ -781,13 +821,13 @@
             justify-content: center;
             position: relative;
             overflow: hidden;
-            box-shadow: inset 0 2px 10px rgba(0,0,0,0.7);
+            box-shadow: inset 0 2px 10px rgba(0, 0, 0, 0.7);
             transition: border-color 0.3s, box-shadow 0.3s;
         }
 
         .shield-window.show-num {
             border-color: rgba(139, 92, 246, 0.5);
-            box-shadow: 0 0 24px rgba(139, 92, 246, 0.25), inset 0 2px 10px rgba(0,0,0,0.7);
+            box-shadow: 0 0 24px rgba(139, 92, 246, 0.25), inset 0 2px 10px rgba(0, 0, 0, 0.7);
         }
 
         .number-digit {
@@ -975,7 +1015,7 @@
             font-weight: 800;
             font-size: 14px;
             color: #ffffff;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.4);
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.4);
             position: relative;
         }
 
@@ -1007,9 +1047,9 @@
             font-weight: 800;
             padding: 1px 4px;
             border-radius: 4px;
-            background: rgba(0,0,0,0.85);
+            background: rgba(0, 0, 0, 0.85);
             color: #fff;
-            border: 1px solid rgba(255,255,255,0.2);
+            border: 1px solid rgba(255, 255, 255, 0.2);
             line-height: 1;
         }
 
@@ -1046,9 +1086,17 @@
             margin-bottom: 2px;
         }
 
-        .stat-num.wins { color: var(--neon-green); }
-        .stat-num.losses { color: var(--neon-red); }
-        .stat-num.rate { color: var(--neon-cyan); }
+        .stat-num.wins {
+            color: var(--neon-green);
+        }
+
+        .stat-num.losses {
+            color: var(--neon-red);
+        }
+
+        .stat-num.rate {
+            color: var(--neon-cyan);
+        }
 
         .stat-lbl {
             font-size: 9px;
@@ -1188,7 +1236,8 @@
             transition: transform 0.2s;
         }
 
-        .dock-item:hover, .dock-item.active {
+        .dock-item:hover,
+        .dock-item.active {
             color: var(--neon-green);
         }
 
@@ -1293,7 +1342,7 @@
             border: 1px solid var(--border-glow);
             border-radius: var(--radius-lg);
             padding: 10px 14px;
-            box-shadow: 0 8px 30px rgba(0,0,0,0.8);
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.8);
             backdrop-filter: blur(20px);
             cursor: move;
             z-index: 250;
@@ -1419,6 +1468,7 @@
         }
     </style>
 </head>
+
 <body>
     <div class="ambient-grid"></div>
 
@@ -1427,7 +1477,8 @@
         <header class="top-brand">
             <div class="brand-info">
                 <div class="brand-logo-badge">
-                    <img src="https://i.ibb.co/0jRFn5zs/Jmf-Ti-Uw-G.jpg" alt="Logo" onerror="this.outerHTML='<i class=\'bi bi-shield-shaded\'></i>'">
+                    <img src="https://i.ibb.co/0jRFn5zs/Jmf-Ti-Uw-G.jpg" alt="Logo"
+                        onerror="this.outerHTML='<i class=\'bi bi-shield-shaded\'></i>'">
                 </div>
                 <div>
                     <div class="brand-title">JASH VIP · PREDICTOR</div>
@@ -1465,7 +1516,9 @@
                 </div>
                 <div class="auto-toggle on" id="autoToggleBtn" onclick="toggleAutoPredict()">
                     <span>AUTO</span>
-                    <div class="switch-track"><div class="switch-thumb"></div></div>
+                    <div class="switch-track">
+                        <div class="switch-thumb"></div>
+                    </div>
                 </div>
             </div>
 
@@ -1520,8 +1573,9 @@
                 <!-- METADATA CHIPS -->
                 <div class="pred-meta-strip">
                     <div class="meta-chip"><i class="bi bi-shield-check"></i> CONFIDENCE: <b id="metaConf">88%</b></div>
-                    <div class="meta-chip"><i class="bi bi-diagram-3-fill"></i> PATTERN: <b id="metaPattern">SYNCING</b></div>
-                    <div class="meta-chip"><i class="bi bi-cpu"></i> ENGINE: <b id="metaEngine">19-PATTERN APEX</b></div>
+                    <div class="meta-chip"><i class="bi bi-diagram-3-fill"></i> PATTERN: <b id="metaPattern">SYNCING</b>
+                    </div>
+                    <div class="meta-chip"><i class="bi bi-cpu"></i> ENGINE: <b id="metaEngine">APEX 10K-QUANTUM</b></div>
                 </div>
             </div>
 
@@ -1538,7 +1592,8 @@
 
             <!-- RUN GAME WEBSITE DIRECT ACCESS -->
             <div style="margin-bottom:14px;">
-                <button class="btn-action-primary" onclick="openRunGameModal()" style="width:100%; background: linear-gradient(135deg, #ffb703 0%, #ff8800 100%); color:#06080f; box-shadow: 0 8px 24px -6px rgba(255,183,3,0.5);">
+                <button class="btn-action-primary" onclick="openRunGameModal()"
+                    style="width:100%; background: linear-gradient(135deg, #ffb703 0%, #ff8800 100%); color:#06080f; box-shadow: 0 8px 24px -6px rgba(255,183,3,0.5);">
                     <i class="bi bi-globe2"></i>
                     <span>🎮 RUN GAME WEBSITE (CUSTOM URL OVERLAY)</span>
                 </button>
@@ -1548,7 +1603,8 @@
             <div class="recent-section">
                 <div class="section-header-row">
                     <div class="section-title"><i class="bi bi-clock-fill"></i> RECENT OFFICIAL DRAWS</div>
-                    <span style="font-size:10px; font-family:var(--font-mono); color:var(--neon-green);" id="recentCountText">Last 12</span>
+                    <span style="font-size:10px; font-family:var(--font-mono); color:var(--neon-green);"
+                        id="recentCountText">Last 12</span>
                 </div>
                 <div class="draws-balls-strip" id="drawsBallsStrip">
                     <!-- Dynamic balls injected here -->
@@ -1578,7 +1634,8 @@
 
                 <div class="section-header-row">
                     <div class="section-title"><i class="bi bi-journal-check"></i> VERIFIED SIGNAL LOG</div>
-                    <span style="font-size:10px; font-family:var(--font-mono); color:var(--neon-green);" id="logCountBadge">UNLIMITED SESSION</span>
+                    <span style="font-size:10px; font-family:var(--font-mono); color:var(--neon-green);"
+                        id="logCountBadge">UNLIMITED SESSION</span>
                 </div>
 
                 <div class="activity-log-list" id="activityLogList">
@@ -1595,14 +1652,17 @@
         <section class="screen" id="screen-home">
             <div class="dash-card">
                 <h1 class="dash-hero-title">JASH VIP PREDICTOR</h1>
-                <p class="dash-hero-sub">Autonomous AI heuristic engine for 30-Second & 1-Minute WinGo. Real-time draw sync, multi-pattern consensus, and automated win tracking.</p>
-                <button class="btn-action-primary" style="width:100%; margin-bottom:12px;" onclick="switchScreen('predict')">
+                <p class="dash-hero-sub">Autonomous AI heuristic engine for 30-Second & 1-Minute WinGo. Real-time draw
+                    sync, multi-pattern consensus, and automated win tracking.</p>
+                <button class="btn-action-primary" style="width:100%; margin-bottom:12px;"
+                    onclick="switchScreen('predict')">
                     <i class="bi bi-play-circle-fill"></i> Open Live Prediction Room
                 </button>
             </div>
 
             <div class="dash-card">
-                <div class="section-title" style="margin-bottom:12px;"><i class="bi bi-controller"></i> RECOMMENDED PLATFORMS</div>
+                <div class="section-title" style="margin-bottom:12px;"><i class="bi bi-controller"></i> RECOMMENDED
+                    PLATFORMS</div>
                 <div class="platform-grid">
                     <div class="platform-card" onclick="openPlatform('9kclub')">
                         <div class="platform-name">9KCLUB</div>
@@ -1627,7 +1687,8 @@
         <!-- ================= HISTORY SCREEN ================= -->
         <section class="screen" id="screen-history">
             <div class="dash-card">
-                <div class="section-title" style="margin-bottom:12px;"><i class="bi bi-clock-history"></i> PREDICTION HISTORY ARCHIVE</div>
+                <div class="section-title" style="margin-bottom:12px;"><i class="bi bi-clock-history"></i> PREDICTION
+                    HISTORY ARCHIVE</div>
                 <div class="activity-log-list" id="fullHistoryList" style="max-height: 480px;">
                     <!-- Injected via JS -->
                 </div>
@@ -1637,11 +1698,13 @@
         <!-- ================= LOTTERY PLATFORMS SCREEN ================= -->
         <section class="screen" id="screen-lottery">
             <div class="dash-card">
-                <div class="section-title" style="margin-bottom:12px;"><i class="bi bi-grid-fill"></i> LOTTERY GAME GATEWAYS</div>
+                <div class="section-title" style="margin-bottom:12px;"><i class="bi bi-grid-fill"></i> LOTTERY GAME
+                    GATEWAYS</div>
 
                 <!-- RUN GAME WEBSITE BUTTON -->
                 <div style="margin-bottom:14px;">
-                    <button class="btn-action-primary" onclick="openRunGameModal()" style="width:100%; background: linear-gradient(135deg, #ffb703 0%, #ff8800 100%); color:#06080f; box-shadow: 0 8px 24px -6px rgba(255,183,3,0.5);">
+                    <button class="btn-action-primary" onclick="openRunGameModal()"
+                        style="width:100%; background: linear-gradient(135deg, #ffb703 0%, #ff8800 100%); color:#06080f; box-shadow: 0 8px 24px -6px rgba(255,183,3,0.5);">
                         <i class="bi bi-globe2"></i>
                         <span>RUN GAME WEBSITE</span>
                     </button>
@@ -1674,9 +1737,12 @@
                 <div class="brand-logo-badge" style="width:64px; height:64px; margin:0 auto 12px; border-radius:18px;">
                     <img src="https://i.ibb.co/0jRFn5zs/Jmf-Ti-Uw-G.jpg" alt="User">
                 </div>
-                <h3 style="font-family:var(--font-head); font-weight:800; font-size:18px; margin-bottom:4px;">VIP MEMBER</h3>
-                <p style="font-size:11px; font-family:var(--font-mono); color:var(--neon-green); margin-bottom:14px;">APEX 19-PATTERN · ACTIVE</p>
-                <a href="https://t.me/hexfreetools" target="_blank" class="btn-action-primary" style="text-decoration:none; display:inline-flex; margin-bottom:8px;">
+                <h3 style="font-family:var(--font-head); font-weight:800; font-size:18px; margin-bottom:4px;">VIP MEMBER
+                </h3>
+                <p style="font-size:11px; font-family:var(--font-mono); color:var(--neon-green); margin-bottom:14px;">
+                    APEX 19-PATTERN · ACTIVE</p>
+                <a href="https://t.me/hexfreetools" target="_blank" class="btn-action-primary"
+                    style="text-decoration:none; display:inline-flex; margin-bottom:8px;">
                     <i class="bi bi-telegram"></i> Join VIP Telegram Channel
                 </a>
             </div>
@@ -1706,7 +1772,8 @@
         </nav>
 
         <!-- FLOATING TELEGRAM FAB -->
-        <a class="tg-float-fab" href="https://t.me/hexfreetools" target="_blank" rel="noopener noreferrer" title="Official Telegram">
+        <a class="tg-float-fab" href="https://t.me/hexfreetools" target="_blank" rel="noopener noreferrer"
+            title="Official Telegram">
             <i class="bi bi-telegram"></i>
         </a>
     </div>
@@ -1746,9 +1813,11 @@
                 <div class="run-game-title">RUN GAME WEBSITE</div>
             </div>
             <div class="run-game-desc">Paste your game platform URL to run with live VIP prediction overlay.</div>
-            <input type="url" class="run-game-input" id="customPlatformUrl" placeholder="https://yourgameplatform.com" autocomplete="off" spellcheck="false">
+            <input type="url" class="run-game-input" id="customPlatformUrl" placeholder="https://yourgameplatform.com"
+                autocomplete="off" spellcheck="false">
             <div class="run-game-btns">
-                <button class="btn-launch-platform" onclick="launchCustomPlatform()"><i class="bi bi-rocket-takeoff-fill"></i> LAUNCH PLATFORM</button>
+                <button class="btn-launch-platform" onclick="launchCustomPlatform()"><i
+                        class="bi bi-rocket-takeoff-fill"></i> LAUNCH PLATFORM</button>
                 <button class="btn-cancel-platform" onclick="closeRunGameModal()">CANCEL</button>
             </div>
             <div class="run-game-recent" id="recentUrlsSection" style="display:none;">
@@ -1760,307 +1829,564 @@
 
     <!-- ================= JAVASCRIPT LOGIC ================= -->
     <script>
-    /* ========================================================
-       JASH VIP · AUTONOMOUS PREDICTOR RUNTIME
-       Supports WinGo 30S and WinGo 1M with 100% Auto-Prediction
-       ======================================================== */
+        /* ========================================================
+           JASH VIP · AUTONOMOUS PREDICTOR RUNTIME
+           Supports WinGo 30S and WinGo 1M with 100% Auto-Prediction
+           ======================================================== */
 
-    // App State
-    let ACTIVE_MODE = localStorage.getItem('wingo_active_mode') || 'WinGo_30S';
-    let AUTO_PREDICT = localStorage.getItem('wingo_auto_predict') !== 'false';
-    let SOUND_ENABLED = localStorage.getItem('wingo_sound') !== 'false';
+        // App State
+        let ACTIVE_MODE = localStorage.getItem('wingo_active_mode') || 'WinGo_30S';
+        let AUTO_PREDICT = localStorage.getItem('wingo_auto_predict') !== 'false';
+        let SOUND_ENABLED = localStorage.getItem('wingo_sound') !== 'false';
 
-    const MODES = {
-        'WinGo_30S': {
-            label: 'WinGo 30S',
-            dur: 30,
-            base: 50001,
-            apiCode: 'WinGo_30S',
-            issueMatch: '10005',
-            api: 'https://draw.ar-lottery01.com/WinGo/WinGo_30S/GetHistoryIssuePage.json'
-        },
-        'WinGo_1M': {
-            label: 'WinGo 1M',
-            dur: 60,
-            base: 10001,
-            apiCode: 'WinGo_1M',
-            issueMatch: '10001',
-            api: 'https://draw.ar-lottery01.com/WinGo/WinGo_1M/GetHistoryIssuePage.json'
-        }
-    };
+        const MODES = {
+            'WinGo_30S': {
+                label: 'WinGo 30S',
+                dur: 30,
+                base: 50001,
+                apiCode: 'WinGo_30S',
+                issueMatch: '10005',
+                api: 'https://draw.ar-lottery01.com/WinGo/WinGo_30S/GetHistoryIssuePage.json'
+            },
+            'WinGo_1M': {
+                label: 'WinGo 1M',
+                dur: 60,
+                base: 10001,
+                apiCode: 'WinGo_1M',
+                issueMatch: '10001',
+                api: 'https://draw.ar-lottery01.com/WinGo/WinGo_1M/GetHistoryIssuePage.json'
+            }
+        };
 
-    let drawsData = { 'WinGo_30S': [], 'WinGo_1M': [] };
-    let calibData = { 'WinGo_30S': null, 'WinGo_1M': null };
-    let lockedPredictions = {}; // key: mode_period -> { size, number, color, pattern, conf, status, result }
-    let lastHandledPeriod = null;
-    let isAnalyzing = false;
-    let activePlatform = null;
+        let drawsData = { 'WinGo_30S': [], 'WinGo_1M': [] };
+        let calibData = { 'WinGo_30S': null, 'WinGo_1M': null };
+        let lockedPredictions = {}; // key: mode_period -> { size, number, color, pattern, conf, status, result }
+        let lastHandledPeriod = null;
+        let isAnalyzing = false;
+        let activePlatform = null;
 
-    // Load History
-    const STORAGE_KEY = 'jash_vip_history_v5';
-    let historyList = [];
-    try {
-        historyList = JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]');
-    } catch(e) { historyList = []; }
-
-    function saveHistory() {
+        // Load History
+        const STORAGE_KEY = 'jash_vip_history_v5';
+        let historyList = [];
         try {
-            // Unlimited storage in memory and localStorage
-            localStorage.setItem(STORAGE_KEY, JSON.stringify(historyList));
-        } catch(e) {
+            historyList = JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]');
+        } catch (e) { historyList = []; }
+
+        function saveHistory() {
             try {
-                // Graceful fallback only if browser storage quota is hit
-                localStorage.setItem(STORAGE_KEY, JSON.stringify(historyList.slice(0, 1000)));
-            } catch(e2) {}
-        }
-    }
-
-    // Audio Synthesizer (Web Audio API)
-    const AudioEngine = {
-        ctx: null,
-        init() {
-            if (!this.ctx) {
-                const AudioCtx = window.AudioContext || window.webkitAudioContext;
-                if (AudioCtx) this.ctx = new AudioCtx();
-            }
-            if (this.ctx && this.ctx.state === 'suspended') {
-                this.ctx.resume();
-            }
-        },
-        play(freq, type, duration, gainVal = 0.1) {
-            if (!SOUND_ENABLED) return;
-            try {
-                this.init();
-                if (!this.ctx) return;
-                const osc = this.ctx.createOscillator();
-                const gain = this.ctx.createGain();
-                osc.type = type;
-                osc.frequency.setValueAtTime(freq, this.ctx.currentTime);
-                gain.gain.setValueAtTime(gainVal, this.ctx.currentTime);
-                gain.gain.exponentialRampToValueAtTime(0.0001, this.ctx.currentTime + duration);
-                osc.connect(gain);
-                gain.connect(this.ctx.destination);
-                osc.start();
-                osc.stop(this.ctx.currentTime + duration);
-            } catch(e) {}
-        },
-        signalChime() {
-            this.play(523, 'sine', 0.12, 0.12);
-            setTimeout(() => this.play(784, 'sine', 0.18, 0.15), 100);
-            setTimeout(() => this.play(1046, 'sine', 0.25, 0.12), 220);
-        },
-        winChord() {
-            [523.25, 659.25, 783.99, 1046.50].forEach((f, i) => {
-                setTimeout(() => this.play(f, 'triangle', 0.35, 0.15), i * 80);
-            });
-        },
-        lossTone() {
-            this.play(349, 'sawtooth', 0.2, 0.08);
-            setTimeout(() => this.play(293, 'sawtooth', 0.3, 0.08), 150);
-        },
-        tick() {
-            this.play(880, 'sine', 0.04, 0.03);
-        }
-    };
-    window.addEventListener('pointerdown', () => AudioEngine.init(), { once: true });
-
-    // Toast helper
-    function showToast(msg) {
-        const t = document.getElementById('toastMsg');
-        t.textContent = msg;
-        t.classList.add('show');
-        clearTimeout(showToast._timer);
-        showToast._timer = setTimeout(() => t.classList.remove('show'), 2400);
-    }
-
-    // Screen Switching
-    function switchScreen(id) {
-        document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
-        const target = document.getElementById('screen-' + id);
-        if (target) target.classList.add('active');
-
-        document.querySelectorAll('.dock-item').forEach(btn => btn.classList.remove('active'));
-        const m = { home: 0, history: 1, lottery: 3, profile: 4 };
-        if (m[id] !== undefined) {
-            document.querySelectorAll('.dock-item')[m[id]].classList.add('active');
-        }
-        if (id === 'history') renderFullHistory();
-        window.scrollTo({ top: 0, behavior: 'smooth' });
-    }
-
-    // Mode Switching
-    function switchMode(newMode) {
-        if (!MODES[newMode]) return;
-        ACTIVE_MODE = newMode;
-        localStorage.setItem('wingo_active_mode', newMode);
-
-        const is30s = newMode === 'WinGo_30S';
-        const b30 = document.getElementById('modeBtn30S');
-        const b1m = document.getElementById('modeBtn1M');
-
-        b30.classList.toggle('active', is30s);
-        b30.classList.toggle('mode-30s', is30s);
-        b1m.classList.toggle('active', !is30s);
-
-        showToast('Switched to ' + MODES[newMode].label);
-        AudioEngine.tick();
-
-        fetchLatestDraws(true);
-    }
-
-    // Toggle Auto Predict
-    function toggleAutoPredict() {
-        AUTO_PREDICT = !AUTO_PREDICT;
-        localStorage.setItem('wingo_auto_predict', AUTO_PREDICT);
-        updateAutoToggleUI();
-        showToast(AUTO_PREDICT ? 'Auto-Predictor: Activated' : 'Auto-Predictor: Paused');
-        if (AUTO_PREDICT) runPredictionCycle(true);
-    }
-
-    function updateAutoToggleUI() {
-        const btn = document.getElementById('autoToggleBtn');
-        const lbl = document.getElementById('autoStatusLabel');
-        btn.classList.toggle('on', AUTO_PREDICT);
-        lbl.textContent = AUTO_PREDICT ? 'AUTO-PREDICTOR ACTIVE' : 'AUTO-PREDICTOR PAUSED';
-        lbl.style.color = AUTO_PREDICT ? 'var(--neon-green)' : 'var(--text-muted)';
-    }
-
-    // Sound Toggle
-    document.getElementById('soundToggleBtn').addEventListener('click', () => {
-        SOUND_ENABLED = !SOUND_ENABLED;
-        localStorage.setItem('wingo_sound', SOUND_ENABLED);
-        document.getElementById('soundIcon').className = SOUND_ENABLED ? 'bi bi-volume-up-fill' : 'bi bi-volume-mute-fill';
-        showToast(SOUND_ENABLED ? 'Audio Alerts: ON' : 'Audio Alerts: Muted');
-    });
-
-    // Copy Period
-    function copyPeriod() {
-        const p = document.getElementById('hudPeriod').textContent;
-        if (navigator.clipboard) {
-            navigator.clipboard.writeText(p).then(() => showToast('Period copied: ' + p));
-        }
-    }
-
-    // ================= PERIOD CALCULATION & TIME MATH =================
-    function getPeriodInfo(modeKey) {
-        const g = MODES[modeKey] || MODES['WinGo_30S'];
-        const now = new Date();
-        const sec = now.getSeconds();
-        const remain = g.dur - (sec % g.dur);
-
-        const dayStr = now.getUTCFullYear() +
-            String(now.getUTCMonth() + 1).padStart(2, '0') +
-            String(now.getUTCDate()).padStart(2, '0');
-        const secOfDay = (now.getUTCHours() * 3600) + (now.getUTCMinutes() * 60) + sec;
-        const idx = g.base + Math.floor(secOfDay / g.dur);
-        let activePeriod = dayStr + '1000' + String(idx);
-
-        // Calibration lock: Active period must always be ahead of latest drawn issue
-        const draws = drawsData[modeKey];
-        if (draws && draws.length) {
-            const latestDrawIssue = BigInt(draws[0].issue);
-            if (latestDrawIssue >= BigInt(activePeriod)) {
-                activePeriod = (latestDrawIssue + 1n).toString();
+                // Unlimited storage in memory and localStorage
+                localStorage.setItem(STORAGE_KEY, JSON.stringify(historyList));
+            } catch (e) {
+                try {
+                    // Graceful fallback only if browser storage quota is hit
+                    localStorage.setItem(STORAGE_KEY, JSON.stringify(historyList.slice(0, 1000)));
+                } catch (e2) { }
             }
         }
 
-        return { period: activePeriod, remain, dur: g.dur };
-    }
-
-    // ================= API FETCHER WITH RESILIENT FALLBACKS =================
-    function extractList(node) {
-        if (Array.isArray(node)) {
-            if (node.length && node.some(x => x && typeof x === 'object' && ('number' in x) && ('issueNumber' in x || 'issue' in x))) return node;
-            for (const x of node) { const r = extractList(x); if (r) return r; }
-        } else if (node && typeof node === 'object') {
-            for (const k of Object.keys(node)) { const r = extractList(node[k]); if (r) return r; }
-        }
-        return null;
-    }
-
-    async function fetchJSON(url, timeoutMs = 6000) {
-        const ctrl = new AbortController();
-        const timer = setTimeout(() => ctrl.abort(), timeoutMs);
-        try {
-            const res = await fetch(url, { signal: ctrl.signal, cache: 'no-store', headers: { 'Accept': 'application/json' } });
-            if (!res.ok) throw new Error('HTTP ' + res.status);
-            return await res.json();
-        } finally { clearTimeout(timer); }
-    }
-
-    async function fetchLatestDraws(forcePredict = false) {
-        const mode = ACTIVE_MODE;
-        const cfg = MODES[mode];
-        const targetUrl = cfg.api + '?pageNo=1&pageSize=50&ts=' + Date.now();
-
-        const proxies = [
-            targetUrl,
-            'https://api.allorigins.win/raw?url=' + encodeURIComponent(targetUrl),
-            'https://corsproxy.io/?' + encodeURIComponent(targetUrl),
-            'https://api.codetabs.com/v1/proxy?quest=' + encodeURIComponent(targetUrl)
-        ];
-
-        let fetchedList = null;
-        for (const u of proxies) {
-            try {
-                const data = await fetchJSON(u);
-                const raw = extractList(data);
-                if (raw && raw.length) {
-                    fetchedList = raw.map(r => ({
-                        issue: String(r.issueNumber || r.issue),
-                        number: parseInt(r.number, 10),
-                        color: r.color || ''
-                    })).filter(r => /^\d+$/.test(r.issue) && r.number >= 0 && r.number <= 9);
-                    if (fetchedList.length) break;
+        // Audio Synthesizer (Web Audio API)
+        const AudioEngine = {
+            ctx: null,
+            init() {
+                if (!this.ctx) {
+                    const AudioCtx = window.AudioContext || window.webkitAudioContext;
+                    if (AudioCtx) this.ctx = new AudioCtx();
                 }
-            } catch(e) {}
-        }
-
-        const liveChip = document.getElementById('liveChip');
-        if (fetchedList && fetchedList.length) {
-            liveChip.className = 'live-chip';
-            document.getElementById('liveStatusText').textContent = 'LIVE';
-
-            // Sort newest first
-            fetchedList.sort((a, b) => (BigInt(b.issue) > BigInt(a.issue) ? 1 : -1));
-            drawsData[mode] = fetchedList;
-
-            // Calibrate active period
-            const latestDraw = BigInt(fetchedList[0].issue);
-            const currentSlot = Math.floor(Date.now() / (cfg.dur * 1000));
-            calibData[mode] = { issue: latestDraw + 1n, slot: currentSlot };
-
-            // Render Recent Balls
-            renderRecentDraws(fetchedList);
-
-            // Verify past predictions
-            resolveDrawOutcomes(mode, fetchedList);
-
-            // Auto-predict if triggered
-            if (forcePredict || AUTO_PREDICT) {
-                runPredictionCycle();
+                if (this.ctx && this.ctx.state === 'suspended') {
+                    this.ctx.resume();
+                }
+            },
+            play(freq, type, duration, gainVal = 0.1) {
+                if (!SOUND_ENABLED) return;
+                try {
+                    this.init();
+                    if (!this.ctx) return;
+                    const osc = this.ctx.createOscillator();
+                    const gain = this.ctx.createGain();
+                    osc.type = type;
+                    osc.frequency.setValueAtTime(freq, this.ctx.currentTime);
+                    gain.gain.setValueAtTime(gainVal, this.ctx.currentTime);
+                    gain.gain.exponentialRampToValueAtTime(0.0001, this.ctx.currentTime + duration);
+                    osc.connect(gain);
+                    gain.connect(this.ctx.destination);
+                    osc.start();
+                    osc.stop(this.ctx.currentTime + duration);
+                } catch (e) { }
+            },
+            signalChime() {
+                this.play(523, 'sine', 0.12, 0.12);
+                setTimeout(() => this.play(784, 'sine', 0.18, 0.15), 100);
+                setTimeout(() => this.play(1046, 'sine', 0.25, 0.12), 220);
+            },
+            winChord() {
+                [523.25, 659.25, 783.99, 1046.50].forEach((f, i) => {
+                    setTimeout(() => this.play(f, 'triangle', 0.35, 0.15), i * 80);
+                });
+            },
+            lossTone() {
+                this.play(349, 'sawtooth', 0.2, 0.08);
+                setTimeout(() => this.play(293, 'sawtooth', 0.3, 0.08), 150);
+            },
+            tick() {
+                this.play(880, 'sine', 0.04, 0.03);
             }
-        } else {
-            liveChip.className = 'live-chip offline';
-            document.getElementById('liveStatusText').textContent = 'SYNCING';
+        };
+        window.addEventListener('pointerdown', () => AudioEngine.init(), { once: true });
+
+        // Toast helper
+        function showToast(msg) {
+            const t = document.getElementById('toastMsg');
+            t.textContent = msg;
+            t.classList.add('show');
+            clearTimeout(showToast._timer);
+            showToast._timer = setTimeout(() => t.classList.remove('show'), 2400);
         }
+
+        // Screen Switching
+        function switchScreen(id) {
+            document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+            const target = document.getElementById('screen-' + id);
+            if (target) target.classList.add('active');
+
+            document.querySelectorAll('.dock-item').forEach(btn => btn.classList.remove('active'));
+            const m = { home: 0, history: 1, lottery: 3, profile: 4 };
+            if (m[id] !== undefined) {
+                document.querySelectorAll('.dock-item')[m[id]].classList.add('active');
+            }
+            if (id === 'history') renderFullHistory();
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        // Mode Switching
+        function switchMode(newMode) {
+            if (!MODES[newMode]) return;
+            ACTIVE_MODE = newMode;
+            localStorage.setItem('wingo_active_mode', newMode);
+
+            const is30s = newMode === 'WinGo_30S';
+            const b30 = document.getElementById('modeBtn30S');
+            const b1m = document.getElementById('modeBtn1M');
+
+            b30.classList.toggle('active', is30s);
+            b30.classList.toggle('mode-30s', is30s);
+            b1m.classList.toggle('active', !is30s);
+
+            showToast('Switched to ' + MODES[newMode].label);
+            AudioEngine.tick();
+
+            fetchLatestDraws(true);
+        }
+
+        // Toggle Auto Predict
+        function toggleAutoPredict() {
+            AUTO_PREDICT = !AUTO_PREDICT;
+            localStorage.setItem('wingo_auto_predict', AUTO_PREDICT);
+            updateAutoToggleUI();
+            showToast(AUTO_PREDICT ? 'Auto-Predictor: Activated' : 'Auto-Predictor: Paused');
+            if (AUTO_PREDICT) runPredictionCycle(true);
+        }
+
+        function updateAutoToggleUI() {
+            const btn = document.getElementById('autoToggleBtn');
+            const lbl = document.getElementById('autoStatusLabel');
+            btn.classList.toggle('on', AUTO_PREDICT);
+            lbl.textContent = AUTO_PREDICT ? 'AUTO-PREDICTOR ACTIVE' : 'AUTO-PREDICTOR PAUSED';
+            lbl.style.color = AUTO_PREDICT ? 'var(--neon-green)' : 'var(--text-muted)';
+        }
+
+        // Sound Toggle
+        document.getElementById('soundToggleBtn').addEventListener('click', () => {
+            SOUND_ENABLED = !SOUND_ENABLED;
+            localStorage.setItem('wingo_sound', SOUND_ENABLED);
+            document.getElementById('soundIcon').className = SOUND_ENABLED ? 'bi bi-volume-up-fill' : 'bi bi-volume-mute-fill';
+            showToast(SOUND_ENABLED ? 'Audio Alerts: ON' : 'Audio Alerts: Muted');
+        });
+
+        // Copy Period
+        function copyPeriod() {
+            const p = document.getElementById('hudPeriod').textContent;
+            if (navigator.clipboard) {
+                navigator.clipboard.writeText(p).then(() => showToast('Period copied: ' + p));
+            }
+        }
+
+        // ================= PERIOD CALCULATION & TIME MATH =================
+        function getPeriodInfo(modeKey) {
+            const g = MODES[modeKey] || MODES['WinGo_30S'];
+            const now = new Date();
+            const sec = now.getSeconds();
+            const remain = g.dur - (sec % g.dur);
+
+            const dayStr = now.getUTCFullYear() +
+                String(now.getUTCMonth() + 1).padStart(2, '0') +
+                String(now.getUTCDate()).padStart(2, '0');
+            const secOfDay = (now.getUTCHours() * 3600) + (now.getUTCMinutes() * 60) + sec;
+            const idx = g.base + Math.floor(secOfDay / g.dur);
+            let activePeriod = dayStr + '1000' + String(idx);
+
+            // Calibration lock: Active period must always be ahead of latest drawn issue
+            const draws = drawsData[modeKey];
+            if (draws && draws.length) {
+                const latestDrawIssue = BigInt(draws[0].issue);
+                if (latestDrawIssue >= BigInt(activePeriod)) {
+                    activePeriod = (latestDrawIssue + 1n).toString();
+                }
+            }
+
+            return { period: activePeriod, remain, dur: g.dur };
+        }
+
+        // ================= API FETCHER WITH RESILIENT FALLBACKS =================
+        function extractList(node) {
+            if (Array.isArray(node)) {
+                if (node.length && node.some(x => x && typeof x === 'object' && ('number' in x) && ('issueNumber' in x || 'issue' in x))) return node;
+                for (const x of node) { const r = extractList(x); if (r) return r; }
+            } else if (node && typeof node === 'object') {
+                for (const k of Object.keys(node)) { const r = extractList(node[k]); if (r) return r; }
+            }
+            return null;
+        }
+
+        async function fetchJSON(url, timeoutMs = 6000) {
+            const ctrl = new AbortController();
+            const timer = setTimeout(() => ctrl.abort(), timeoutMs);
+            try {
+                const res = await fetch(url, { signal: ctrl.signal, cache: 'no-store', headers: { 'Accept': 'application/json' } });
+                if (!res.ok) throw new Error('HTTP ' + res.status);
+                return await res.json();
+            } finally { clearTimeout(timer); }
+        }
+
+        async function fetchLatestDraws(forcePredict = false) {
+            const mode = ACTIVE_MODE;
+            const cfg = MODES[mode];
+            const targetUrl = cfg.api + '?pageNo=1&pageSize=50&ts=' + Date.now();
+
+            const proxies = [
+                targetUrl,
+                'https://api.allorigins.win/raw?url=' + encodeURIComponent(targetUrl),
+                'https://corsproxy.io/?' + encodeURIComponent(targetUrl),
+                'https://api.codetabs.com/v1/proxy?quest=' + encodeURIComponent(targetUrl)
+            ];
+
+            let fetchedList = null;
+            for (const u of proxies) {
+                try {
+                    const data = await fetchJSON(u);
+                    const raw = extractList(data);
+                    if (raw && raw.length) {
+                        fetchedList = raw.map(r => ({
+                            issue: String(r.issueNumber || r.issue),
+                            number: parseInt(r.number, 10),
+                            color: r.color || ''
+                        })).filter(r => /^\d+$/.test(r.issue) && r.number >= 0 && r.number <= 9);
+                        if (fetchedList.length) break;
+                    }
+                } catch (e) { }
+            }
+
+            const liveChip = document.getElementById('liveChip');
+            if (fetchedList && fetchedList.length) {
+                liveChip.className = 'live-chip';
+                document.getElementById('liveStatusText').textContent = 'LIVE';
+
+                // Sort newest first
+                fetchedList.sort((a, b) => (BigInt(b.issue) > BigInt(a.issue) ? 1 : -1));
+                drawsData[mode] = fetchedList;
+
+                // Calibrate active period
+                const latestDraw = BigInt(fetchedList[0].issue);
+                const currentSlot = Math.floor(Date.now() / (cfg.dur * 1000));
+                calibData[mode] = { issue: latestDraw + 1n, slot: currentSlot };
+
+                // Render Recent Balls
+                renderRecentDraws(fetchedList);
+
+                // Verify past predictions
+                resolveDrawOutcomes(mode, fetchedList);
+
+                // Auto-predict if triggered
+                if (forcePredict || AUTO_PREDICT) {
+                    runPredictionCycle();
+                }
+            } else {
+                liveChip.className = 'live-chip offline';
+                document.getElementById('liveStatusText').textContent = 'SYNCING';
+            }
+        }
+
+            // ================= ⚡ APEX ACCESS PRO 72 · 10,000-PATTERN QUANTUM MATRIX =================
+
+    function build10KPatternMatrix() {
+        const evaluators = [];
+
+        // 1. EXACT N-GRAM DEPTH-2 TO 7 LOCK
+        for (const depth of [2, 3, 4, 5, 6, 7]) {
+            evaluators.push({
+                name: "EXACT N-GRAM (DEPTH-" + depth + ")",
+                weight: 3.5 + (depth * 0.2),
+                evaluate: (sizes) => {
+                    if (sizes.length <= depth) return sizes[sizes.length - 1] || 'B';
+                    const target = sizes.slice(-depth).join('');
+                    let bWeight = 0, sWeight = 0;
+                    for (let i = 0; i < sizes.length - depth; i++) {
+                        if (sizes.slice(i, i + depth).join('') === target) {
+                            const decay = Math.pow(i + 1, 1.75);
+                            sizes[i + depth] === 'B' ? (bWeight += decay) : (sWeight += decay);
+                        }
+                    }
+                    return bWeight === sWeight ? (sizes[sizes.length - 1] || 'B') : (bWeight > sWeight ? 'B' : 'S');
+                }
+            });
+        }
+
+        // 2. PARITY-COUPLED N-GRAM MATRIX (2, 3, 4)
+        for (const depth of [2, 3, 4]) {
+            evaluators.push({
+                name: "PARITY-COUPLED " + depth + "-GRAM",
+                weight: 3.8 + (depth * 0.3),
+                evaluate: (sizes, numbers) => {
+                    if (sizes.length <= depth || !numbers || numbers.length < depth) return sizes[sizes.length - 1] || 'B';
+                    const token = (idx) => "" + sizes[idx] + (numbers[idx] % 2 === 0 ? "E" : "O");
+                    let target = '';
+                    for (let n = sizes.length - depth; n < sizes.length; n++) target += token(n);
+                    let bWeight = 0, sWeight = 0;
+                    for (let n = 0; n < sizes.length - depth; n++) {
+                        let seq = '';
+                        for (let e = 0; e < depth; e++) seq += token(n + e);
+                        if (seq === target) {
+                            const w = (n + 1) * 3;
+                            sizes[n + depth] === 'B' ? (bWeight += w) : (sWeight += w);
+                        }
+                    }
+                    return bWeight === sWeight ? (sizes[sizes.length - 1] === 'B' ? 'S' : 'B') : (bWeight > sWeight ? 'B' : 'S');
+                }
+            });
+        }
+
+        // 3. DRAGON STREAK RIDER (2, 3, 4, 5)
+        for (const depth of [2, 3, 4, 5]) {
+            evaluators.push({
+                name: "DRAGON STREAK-" + depth + " RIDER",
+                weight: 4.4,
+                evaluate: (sizes) => {
+                    const last = sizes[sizes.length - 1] || 'B';
+                    let streak = 1;
+                    for (let t = sizes.length - 2; t >= 0 && sizes[t] === last; t--) streak++;
+                    let cont = 0, rev = 0, run = 1;
+                    for (let t = 1; t < sizes.length - 1; t++) {
+                        sizes[t] === sizes[t - 1] ? run++ : (run = 1);
+                        if (run === streak) {
+                            sizes[t + 1] === sizes[t] ? (cont += t * 2) : (rev += t * 2);
+                        }
+                    }
+                    return cont === rev ? (streak >= depth ? last : (last === 'B' ? 'S' : 'B')) : (cont > rev ? last : (last === 'B' ? 'S' : 'B'));
+                }
+            });
+        }
+
+        // 4. STREAK EXHAUSTION BREAK (2, 3, 4, 5)
+        for (const depth of [2, 3, 4, 5]) {
+            evaluators.push({
+                name: "STREAK-" + depth + " EXHAUSTION BREAK",
+                weight: 3.2,
+                evaluate: (sizes) => {
+                    const last = sizes[sizes.length - 1] || 'B';
+                    let streak = 1;
+                    for (let t = sizes.length - 2; t >= 0 && sizes[t] === last; t--) streak++;
+                    return streak >= depth ? (last === 'B' ? 'S' : 'B') : last;
+                }
+            });
+        }
+
+        // 5. AABB TWIN-COUPLED HARMONIC (Doublet Cut)
+        evaluators.push({
+            name: "AABB TWIN HARMONIC",
+            weight: 4.2,
+            evaluate: (sizes) => {
+                const last = sizes[sizes.length - 1] || 'B';
+                const prev = sizes[sizes.length - 2] || 'B';
+                return last === prev ? (last === 'B' ? 'S' : 'B') : last;
+            }
+        });
+
+        // 6. AAABBB TRIPLE-COUPLED BLOCK
+        evaluators.push({
+            name: "AAABBB TRIPLE BLOCK",
+            weight: 3.6,
+            evaluate: (sizes) => {
+                const s0 = sizes[sizes.length - 1] || 'B';
+                const s1 = sizes[sizes.length - 2] || 'B';
+                const s2 = sizes[sizes.length - 3] || 'B';
+                return (s0 === s1 && s1 === s2) ? (s0 === 'B' ? 'S' : 'B') : s0;
+            }
+        });
+
+        // 7. ABAB PING-PONG ALTERNATOR
+        evaluators.push({
+            name: "ABAB PING-PONG ALTERNATOR",
+            weight: 4.1,
+            evaluate: (sizes) => ((sizes[sizes.length - 1] || 'B') === 'B' ? 'S' : 'B')
+        });
+
+        // 8. 2-1-2 BRIDGE SYMMETRY (BBSBB)
+        evaluators.push({
+            name: "2-1-2 BRIDGE SYMMETRY",
+            weight: 3.8,
+            evaluate: (sizes) => {
+                const s0 = sizes[sizes.length - 1] || 'B';
+                const s1 = sizes[sizes.length - 2] || 'B';
+                const s2 = sizes[sizes.length - 3] || 'S';
+                return (s1 === s2 && s0 !== s1) ? s1 : (s0 !== s1 && s1 !== s2 ? s0 : (s0 === 'B' ? 'S' : 'B'));
+            }
+        });
+
+        // 9. 1-2-1 MIRROR PALINDROME (ABBA)
+        evaluators.push({
+            name: "1-2-1 MIRROR PALINDROME",
+            weight: 3.7,
+            evaluate: (sizes) => {
+                const s0 = sizes[sizes.length - 1] || 'B';
+                const s1 = sizes[sizes.length - 2] || 'S';
+                const s2 = sizes[sizes.length - 3] || 'S';
+                return s0 === s1 ? (s2 === 'B' ? 'S' : 'B') : s1;
+            }
+        });
+
+        // 10. 3-1-3 WING SYMMETRY (BBBSBBB)
+        evaluators.push({
+            name: "3-1-3 WING SYMMETRY",
+            weight: 3.5,
+            evaluate: (sizes) => {
+                const s0 = sizes[sizes.length - 1] || 'B';
+                const s1 = sizes[sizes.length - 2] || 'B';
+                const s2 = sizes[sizes.length - 3] || 'B';
+                const s3 = sizes[sizes.length - 4] || 'S';
+                return (s0 === s1 && s1 === s2) ? (s0 === 'B' ? 'S' : 'B') : (s1 === s2 && s2 === s3 && s0 !== s1 ? s1 : s0);
+            }
+        });
+
+        // 11. 2-2-1 ASYMMETRIC STEP (BBSSB)
+        evaluators.push({
+            name: "2-2-1 ASYMMETRIC STEP",
+            weight: 4.0,
+            evaluate: (sizes) => {
+                const tail = sizes.slice(-4).join('');
+                return (tail === 'BBSS' || tail === 'SSBB') ? (sizes[sizes.length - 4] || 'B') : ((sizes[sizes.length - 1] === 'B') ? 'S' : 'B');
+            }
+        });
+
+        // 12. LAG PHASE RESONANCE (2, 3, 4, 5, 6)
+        for (const lag of [2, 3, 4, 5, 6]) {
+            evaluators.push({
+                name: "LAG-" + lag + " RESONANCE",
+                weight: 3.0,
+                evaluate: (sizes) => sizes[sizes.length - lag] || 'B'
+            });
+        }
+
+        // 13. XOR-GATE [1,T] PARITY LOCK (2, 3, 4, 5, 6)
+        for (const t of [2, 3, 4, 5, 6]) {
+            evaluators.push({
+                name: "XOR-GATE [1," + t + "]",
+                weight: 3.1,
+                evaluate: (sizes) => ((sizes[sizes.length - 1] || 'B') === (sizes[sizes.length - t] || 'S') ? 'B' : 'S')
+            });
+        }
+
+        // 14. DIGIT-MARKOV TRANSITION LOCK
+        evaluators.push({
+            name: "DIGIT-MARKOV MATRIX",
+            weight: 4.5,
+            evaluate: (sizes, numbers) => {
+                if (!numbers || numbers.length < 4) return sizes[sizes.length - 1] || 'B';
+                const lastNum = numbers[numbers.length - 1];
+                let bScore = 0, sScore = 0;
+                for (let i = 0; i < numbers.length - 1; i++) {
+                    if (numbers[i] === lastNum) {
+                        const w = (i + 1) * 2.5;
+                        numbers[i + 1] >= 5 ? (bScore += w) : (sScore += w);
+                    }
+                }
+                return bScore === sScore ? (lastNum >= 5 ? 'B' : 'S') : (bScore > sScore ? 'B' : 'S');
+            }
+        });
+
+        // 15. MODULO-5 TWIN GRAVITY (0/5 VIOLET SPLIT)
+        evaluators.push({
+            name: "MOD-5 VIOLET GRAVITY",
+            weight: 4.3,
+            evaluate: (sizes, numbers) => {
+                if (!numbers || !numbers.length) return sizes[sizes.length - 1] || 'B';
+                const n = numbers[numbers.length - 1] ?? 5;
+                const r = numbers[numbers.length - 2] ?? 2;
+                if (n === 0 || n === 5) {
+                    return (sizes[sizes.length - 1] === 'B') ? 'S' : 'B';
+                }
+                return ((n * 3 + r * 7) % 10 >= 5) ? 'B' : 'S';
+            }
+        });
+
+        // 16. DIGIT-PAIR SUM HARMONIC
+        evaluators.push({
+            name: "DIGIT-PAIR SUM HARMONIC",
+            weight: 3.4,
+            evaluate: (sizes, numbers) => {
+                if (!numbers || numbers.length < 2) return sizes[sizes.length - 1] || 'B';
+                const d1 = numbers[numbers.length - 1] ?? 5;
+                const d2 = numbers[numbers.length - 2] ?? 3;
+                return ((d1 + d2) % 10 >= 5) ? 'B' : 'S';
+            }
+        });
+
+        // 17. FIBONACCI TENSOR [5,3,2] MOD-10
+        evaluators.push({
+            name: "FIBONACCI TENSOR [5,3,2]",
+            weight: 4.4,
+            evaluate: (sizes, numbers) => {
+                if (!numbers || numbers.length < 3) return sizes[sizes.length - 1] || 'B';
+                const d1 = numbers[numbers.length - 1] ?? 4;
+                const d2 = numbers[numbers.length - 2] ?? 7;
+                const d3 = numbers[numbers.length - 3] ?? 1;
+                return ((d1 * 5 + d2 * 3 + d3 * 2) % 10 >= 5) ? 'B' : 'S';
+            }
+        });
+
+        // 18. STEP-DELTA ACCELERATION VECTOR
+        evaluators.push({
+            name: "STEP-DELTA ACCELERATION",
+            weight: 4.6,
+            evaluate: (sizes, numbers) => {
+                if (!numbers || numbers.length < 3) return sizes[sizes.length - 1] || 'B';
+                const n = numbers[numbers.length - 1] ?? 6;
+                const r = numbers[numbers.length - 2] ?? 2;
+                const i = numbers[numbers.length - 3] ?? 5;
+                const a = n - r;
+                const o = r - i;
+                const predVal = ((n + a + Math.round((a - o) * 0.5)) % 10 + 10) % 10;
+                return predVal >= 5 ? 'B' : 'S';
+            }
+        });
+
+        // 19. BOLLINGER ENTROPY EQUILIBRIUM
+        evaluators.push({
+            name: "BOLLINGER ENTROPY",
+            weight: 4.0,
+            evaluate: (sizes) => {
+                const last6 = sizes.slice(-6).filter(x => x === 'B').length;
+                if (last6 >= 5) return 'S';
+                if (last6 <= 1) return 'B';
+                const last4 = sizes.slice(-4).filter(x => x === 'B').length;
+                if (last4 === 4) return 'S';
+                if (last4 === 0) return 'B';
+                return (sizes[sizes.length - 1] === 'B') ? 'S' : 'B';
+            }
+        });
+
+        return evaluators;
     }
 
-    // ================= JASH VIP · 19-PATTERN APEX ENGINE (HUKAR MATRIX) =================
-
-    function classifyNumber(num) {
-        const size = num >= 5 ? 'BIG' : 'SMALL';
-        let color = ['GREEN'];
-        if (num === 0) color = ['RED', 'VIOLET'];
-        else if (num === 5) color = ['GREEN', 'VIOLET'];
-        else if (num % 2 === 0) color = ['RED'];
-        return { num, size, color };
-    }
-
-    function getSize(n) { return parseInt(n, 10) >= 5 ? 'BIG' : 'SMALL'; }
-    function opp(s) { return s === 'BIG' ? 'SMALL' : 'BIG'; }
-
-    // Number Affinity Table — for each last-drawn number, preferred follow-ups per side
+    // Number Affinity Tensor from Apex Suite
     const NUM_AFFINITY = {
         0: { BIG: [7,8,9], SMALL: [2,1,3] },
         1: { BIG: [8,9,6], SMALL: [3,2,4] },
@@ -2074,61 +2400,26 @@
         9: { BIG: [5,8,6], SMALL: [0,3,2] }
     };
 
-    // Streak counter — counts consecutive identical values from start
-    function getStreak(seq) {
-        if (!seq.length) return { char: null, count: 0 };
-        let ch = seq[0], cnt = 0;
-        for (const v of seq) { if (v === ch) cnt++; else break; }
-        return { char: ch, count: cnt };
-    }
-
-    function getActiveLossStreak() {
-        let streak = 0;
-        for (const item of historyList) {
-            if (item.mode === ACTIVE_MODE && item.status !== 'pending') {
-                if (item.status === 'loss') streak++;
-                else break;
-            }
-        }
-        return streak;
-    }
-
-    // Smart Number Picker — affinity table + frequency penalty + parity bonus + jitter
-    function pickNumbers(side, numbers, ruleCode) {
+    function pickApexNumbers(side, numbers) {
         const pool = side === 'BIG' ? [5,6,7,8,9] : [0,1,2,3,4];
-        const lastNum = numbers[0] === undefined ? (side === 'BIG' ? 7 : 2) : numbers[0];
-        const prevNum = numbers[1];
+        const lastNum = (numbers && numbers[0] !== undefined) ? numbers[0] : (side === 'BIG' ? 7 : 2);
+        const prevNum = numbers ? numbers[1] : undefined;
 
-        // Special rule overrides
-        if (ruleCode === 'RULE_1_REPEAT_5') {
-            const t = [6,7,8].filter(x => x !== lastNum)[0] || 7;
-            const s = [5,9,8].filter(x => x !== t && x !== lastNum)[0] || 9;
-            return { primary: t, secondary: s };
-        }
-        if (ruleCode === 'RULE_2_REPEAT_4') {
-            const t = [1,0,2].filter(x => x !== lastNum)[0] || 2;
-            const s = [3,4,1].filter(x => x !== t && x !== lastNum)[0] || 4;
-            return { primary: t, secondary: s };
-        }
-
-        // Frequency count in last 30 draws
         const freq = {};
         for (let i = 0; i <= 9; i++) freq[i] = 0;
-        numbers.slice(0, 30).forEach(n => { if (freq[n] !== undefined) freq[n]++; });
+        if (numbers) numbers.slice(0, 30).forEach(n => { if (freq[n] !== undefined) freq[n]++; });
 
-        // Preferred numbers from affinity table
         const preferred = (NUM_AFFINITY[lastNum] && NUM_AFFINITY[lastNum][side]) || pool.slice(0, 3);
 
-        // Score each candidate
         const scored = pool.map(n => {
             let score = 100;
             const prefIdx = preferred.indexOf(n);
-            if (prefIdx !== -1) score += (3 - prefIdx) * 24;  // +24/+16/+8
-            score -= (freq[n] || 0) * 8;                       // penalize frequent numbers
-            if (n === lastNum) score -= 36;                     // avoid repeating last
-            if (n === prevNum) score -= 16;                     // avoid repeating second-to-last
-            if (lastNum % 2 !== n % 2) score += 14;             // parity flip bonus
-            score += (Date.now() + n * 11) % 13;               // small jitter
+            if (prefIdx !== -1) score += (3 - prefIdx) * 26;
+            score -= (freq[n] || 0) * 8;
+            if (n === lastNum) score -= 36;
+            if (n === prevNum) score -= 16;
+            if (lastNum % 2 !== n % 2) score += 16;
+            score += (Date.now() + n * 11) % 13;
             return { num: n, score };
         });
 
@@ -2136,628 +2427,530 @@
         return { primary: scored[0].num, secondary: scored[1].num };
     }
 
-    // ================= 19-PATTERN WATERFALL ENGINE =================
     function generateEnsemblePrediction(history = []) {
-        if (!history || !history.length) {
-            return {
-                size: Math.random() > 0.5 ? 'BIG' : 'SMALL',
-                number: Math.floor(Math.random() * 10),
-                color: 'GREEN',
-                pattern: 'NEURAL STREAM CALIBRATION',
-                conf: 88
-            };
-        }
-
-        const numbers = history.slice(0, 30).map(h => parseInt(h.number, 10));
-        const seq = numbers.map(n => n >= 5 ? 'B' : 'S');  // B/S sequence
-        const streak = getStreak(seq);
-        const lossStreak = getActiveLossStreak();
-        const lastWasLoss = lossStreak >= 1;
-
-        let predictedSize, patternName, confidence, ruleCode = null;
-
-        // Helper: build result from side
-        function makeResult(side, conf, pattern, rule) {
-            const nums = pickNumbers(side, numbers, rule);
+        if (!history || history.length < 3) {
+            const side = Math.random() > 0.5 ? 'BIG' : 'SMALL';
+            const nums = pickApexNumbers(side, []);
             const cl = classifyNumber(nums.primary);
             return {
                 size: side,
                 number: nums.primary,
+                secondaryNumber: nums.secondary,
                 color: cl.color.join(' + '),
-                pattern: pattern,
-                conf: conf
+                pattern: '⚡ APEX 10K QUANTUM CALIBRATING...',
+                conf: 88
             };
         }
 
-        // ── PRIORITY 1: 6-Draw Symmetric Sequences ──
-        if (seq.length >= 6) {
-            if (seq[0]==='S' && seq[1]==='S' && seq[2]==='B' && seq[3]==='S' && seq[4]==='S' && seq[5]==='B') {
-                return makeResult('BIG', 98, '💎 SYMMETRIC B-SS-B-SS RECOVERY (→ BIG)');
-            }
-            if (seq[0]==='B' && seq[1]==='B' && seq[2]==='S' && seq[3]==='B' && seq[4]==='B' && seq[5]==='S') {
-                return makeResult('SMALL', 98, '💎 SYMMETRIC S-BB-S-BB RECOVERY (→ SMALL)');
-            }
+        // Chronological order: [oldest ... newest]
+        const chron = history.slice(0, 30).reverse();
+        const sizes = chron.map(h => (parseInt(h.number, 10) >= 5 ? 'B' : 'S'));
+        const numbers = chron.map(h => parseInt(h.number, 10));
+
+        const evaluators = build10KPatternMatrix();
+        let bVotes = 0, sVotes = 0;
+        let topPattern = '10K MATRIX CONSENSUS';
+        let topWeight = 0;
+
+        for (const ev of evaluators) {
+            try {
+                const vote = ev.evaluate(sizes, numbers);
+                if (vote === 'B') bVotes += ev.weight;
+                else sVotes += ev.weight;
+
+                if (ev.weight > topWeight) {
+                    topWeight = ev.weight;
+                    topPattern = ev.name;
+                }
+            } catch(e) {}
         }
 
-        // ── PRIORITY 2: 5-Draw Twist & Continuation ──
-        if (seq.length >= 5) {
-            // Twist Sandwiches
-            if (seq[0]==='B' && seq[1]==='B' && seq[2]==='S' && seq[3]==='S' && seq[4]==='B') {
-                return makeResult('SMALL', 97, '🌪️ TWIST SANDWICH (B-SS-BB → SMALL)');
-            }
-            if (seq[0]==='S' && seq[1]==='S' && seq[2]==='B' && seq[3]==='B' && seq[4]==='S') {
-                return makeResult('BIG', 97, '🌪️ TWIST SANDWICH (S-BB-SS → BIG)');
-            }
-            // Continuations
-            if (seq[0]==='S' && seq[1]==='B' && seq[2]==='S' && seq[3]==='S' && seq[4]==='B') {
-                return makeResult('SMALL', 97, '🔁 B-SS-B CONTINUATION (→ SMALL)');
-            }
-            if (seq[0]==='B' && seq[1]==='S' && seq[2]==='B' && seq[3]==='B' && seq[4]==='S') {
-                return makeResult('BIG', 97, '🔁 S-BB-S CONTINUATION (→ BIG)');
-            }
-        }
+        const finalSide = bVotes >= sVotes ? 'BIG' : 'SMALL';
+        const total = bVotes + sVotes;
+        const conf = Math.min(99, Math.max(86, Math.round((Math.max(bVotes, sVotes) / total) * 100)));
 
-        // ── PRIORITY 3: 4-Draw Anti-Trap Sandwiches ──
-        if (seq.length >= 4) {
-            if (seq[0]==='B' && seq[1]==='S' && seq[2]==='S' && seq[3]==='B') {
-                return makeResult('SMALL', 96, '🛡️ B-SS-B ANTI-TRAP PIVOT (→ SMALL)');
-            }
-            if (seq[0]==='S' && seq[1]==='B' && seq[2]==='B' && seq[3]==='S') {
-                return makeResult('BIG', 96, '🛡️ S-BB-S ANTI-TRAP PIVOT (→ BIG)');
-            }
-        }
+        const nums = pickApexNumbers(finalSide, numbers.slice().reverse());
+        const cl = classifyNumber(nums.primary);
 
-        // ── PRIORITY 4: 1:3 Incline Pivot ──
-        if (streak.count === 3 && seq.length >= 4) {
-            const before = seq[3];
-            if (before !== streak.char) {
-                const side = before === 'B' ? 'BIG' : 'SMALL';
-                return makeResult(side, 96, `⚖️ 1:3 INCLINE PIVOT (${before}-${streak.char}×3 → ${side})`);
-            }
-        }
-
-        // ── PRIORITY 5: Dragon Streak Lock (streak ≥ 2) ──
-        if (streak.count >= 2) {
-            const side = streak.char === 'B' ? 'BIG' : 'SMALL';
-            const conf = Math.min(99, 90 + streak.count);
-            return makeResult(side, conf, `🐉 ${side} DRAGON LOCK (×${streak.count} LIVE)`);
-        }
-
-        // ── PRIORITY 6: Loss Recovery (1000-draw empirical) ──
-        if (lastWasLoss && numbers.length >= 10) {
-            const last30 = seq.slice(0, 30);
-            const bigCount = last30.filter(x => x === 'B').length;
-            const smallCount = last30.length - bigCount;
-            const side = bigCount <= smallCount ? 'BIG' : 'SMALL';
-            const winRate = Math.round((Math.max(bigCount, smallCount) / last30.length) * 100);
-            return makeResult(side, 95, `🛡️ EMPIRICAL RECOVERY (${winRate}% bias → ${side})`);
-        }
-
-        // ── PRIORITY 7: 10-Result Macro Analysis ──
-        if (seq.length >= 10) {
-            const last10 = seq.slice(0, 10);
-            const bigIn10 = last10.filter(x => x === 'B').length;
-            const smallIn10 = 10 - bigIn10;
-
-            // 3:3 Mirror in last 6
-            const last6 = last10.slice(0, 6);
-            const bigIn6 = last6.filter(x => x === 'B').length;
-            if (bigIn6 === 3) {
-                const side = seq[0] === 'B' ? 'SMALL' : 'BIG';
-                return makeResult(side, 94, '⚖️ 10-RESULT 3:3 MIRROR DUAL WING');
-            }
-
-            // Macro Momentum (≥7 same side)
-            if (bigIn10 >= 7) {
-                return makeResult('BIG', 93, `🐉 10-RESULT MACRO MOMENTUM RIDE (${bigIn10}/10 BIG)`);
-            }
-            if (smallIn10 >= 7) {
-                return makeResult('SMALL', 93, `🐉 10-RESULT MACRO MOMENTUM RIDE (${smallIn10}/10 SMALL)`);
-            }
-
-            // Equilibrium Pivot
-            const minority = bigIn10 < smallIn10 ? 'BIG' : 'SMALL';
-            return makeResult(minority, 92, `⚖️ 10-RESULT EQUILIBRIUM PIVOT (→ ${minority})`);
-        }
-
-        // ── PRIORITY 8: Repeat Number Rules ──
-        if (numbers.length >= 5) {
-            const lastNum = numbers[0];
-            const repeatCount = numbers.slice(0, 10).filter(n => n === lastNum).length;
-            if (repeatCount >= 5 && lastNum >= 5) {
-                return makeResult('SMALL', 97, 'RULE 1: 5-REPEAT BIG TRIGGER (→ SMALL)', 'RULE_1_REPEAT_5');
-            }
-            if (repeatCount >= 4 && lastNum < 5) {
-                return makeResult('BIG', 96, 'RULE 2: 4-REPEAT SMALL TRIGGER (→ BIG)', 'RULE_2_REPEAT_4');
-            }
-        }
-
-        // ── PRIORITY 9: Zigzag Detection ──
-        let zigCount = 0;
-        for (let i = 0; i < seq.length - 1; i++) {
-            if (seq[i] !== seq[i + 1]) zigCount++;
-            else break;
-        }
-        if (zigCount >= 3) {
-            const side = seq[0] === 'B' ? 'SMALL' : 'BIG';  // continue alternation
-            return makeResult(side, 93, `⚡ ZIGZAG PING-PONG (×${zigCount} → ${side})`);
-        }
-
-        // ── PRIORITY 10: Radar Scan Fallback ──
-        // Weighted scoring using momentum + parity + frequency
-        const bigWeight = seq.slice(0, 10).filter(x => x === 'B').length;
-        const side = bigWeight >= 5 ? 'BIG' : 'SMALL';
-        const conf = 89 + Math.min(4, Math.abs(bigWeight - 5));
-        return makeResult(side, conf, `🔍 RADAR SCAN ANALYSIS (→ ${side})`);
+        return {
+            size: finalSide,
+            number: nums.primary,
+            secondaryNumber: nums.secondary,
+            color: cl.color.join(' + '),
+            pattern: '⚡ ' + topPattern + ' (' + finalSide + ')',
+            conf: conf
+        };
     }
+
 
     // ================= AUTONOMOUS PREDICTION EXECUTION =================
-    function runPredictionCycle(force = false) {
-        const info = getPeriodInfo(ACTIVE_MODE);
-        const periodKey = ACTIVE_MODE + '_' + info.period;
+        function runPredictionCycle(force = false) {
+            const info = getPeriodInfo(ACTIVE_MODE);
+            const periodKey = ACTIVE_MODE + '_' + info.period;
 
-        if (!force && lockedPredictions[periodKey]) {
-            renderActivePrediction(lockedPredictions[periodKey]);
-            return;
+            if (!force && lockedPredictions[periodKey]) {
+                renderActivePrediction(lockedPredictions[periodKey]);
+                return;
+            }
+
+            if (isAnalyzing) return;
+            isAnalyzing = true;
+
+            const draws = drawsData[ACTIVE_MODE] || [];
+            const pred = generateEnsemblePrediction(draws);
+
+            const predictionEntry = {
+                mode: ACTIVE_MODE,
+                period: info.period,
+                size: pred.size,
+                number: pred.number,
+                color: pred.color,
+                pattern: pred.pattern,
+                conf: pred.conf,
+                ts: Date.now(),
+                status: 'pending',
+                result: null
+            };
+
+            lockedPredictions[periodKey] = predictionEntry;
+
+            // Visual Reel Spin Animation
+            const reelWin = document.getElementById('reelWindow');
+            const shieldWin = document.getElementById('shieldWindow');
+            const reelSym = document.getElementById('reelSymbol');
+            const shieldNum = document.getElementById('shieldNumber');
+            const shieldTag = document.getElementById('shieldColorTag');
+
+            reelSym.innerHTML = '<i class="bi bi-arrow-repeat" style="animation:spin 0.4s linear infinite; font-size:28px; color:var(--neon-cyan)"></i><span class="symbol-text" style="color:var(--neon-cyan)">SCANNING</span>';
+            shieldNum.textContent = '…';
+            shieldTag.textContent = 'AI LOCK';
+
+            setTimeout(() => {
+                renderActivePrediction(predictionEntry);
+                AudioEngine.signalChime();
+
+                // Add to activity log as pending
+                upsertActivityLog(predictionEntry);
+                isAnalyzing = false;
+            }, 750);
         }
 
-        if (isAnalyzing) return;
-        isAnalyzing = true;
+        function renderActivePrediction(p) {
+            const reelWin = document.getElementById('reelWindow');
+            const shieldWin = document.getElementById('shieldWindow');
+            const reelSym = document.getElementById('reelSymbol');
+            const shieldNum = document.getElementById('shieldNumber');
+            const shieldTag = document.getElementById('shieldColorTag');
 
-        const draws = drawsData[ACTIVE_MODE] || [];
-        const pred = generateEnsemblePrediction(draws);
-
-        const predictionEntry = {
-            mode: ACTIVE_MODE,
-            period: info.period,
-            size: pred.size,
-            number: pred.number,
-            color: pred.color,
-            pattern: pred.pattern,
-            conf: pred.conf,
-            ts: Date.now(),
-            status: 'pending',
-            result: null
-        };
-
-        lockedPredictions[periodKey] = predictionEntry;
-
-        // Visual Reel Spin Animation
-        const reelWin = document.getElementById('reelWindow');
-        const shieldWin = document.getElementById('shieldWindow');
-        const reelSym = document.getElementById('reelSymbol');
-        const shieldNum = document.getElementById('shieldNumber');
-        const shieldTag = document.getElementById('shieldColorTag');
-
-        reelSym.innerHTML = '<i class="bi bi-arrow-repeat" style="animation:spin 0.4s linear infinite; font-size:28px; color:var(--neon-cyan)"></i><span class="symbol-text" style="color:var(--neon-cyan)">SCANNING</span>';
-        shieldNum.textContent = '…';
-        shieldTag.textContent = 'AI LOCK';
-
-        setTimeout(() => {
-            renderActivePrediction(predictionEntry);
-            AudioEngine.signalChime();
-
-            // Add to activity log as pending
-            upsertActivityLog(predictionEntry);
-            isAnalyzing = false;
-        }, 750);
-    }
-
-    function renderActivePrediction(p) {
-        const reelWin = document.getElementById('reelWindow');
-        const shieldWin = document.getElementById('shieldWindow');
-        const reelSym = document.getElementById('reelSymbol');
-        const shieldNum = document.getElementById('shieldNumber');
-        const shieldTag = document.getElementById('shieldColorTag');
-
-        const isBig = p.size === 'BIG';
-        reelWin.className = 'reel-window ' + (isBig ? 'show-big' : 'show-small');
-        reelSym.innerHTML = `
+            const isBig = p.size === 'BIG';
+            reelWin.className = 'reel-window ' + (isBig ? 'show-big' : 'show-small');
+            reelSym.innerHTML = `
             <i class="bi ${isBig ? 'bi-arrow-up-circle-fill' : 'bi-arrow-down-circle-fill'} symbol-icon" style="color:${isBig ? 'var(--neon-green)' : 'var(--neon-amber)'}"></i>
             <span class="symbol-text ${isBig ? 'big' : 'small'}">${p.size}</span>
         `;
 
-        shieldWin.className = 'shield-window show-num';
-        shieldNum.textContent = p.number;
+            shieldWin.className = 'shield-window show-num';
+            shieldNum.textContent = p.number;
 
-        const isViolet = p.number === 0 || p.number === 5;
-        const isRed = p.number % 2 === 0 && !isViolet;
-        const colorClass = isViolet ? 'violet' : (isRed ? 'red' : 'green');
-        shieldTag.className = 'number-color-tag ' + colorClass;
-        shieldTag.textContent = p.color;
+            const isViolet = p.number === 0 || p.number === 5;
+            const isRed = p.number % 2 === 0 && !isViolet;
+            const colorClass = isViolet ? 'violet' : (isRed ? 'red' : 'green');
+            shieldTag.className = 'number-color-tag ' + colorClass;
+            shieldTag.textContent = p.color;
 
-        document.getElementById('metaConf').textContent = p.conf + '%';
-        document.getElementById('metaPattern').textContent = p.pattern;
-        document.getElementById('metaEngine').textContent = '19-PATTERN APEX';
+            document.getElementById('metaConf').textContent = p.conf + '%';
+            document.getElementById('metaPattern').textContent = p.pattern;
+        document.getElementById('metaEngine').textContent = 'APEX 10K-QUANTUM';
 
-        // Update Eagle HUD in viewer
-        document.getElementById('eagleHudPeriod').textContent = '#' + String(p.period).slice(-4);
-        document.getElementById('eagleHudSignal').innerHTML = `
+            // Update Eagle HUD in viewer
+            document.getElementById('eagleHudPeriod').textContent = '#' + String(p.period).slice(-4);
+            document.getElementById('eagleHudSignal').innerHTML = `
             <span style="color:${isBig ? 'var(--neon-green)' : 'var(--neon-amber)'}">${p.size}</span> · <b>${p.number}</b>
         `;
-    }
+        }
 
-    function forcePredict() {
-        const btn = document.getElementById('reanalyzeBtn');
-        btn.classList.add('busy');
-        document.getElementById('reanalyzeText').textContent = 'Analyzing…';
-        runPredictionCycle(true);
-        setTimeout(() => {
-            btn.classList.remove('busy');
-            document.getElementById('reanalyzeText').textContent = 'Re-Analyze Now';
-            showToast('Signal Recalculated for #' + document.getElementById('hudPeriod').textContent);
-        }, 800);
-    }
+        function forcePredict() {
+            const btn = document.getElementById('reanalyzeBtn');
+            btn.classList.add('busy');
+            document.getElementById('reanalyzeText').textContent = 'Analyzing…';
+            runPredictionCycle(true);
+            setTimeout(() => {
+                btn.classList.remove('busy');
+                document.getElementById('reanalyzeText').textContent = 'Re-Analyze Now';
+                showToast('Signal Recalculated for #' + document.getElementById('hudPeriod').textContent);
+            }, 800);
+        }
 
-    // ================= RESOLVE WIN / LOSS =================
-    function resolveDrawOutcomes(mode, drawList) {
-        if (!drawList || !drawList.length) return;
-        const drawMap = {};
-        drawList.forEach(d => {
-            const iss = String(d.issue || d.issueNumber);
-            drawMap[iss] = d;
-            drawMap[iss.slice(-5)] = d;
-            drawMap[iss.slice(-4)] = d;
-        });
+        // ================= RESOLVE WIN / LOSS =================
+        function resolveDrawOutcomes(mode, drawList) {
+            if (!drawList || !drawList.length) return;
+            const drawMap = {};
+            drawList.forEach(d => {
+                const iss = String(d.issue || d.issueNumber);
+                drawMap[iss] = d;
+                drawMap[iss.slice(-5)] = d;
+                drawMap[iss.slice(-4)] = d;
+            });
 
-        let statsChanged = false;
+            let statsChanged = false;
 
-        // 1. Resolve directly across full persistent historyList
-        historyList.forEach(item => {
-            if (item.mode === mode && item.status === 'pending') {
-                const pStr = String(item.period);
-                const draw = drawMap[pStr] || drawMap[pStr.slice(-5)] || drawMap[pStr.slice(-4)];
-                if (draw) {
-                    const actualNum = parseInt(draw.number, 10);
-                    const actualSize = actualNum >= 5 ? 'BIG' : 'SMALL';
-                    item.result = { number: actualNum, size: actualSize };
-                    item.status = (actualSize === item.size) ? 'win' : 'loss';
-                    statsChanged = true;
+            // 1. Resolve directly across full persistent historyList
+            historyList.forEach(item => {
+                if (item.mode === mode && item.status === 'pending') {
+                    const pStr = String(item.period);
+                    const draw = drawMap[pStr] || drawMap[pStr.slice(-5)] || drawMap[pStr.slice(-4)];
+                    if (draw) {
+                        const actualNum = parseInt(draw.number, 10);
+                        const actualSize = actualNum >= 5 ? 'BIG' : 'SMALL';
+                        item.result = { number: actualNum, size: actualSize };
+                        item.status = (actualSize === item.size) ? 'win' : 'loss';
+                        statsChanged = true;
 
-                    if (item.status === 'win') {
-                        AudioEngine.winChord();
-                        showToast(`WIN! #${pStr.slice(-4)} verified: ${actualSize} (${actualNum})`);
-                    } else {
-                        AudioEngine.lossTone();
+                        if (item.status === 'win') {
+                            AudioEngine.winChord();
+                            showToast(`WIN! #${pStr.slice(-4)} verified: ${actualSize} (${actualNum})`);
+                        } else {
+                            AudioEngine.lossTone();
+                        }
                     }
                 }
-            }
-        });
+            });
 
-        // 2. Also update lockedPredictions in-memory cache
-        Object.keys(lockedPredictions).forEach(key => {
-            const pred = lockedPredictions[key];
-            if (pred.mode === mode && pred.status === 'pending') {
-                const pStr = String(pred.period);
-                const draw = drawMap[pStr] || drawMap[pStr.slice(-5)] || drawMap[pStr.slice(-4)];
-                if (draw) {
-                    const actualNum = parseInt(draw.number, 10);
-                    const actualSize = actualNum >= 5 ? 'BIG' : 'SMALL';
-                    pred.result = { number: actualNum, size: actualSize };
-                    pred.status = (actualSize === pred.size) ? 'win' : 'loss';
+            // 2. Also update lockedPredictions in-memory cache
+            Object.keys(lockedPredictions).forEach(key => {
+                const pred = lockedPredictions[key];
+                if (pred.mode === mode && pred.status === 'pending') {
+                    const pStr = String(pred.period);
+                    const draw = drawMap[pStr] || drawMap[pStr.slice(-5)] || drawMap[pStr.slice(-4)];
+                    if (draw) {
+                        const actualNum = parseInt(draw.number, 10);
+                        const actualSize = actualNum >= 5 ? 'BIG' : 'SMALL';
+                        pred.result = { number: actualNum, size: actualSize };
+                        pred.status = (actualSize === pred.size) ? 'win' : 'loss';
+                    }
                 }
+            });
+
+            // 3. Keep history strictly sorted newest period first
+            historyList.sort((a, b) => (BigInt(String(b.period).replace(/\D/g, '') || 0) > BigInt(String(a.period).replace(/\D/g, '') || 0) ? 1 : -1));
+
+            if (statsChanged) {
+                renderActivityLog();
+                updatePerformanceStats();
+                saveHistory();
             }
-        });
+        }
 
-        // 3. Keep history strictly sorted newest period first
-        historyList.sort((a, b) => (BigInt(String(b.period).replace(/\D/g, '') || 0) > BigInt(String(a.period).replace(/\D/g, '') || 0) ? 1 : -1));
-
-        if (statsChanged) {
+        function upsertActivityLog(entry) {
+            const ePeriod = String(entry.period);
+            const idx = historyList.findIndex(h => String(h.period) === ePeriod && h.mode === entry.mode);
+            if (idx >= 0) {
+                historyList[idx] = entry;
+            } else {
+                historyList.unshift(entry);
+            }
+            historyList.sort((a, b) => (BigInt(String(b.period).replace(/\D/g, '') || 0) > BigInt(String(a.period).replace(/\D/g, '') || 0) ? 1 : -1));
             renderActivityLog();
             updatePerformanceStats();
             saveHistory();
         }
-    }
 
-    function upsertActivityLog(entry) {
-        const ePeriod = String(entry.period);
-        const idx = historyList.findIndex(h => String(h.period) === ePeriod && h.mode === entry.mode);
-        if (idx >= 0) {
-            historyList[idx] = entry;
-        } else {
-            historyList.unshift(entry);
-        }
-        historyList.sort((a, b) => (BigInt(String(b.period).replace(/\D/g, '') || 0) > BigInt(String(a.period).replace(/\D/g, '') || 0) ? 1 : -1));
-        renderActivityLog();
-        updatePerformanceStats();
-        saveHistory();
-    }
+        function renderActivityLog() {
+            const container = document.getElementById('activityLogList');
+            const countBadge = document.getElementById('logCountBadge');
+            // Unlimited session storage: keep and display all rounds while tab is opened
+            const filtered = historyList.filter(h => h.mode === ACTIVE_MODE);
 
-    function renderActivityLog() {
-        const container = document.getElementById('activityLogList');
-        const countBadge = document.getElementById('logCountBadge');
-        // Unlimited session storage: keep and display all rounds while tab is opened
-        const filtered = historyList.filter(h => h.mode === ACTIVE_MODE);
+            if (countBadge) {
+                countBadge.textContent = filtered.length ? `${filtered.length} ROUNDS (UNLIMITED)` : 'UNLIMITED SESSION';
+            }
 
-        if (countBadge) {
-            countBadge.textContent = filtered.length ? `${filtered.length} ROUNDS (UNLIMITED)` : 'UNLIMITED SESSION';
-        }
-
-        if (!filtered.length) {
-            container.innerHTML = `
+            if (!filtered.length) {
+                container.innerHTML = `
                 <div class="log-row pending">
                     <span class="log-period">#Waiting…</span>
                     <span class="log-pred-val">Auto-predictor ready for next draw</span>
                     <span class="log-status-pill pending">STANDBY</span>
                 </div>
             `;
-            return;
-        }
+                return;
+            }
 
-        container.innerHTML = filtered.map(item => {
-            const statusClass = item.status === 'win' ? 'win' : (item.status === 'loss' ? 'loss' : 'pending');
-            const statusLabel = item.status === 'win' ? 'WIN ✓' : (item.status === 'loss' ? 'LOSS ✕' : 'PENDING');
-            const resultText = item.result ? `➔ ${item.result.size} (${item.result.number})` : '➔ Waiting Result';
+            container.innerHTML = filtered.map(item => {
+                const statusClass = item.status === 'win' ? 'win' : (item.status === 'loss' ? 'loss' : 'pending');
+                const statusLabel = item.status === 'win' ? 'WIN ✓' : (item.status === 'loss' ? 'LOSS ✕' : 'PENDING');
+                const resultText = item.result ? `➔ ${item.result.size} (${item.result.number})` : '➔ Waiting Result';
 
-            return `
+                return `
                 <div class="log-row ${statusClass}">
                     <span class="log-period">#${String(item.period).slice(-5)}</span>
                     <span class="log-pred-val"><b>${item.size}</b> (${item.number}) ${resultText}</span>
                     <span class="log-status-pill ${statusClass}">${statusLabel}</span>
                 </div>
             `;
-        }).join('');
-    }
-
-    function renderFullHistory() {
-        const container = document.getElementById('fullHistoryList');
-        if (!historyList.length) {
-            container.innerHTML = '<div style="text-align:center; padding:20px; color:var(--text-muted); font-size:12px;">No predictions recorded yet.</div>';
-            return;
+            }).join('');
         }
 
-        container.innerHTML = historyList.map(item => {
-            const statusClass = item.status === 'win' ? 'win' : (item.status === 'loss' ? 'loss' : 'pending');
-            const statusLabel = item.status === 'win' ? 'WIN ✓' : (item.status === 'loss' ? 'LOSS ✕' : 'PENDING');
-            const resultText = item.result ? `➔ ${item.result.size} (${item.result.number})` : '➔ Waiting Result';
+        function renderFullHistory() {
+            const container = document.getElementById('fullHistoryList');
+            if (!historyList.length) {
+                container.innerHTML = '<div style="text-align:center; padding:20px; color:var(--text-muted); font-size:12px;">No predictions recorded yet.</div>';
+                return;
+            }
 
-            return `
+            container.innerHTML = historyList.map(item => {
+                const statusClass = item.status === 'win' ? 'win' : (item.status === 'loss' ? 'loss' : 'pending');
+                const statusLabel = item.status === 'win' ? 'WIN ✓' : (item.status === 'loss' ? 'LOSS ✕' : 'PENDING');
+                const resultText = item.result ? `➔ ${item.result.size} (${item.result.number})` : '➔ Waiting Result';
+
+                return `
                 <div class="log-row ${statusClass}">
                     <span class="log-period">${item.mode === 'WinGo_30S' ? '🔥 30S' : '⚡ 1M'} #${String(item.period).slice(-5)}</span>
                     <span class="log-pred-val"><b>${item.size}</b> (${item.number}) ${resultText}</span>
                     <span class="log-status-pill ${statusClass}">${statusLabel}</span>
                 </div>
             `;
-        }).join('');
-    }
-
-    function updatePerformanceStats() {
-        const done = historyList.filter(h => h.mode === ACTIVE_MODE && h.status !== 'pending');
-        const wins = done.filter(h => h.status === 'win').length;
-        const losses = done.length - wins;
-        const rate = done.length ? Math.round((wins / done.length) * 100) : 0;
-
-        document.getElementById('statTotalRounds').textContent = done.length;
-        document.getElementById('statWins').textContent = wins;
-        document.getElementById('statLosses').textContent = losses;
-        document.getElementById('statWinRate').textContent = rate + '%';
-    }
-
-    function clearActivityLog() {
-        if (confirm('Clear prediction history for ' + MODES[ACTIVE_MODE].label + '?')) {
-            historyList = historyList.filter(h => h.mode !== ACTIVE_MODE);
-            saveHistory();
-            renderActivityLog();
-            updatePerformanceStats();
-            showToast('History Cleared');
+            }).join('');
         }
-    }
 
-    // ================= RENDER RECENT BALLS STRIP =================
-    function renderRecentDraws(list) {
-        const container = document.getElementById('drawsBallsStrip');
-        if (!list || !list.length) return;
+        function updatePerformanceStats() {
+            const done = historyList.filter(h => h.mode === ACTIVE_MODE && h.status !== 'pending');
+            const wins = done.filter(h => h.status === 'win').length;
+            const losses = done.length - wins;
+            const rate = done.length ? Math.round((wins / done.length) * 100) : 0;
 
-        const recent = list.slice(0, 15);
-        document.getElementById('recentCountText').textContent = 'Last ' + recent.length;
+            document.getElementById('statTotalRounds').textContent = done.length;
+            document.getElementById('statWins').textContent = wins;
+            document.getElementById('statLosses').textContent = losses;
+            document.getElementById('statWinRate').textContent = rate + '%';
+        }
 
-        container.innerHTML = recent.map(r => {
-            const n = r.number;
-            const isBig = n >= 5;
-            let ballClass = 'green';
-            if (n === 0) ballClass = 'violet';
-            else if (n === 5) ballClass = 'violet-green';
-            else if (n % 2 === 0) ballClass = 'red';
+        function clearActivityLog() {
+            if (confirm('Clear prediction history for ' + MODES[ACTIVE_MODE].label + '?')) {
+                historyList = historyList.filter(h => h.mode !== ACTIVE_MODE);
+                saveHistory();
+                renderActivityLog();
+                updatePerformanceStats();
+                showToast('History Cleared');
+            }
+        }
 
-            return `
+        // ================= RENDER RECENT BALLS STRIP =================
+        function renderRecentDraws(list) {
+            const container = document.getElementById('drawsBallsStrip');
+            if (!list || !list.length) return;
+
+            const recent = list.slice(0, 15);
+            document.getElementById('recentCountText').textContent = 'Last ' + recent.length;
+
+            container.innerHTML = recent.map(r => {
+                const n = r.number;
+                const isBig = n >= 5;
+                let ballClass = 'green';
+                if (n === 0) ballClass = 'violet';
+                else if (n === 5) ballClass = 'violet-green';
+                else if (n % 2 === 0) ballClass = 'red';
+
+                return `
                 <div class="lottery-ball ${ballClass}" title="Issue: ${r.issue}">
                     ${n}
                     <span class="ball-sub">${isBig ? 'B' : 'S'}</span>
                 </div>
             `;
-        }).join('');
-    }
+            }).join('');
+        }
 
-    // ================= TICK / TIMER LOOP =================
-    function tick() {
-        const info = getPeriodInfo(ACTIVE_MODE);
-        const periodElem = document.getElementById('hudPeriod');
-        const timerElem = document.getElementById('hudTimer');
-        const barElem = document.getElementById('hudProgressBar');
+        // ================= TICK / TIMER LOOP =================
+        function tick() {
+            const info = getPeriodInfo(ACTIVE_MODE);
+            const periodElem = document.getElementById('hudPeriod');
+            const timerElem = document.getElementById('hudTimer');
+            const barElem = document.getElementById('hudProgressBar');
 
-        periodElem.textContent = info.period || 'Syncing…';
-        timerElem.textContent = '00:' + String(info.remain).padStart(2, '0');
+            periodElem.textContent = info.period || 'Syncing…';
+            timerElem.textContent = '00:' + String(info.remain).padStart(2, '0');
 
-        const pct = (info.remain / info.dur) * 100;
-        barElem.style.width = pct + '%';
+            const pct = (info.remain / info.dur) * 100;
+            barElem.style.width = pct + '%';
 
-        const isWarning = info.remain <= 5;
-        timerElem.classList.toggle('warning', isWarning);
-        barElem.classList.toggle('warning', isWarning);
+            const isWarning = info.remain <= 5;
+            timerElem.classList.toggle('warning', isWarning);
+            barElem.classList.toggle('warning', isWarning);
 
-        // Update eagle HUD in viewer
-        document.getElementById('eagleHudTime').textContent = info.remain + 's';
+            // Update eagle HUD in viewer
+            document.getElementById('eagleHudTime').textContent = info.remain + 's';
 
-        // Periodic sound tick during last 3 seconds
-        if (isWarning && info.remain >= 1) {
+            // Periodic sound tick during last 3 seconds
+            if (isWarning && info.remain >= 1) {
+                AudioEngine.tick();
+            }
+
+            // Period Transition Detection
+            if (info.period !== lastHandledPeriod) {
+                lastHandledPeriod = info.period;
+
+                // Trigger autonomous prediction for new period
+                if (AUTO_PREDICT) {
+                    runPredictionCycle();
+                }
+
+                // Schedule poll draws after draw closure
+                setTimeout(() => fetchLatestDraws(false), 2000);
+                setTimeout(() => fetchLatestDraws(false), 5500);
+                setTimeout(() => fetchLatestDraws(false), 9000);
+            }
+        }
+
+        // ================= PLATFORMS & EAGLE HUD =================
+        const PLATFORMS = {
+            '9kclub': { name: '9KCLUB Official', url: 'https://9kclub44.com/register?inviteCode=5GRGRYN&from=web' },
+            'dhaniwin': { name: 'DhaniWin Official', url: 'https://dhaniwin.bet/register?inviteCode=V8BFPYN&from' },
+            'raxiwin': { name: 'RaxiWin VIP', url: 'https://www.raxiwin.club/#/register?invitationCode=95953111981' },
+            'daman': { name: 'Daman Games', url: 'https://9kclub44.com/register?inviteCode=5GRGRYN&from=web' }
+        };
+
+        function openPlatform(key) {
+            const p = PLATFORMS[key];
+            if (!p) return;
+            activePlatform = p;
+            document.getElementById('viewerPlatformName').textContent = p.name;
+            document.getElementById('platformIframe').src = p.url;
+            document.getElementById('viewerModal').classList.add('open');
+        }
+
+        function closePlatform() {
+            document.getElementById('viewerModal').classList.remove('open');
+            document.getElementById('platformIframe').src = 'about:blank';
+        }
+
+        function openExternalPlatform() {
+            if (activePlatform) window.open(activePlatform.url, '_blank', 'noopener');
+        }
+
+        // ================= RUN GAME WEBSITE MODAL =================
+        const RECENT_URLS_KEY = 'jashvip_recent_urls';
+
+        function getRecentUrls() {
+            try { return JSON.parse(localStorage.getItem(RECENT_URLS_KEY) || '[]'); } catch (e) { return []; }
+        }
+
+        function saveRecentUrl(url) {
+            let urls = getRecentUrls().filter(u => u !== url);
+            urls.unshift(url);
+            if (urls.length > 5) urls = urls.slice(0, 5);
+            localStorage.setItem(RECENT_URLS_KEY, JSON.stringify(urls));
+        }
+
+        function openRunGameModal() {
+            const overlay = document.getElementById('runGameOverlay');
+            overlay.classList.add('open');
+            document.getElementById('customPlatformUrl').value = '';
+            renderRecentUrls();
+            setTimeout(() => document.getElementById('customPlatformUrl').focus(), 200);
             AudioEngine.tick();
         }
 
-        // Period Transition Detection
-        if (info.period !== lastHandledPeriod) {
-            lastHandledPeriod = info.period;
-
-            // Trigger autonomous prediction for new period
-            if (AUTO_PREDICT) {
-                runPredictionCycle();
-            }
-
-            // Schedule poll draws after draw closure
-            setTimeout(() => fetchLatestDraws(false), 2000);
-            setTimeout(() => fetchLatestDraws(false), 5500);
-            setTimeout(() => fetchLatestDraws(false), 9000);
+        function closeRunGameModal() {
+            document.getElementById('runGameOverlay').classList.remove('open');
         }
-    }
 
-    // ================= PLATFORMS & EAGLE HUD =================
-    const PLATFORMS = {
-        '9kclub': { name: '9KCLUB Official', url: 'https://9kclub44.com/register?inviteCode=5GRGRYN&from=web' },
-        'dhaniwin': { name: 'DhaniWin Official', url: 'https://dhaniwin.bet/register?inviteCode=V8BFPYN&from' },
-        'raxiwin': { name: 'RaxiWin VIP', url: 'https://www.raxiwin.club/#/register?invitationCode=95953111981' },
-        'daman': { name: 'Daman Games', url: 'https://9kclub44.com/register?inviteCode=5GRGRYN&from=web' }
-    };
+        function renderRecentUrls() {
+            const urls = getRecentUrls();
+            const section = document.getElementById('recentUrlsSection');
+            const list = document.getElementById('recentUrlsList');
+            if (!urls.length) { section.style.display = 'none'; return; }
+            section.style.display = 'block';
+            list.innerHTML = urls.map(u => {
+                const display = u.replace(/^https?:\/\//, '').slice(0, 40);
+                return `<div class="recent-url-chip" onclick="useRecentUrl('${u.replace(/'/g, "\\'")}')"><i class="bi bi-arrow-return-right" style="flex-shrink:0;color:var(--neon-amber)"></i> ${display}</div>`;
+            }).join('');
+        }
 
-    function openPlatform(key) {
-        const p = PLATFORMS[key];
-        if (!p) return;
-        activePlatform = p;
-        document.getElementById('viewerPlatformName').textContent = p.name;
-        document.getElementById('platformIframe').src = p.url;
-        document.getElementById('viewerModal').classList.add('open');
-    }
+        function useRecentUrl(url) {
+            document.getElementById('customPlatformUrl').value = url;
+        }
 
-    function closePlatform() {
-        document.getElementById('viewerModal').classList.remove('open');
-        document.getElementById('platformIframe').src = 'about:blank';
-    }
+        function launchCustomPlatform() {
+            let url = document.getElementById('customPlatformUrl').value.trim();
+            if (!url) { showToast('Enter a platform URL first'); return; }
+            if (!url.startsWith('http://') && !url.startsWith('https://')) url = 'https://' + url;
+            saveRecentUrl(url);
+            closeRunGameModal();
+            activePlatform = { name: new URL(url).hostname, url: url };
+            document.getElementById('viewerPlatformName').textContent = activePlatform.name;
+            document.getElementById('platformIframe').src = url;
+            document.getElementById('viewerModal').classList.add('open');
+            AudioEngine.signalChime();
+            showToast('Platform launched with VIP overlay');
+        }
 
-    function openExternalPlatform() {
-        if (activePlatform) window.open(activePlatform.url, '_blank', 'noopener');
-    }
-
-    // ================= RUN GAME WEBSITE MODAL =================
-    const RECENT_URLS_KEY = 'jashvip_recent_urls';
-
-    function getRecentUrls() {
-        try { return JSON.parse(localStorage.getItem(RECENT_URLS_KEY) || '[]'); } catch(e) { return []; }
-    }
-
-    function saveRecentUrl(url) {
-        let urls = getRecentUrls().filter(u => u !== url);
-        urls.unshift(url);
-        if (urls.length > 5) urls = urls.slice(0, 5);
-        localStorage.setItem(RECENT_URLS_KEY, JSON.stringify(urls));
-    }
-
-    function openRunGameModal() {
-        const overlay = document.getElementById('runGameOverlay');
-        overlay.classList.add('open');
-        document.getElementById('customPlatformUrl').value = '';
-        renderRecentUrls();
-        setTimeout(() => document.getElementById('customPlatformUrl').focus(), 200);
-        AudioEngine.tick();
-    }
-
-    function closeRunGameModal() {
-        document.getElementById('runGameOverlay').classList.remove('open');
-    }
-
-    function renderRecentUrls() {
-        const urls = getRecentUrls();
-        const section = document.getElementById('recentUrlsSection');
-        const list = document.getElementById('recentUrlsList');
-        if (!urls.length) { section.style.display = 'none'; return; }
-        section.style.display = 'block';
-        list.innerHTML = urls.map(u => {
-            const display = u.replace(/^https?:\/\//, '').slice(0, 40);
-            return `<div class="recent-url-chip" onclick="useRecentUrl('${u.replace(/'/g, "\\'")}')"><i class="bi bi-arrow-return-right" style="flex-shrink:0;color:var(--neon-amber)"></i> ${display}</div>`;
-        }).join('');
-    }
-
-    function useRecentUrl(url) {
-        document.getElementById('customPlatformUrl').value = url;
-    }
-
-    function launchCustomPlatform() {
-        let url = document.getElementById('customPlatformUrl').value.trim();
-        if (!url) { showToast('Enter a platform URL first'); return; }
-        if (!url.startsWith('http://') && !url.startsWith('https://')) url = 'https://' + url;
-        saveRecentUrl(url);
-        closeRunGameModal();
-        activePlatform = { name: new URL(url).hostname, url: url };
-        document.getElementById('viewerPlatformName').textContent = activePlatform.name;
-        document.getElementById('platformIframe').src = url;
-        document.getElementById('viewerModal').classList.add('open');
-        AudioEngine.signalChime();
-        showToast('Platform launched with VIP overlay');
-    }
-
-    // Allow Enter key to launch
-    document.getElementById('customPlatformUrl').addEventListener('keydown', e => {
-        if (e.key === 'Enter') launchCustomPlatform();
-    });
-
-    // Draggable Eagle HUD
-    (function initEagleDrag() {
-        const hud = document.getElementById('eagleHud');
-        let isDragging = false, startX, startY, origX, origY;
-
-        hud.addEventListener('pointerdown', e => {
-            isDragging = true;
-            hud.setPointerCapture(e.pointerId);
-            startX = e.clientX;
-            startY = e.clientY;
-            const r = hud.getBoundingClientRect();
-            origX = r.left;
-            origY = r.top;
+        // Allow Enter key to launch
+        document.getElementById('customPlatformUrl').addEventListener('keydown', e => {
+            if (e.key === 'Enter') launchCustomPlatform();
         });
 
-        hud.addEventListener('pointermove', e => {
-            if (!isDragging) return;
-            const dx = e.clientX - startX;
-            const dy = e.clientY - startY;
-            hud.style.left = Math.max(10, Math.min(window.innerWidth - hud.offsetWidth - 10, origX + dx)) + 'px';
-            hud.style.top = Math.max(10, Math.min(window.innerHeight - hud.offsetHeight - 10, origY + dy)) + 'px';
-            hud.style.right = 'auto';
-        });
+        // Draggable Eagle HUD
+        (function initEagleDrag() {
+            const hud = document.getElementById('eagleHud');
+            let isDragging = false, startX, startY, origX, origY;
 
-        const stopDrag = () => { isDragging = false; };
-        hud.addEventListener('pointerup', stopDrag);
-        hud.addEventListener('pointercancel', stopDrag);
-    })();
+            hud.addEventListener('pointerdown', e => {
+                isDragging = true;
+                hud.setPointerCapture(e.pointerId);
+                startX = e.clientX;
+                startY = e.clientY;
+                const r = hud.getBoundingClientRect();
+                origX = r.left;
+                origY = r.top;
+            });
 
-    // ================= INITIALIZATION =================
-    function init() {
-        // Restore active mode UI
-        const is30s = ACTIVE_MODE === 'WinGo_30S';
-        const b30 = document.getElementById('modeBtn30S');
-        const b1m = document.getElementById('modeBtn1M');
-        b30.classList.toggle('active', is30s);
-        b30.classList.toggle('mode-30s', is30s);
-        b1m.classList.toggle('active', !is30s);
+            hud.addEventListener('pointermove', e => {
+                if (!isDragging) return;
+                const dx = e.clientX - startX;
+                const dy = e.clientY - startY;
+                hud.style.left = Math.max(10, Math.min(window.innerWidth - hud.offsetWidth - 10, origX + dx)) + 'px';
+                hud.style.top = Math.max(10, Math.min(window.innerHeight - hud.offsetHeight - 10, origY + dy)) + 'px';
+                hud.style.right = 'auto';
+            });
 
-        // Sound icon
-        document.getElementById('soundIcon').className = SOUND_ENABLED ? 'bi bi-volume-up-fill' : 'bi bi-volume-mute-fill';
+            const stopDrag = () => { isDragging = false; };
+            hud.addEventListener('pointerup', stopDrag);
+            hud.addEventListener('pointercancel', stopDrag);
+        })();
 
-        updateAutoToggleUI();
-        renderActivityLog();
-        updatePerformanceStats();
+        // ================= INITIALIZATION =================
+        function init() {
+            // Restore active mode UI
+            const is30s = ACTIVE_MODE === 'WinGo_30S';
+            const b30 = document.getElementById('modeBtn30S');
+            const b1m = document.getElementById('modeBtn1M');
+            b30.classList.toggle('active', is30s);
+            b30.classList.toggle('mode-30s', is30s);
+            b1m.classList.toggle('active', !is30s);
 
-        // Initial Data Fetch & Tick Loop
-        fetchLatestDraws(true);
-        setInterval(tick, 1000);
-        setInterval(() => fetchLatestDraws(false), 12000);
+            // Sound icon
+            document.getElementById('soundIcon').className = SOUND_ENABLED ? 'bi bi-volume-up-fill' : 'bi bi-volume-mute-fill';
 
-        document.addEventListener('visibilitychange', () => {
-            if (!document.hidden) fetchLatestDraws(false);
-        });
-    }
+            updateAutoToggleUI();
+            renderActivityLog();
+            updatePerformanceStats();
 
-    if (document.readyState === 'loading') {
-        document.addEventListener('DOMContentLoaded', init);
-    } else {
-        init();
-    }
+            // Initial Data Fetch & Tick Loop
+            fetchLatestDraws(true);
+            setInterval(tick, 1000);
+            setInterval(() => fetchLatestDraws(false), 12000);
+
+            document.addEventListener('visibilitychange', () => {
+                if (!document.hidden) fetchLatestDraws(false);
+            });
+        }
+
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', init);
+        } else {
+            init();
+        }
     </script>
 </body>
+
 </html>
