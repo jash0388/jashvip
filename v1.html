@@ -2400,6 +2400,16 @@
         9: { BIG: [5,8,6], SMALL: [0,3,2] }
     };
 
+    function classifyNumber(num) {
+        const n = parseInt(num, 10);
+        const size = n >= 5 ? 'BIG' : 'SMALL';
+        let color = ['GREEN'];
+        if (n === 0) color = ['RED', 'VIOLET'];
+        else if (n === 5) color = ['GREEN', 'VIOLET'];
+        else if (n % 2 === 0) color = ['RED'];
+        return { num: n, size, color };
+    }
+
     function pickApexNumbers(side, numbers) {
         const pool = side === 'BIG' ? [5,6,7,8,9] : [0,1,2,3,4];
         const lastNum = (numbers && numbers[0] !== undefined) ? numbers[0] : (side === 'BIG' ? 7 : 2);
@@ -2496,43 +2506,46 @@
             if (isAnalyzing) return;
             isAnalyzing = true;
 
-            const draws = drawsData[ACTIVE_MODE] || [];
-            const pred = generateEnsemblePrediction(draws);
+            try {
+                const draws = drawsData[ACTIVE_MODE] || [];
+                const pred = generateEnsemblePrediction(draws);
 
-            const predictionEntry = {
-                mode: ACTIVE_MODE,
-                period: info.period,
-                size: pred.size,
-                number: pred.number,
-                color: pred.color,
-                pattern: pred.pattern,
-                conf: pred.conf,
-                ts: Date.now(),
-                status: 'pending',
-                result: null
-            };
+                const predictionEntry = {
+                    mode: ACTIVE_MODE,
+                    period: info.period,
+                    size: pred.size,
+                    number: pred.number,
+                    color: pred.color,
+                    pattern: pred.pattern,
+                    conf: pred.conf,
+                    ts: Date.now(),
+                    status: 'pending',
+                    result: null
+                };
 
-            lockedPredictions[periodKey] = predictionEntry;
+                lockedPredictions[periodKey] = predictionEntry;
 
-            // Visual Reel Spin Animation
-            const reelWin = document.getElementById('reelWindow');
-            const shieldWin = document.getElementById('shieldWindow');
-            const reelSym = document.getElementById('reelSymbol');
-            const shieldNum = document.getElementById('shieldNumber');
-            const shieldTag = document.getElementById('shieldColorTag');
+                // Visual Reel Spin Animation
+                const reelSym = document.getElementById('reelSymbol');
+                const shieldNum = document.getElementById('shieldNumber');
+                const shieldTag = document.getElementById('shieldColorTag');
 
-            reelSym.innerHTML = '<i class="bi bi-arrow-repeat" style="animation:spin 0.4s linear infinite; font-size:28px; color:var(--neon-cyan)"></i><span class="symbol-text" style="color:var(--neon-cyan)">SCANNING</span>';
-            shieldNum.textContent = '…';
-            shieldTag.textContent = 'AI LOCK';
+                reelSym.innerHTML = '<i class="bi bi-arrow-repeat" style="animation:spin 0.4s linear infinite; font-size:28px; color:var(--neon-cyan)"></i><span class="symbol-text" style="color:var(--neon-cyan)">SCANNING</span>';
+                shieldNum.textContent = '…';
+                shieldTag.textContent = 'AI LOCK';
 
-            setTimeout(() => {
-                renderActivePrediction(predictionEntry);
-                AudioEngine.signalChime();
+                setTimeout(() => {
+                    renderActivePrediction(predictionEntry);
+                    AudioEngine.signalChime();
 
-                // Add to activity log as pending
-                upsertActivityLog(predictionEntry);
+                    // Add to activity log as pending
+                    upsertActivityLog(predictionEntry);
+                    isAnalyzing = false;
+                }, 400);
+            } catch (err) {
+                console.error('runPredictionCycle error:', err);
                 isAnalyzing = false;
-            }, 750);
+            }
         }
 
         function renderActivePrediction(p) {
