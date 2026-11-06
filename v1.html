@@ -8,7 +8,7 @@
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <meta name="theme-color" content="#06080f">
-    <title>JASH VIP · APEX 19-PATTERN ENGINE (30S & 1M Auto-Predictor)</title>
+    <title>JASH VIP · WINGO 14-ENGINE PREDICTOR (30S & 1M)</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link
@@ -1482,7 +1482,7 @@
                 </div>
                 <div>
                     <div class="brand-title">JASH VIP · PREDICTOR</div>
-                    <div class="brand-sub">19-PATTERN APEX ENGINE</div>
+                    <div class="brand-sub">WINGO 14-ENGINE SUITE</div>
                 </div>
             </div>
             <div class="top-actions">
@@ -1575,7 +1575,7 @@
                     <div class="meta-chip"><i class="bi bi-shield-check"></i> CONFIDENCE: <b id="metaConf">88%</b></div>
                     <div class="meta-chip"><i class="bi bi-diagram-3-fill"></i> PATTERN: <b id="metaPattern">SYNCING</b>
                     </div>
-                    <div class="meta-chip"><i class="bi bi-cpu"></i> ENGINE: <b id="metaEngine">APEX 10K-QUANTUM</b></div>
+                    <div class="meta-chip"><i class="bi bi-cpu"></i> ENGINE: <b id="metaEngine">WINGO 14-ENGINE SUITE</b></div>
                 </div>
             </div>
 
@@ -1740,7 +1740,7 @@
                 <h3 style="font-family:var(--font-head); font-weight:800; font-size:18px; margin-bottom:4px;">VIP MEMBER
                 </h3>
                 <p style="font-size:11px; font-family:var(--font-mono); color:var(--neon-green); margin-bottom:14px;">
-                    APEX 19-PATTERN · ACTIVE</p>
+                    14-ENGINE SUITE · ACTIVE</p>
                 <a href="https://t.me/hexfreetools" target="_blank" class="btn-action-primary"
                     style="text-decoration:none; display:inline-flex; margin-bottom:8px;">
                     <i class="bi bi-telegram"></i> Join VIP Telegram Channel
@@ -2437,6 +2437,108 @@
         return { primary: scored[0].num, secondary: scored[1].num };
     }
 
+    // ================= WINGO BIG/SMALL ENGINES + STRATEGY PACK =================
+    const BIG = 1, SMALL = 0;
+
+    const toSeq = (input) => input.map(x =>
+      typeof x === 'number' ? (x >= 5 ? BIG : SMALL) : (x.size ? (x.size === 'BIG' ? BIG : SMALL) : (x.number >= 5 ? BIG : SMALL))
+    );
+    const last = (h) => h[h.length - 1];
+    const flip = (v) => v === BIG ? SMALL : BIG;
+    const majority = (h, k) => { const w = h.slice(-k); const b = w.reduce((a,v)=>a+v,0); return b === w.length-b ? last(h) : (b > w.length-b ? BIG : SMALL); };
+    const streakLen = (h) => { const s = last(h); let n=1; for(let i=h.length-2;i>=0&&h[i]===s;i--) n++; return [s,n]; };
+    const isChop = (h) => { const t=h.slice(-4); return t.length===4 && t.every((v,i)=> i===0 || v!==t[i-1]); };
+
+    function ngram(h, k, smooth=0.5) {
+      if (h.length < k+1) return last(h);
+      const key = h.slice(-k).join('');
+      const table = Object.create(null);
+      for (let i=k; i<h.length; i++) {
+        const ctx = h.slice(i-k,i).join(''); if (!table[ctx]) table[ctx]=[0,0]; table[ctx][h[i]]++;
+      }
+      const c = table[key]; if (!c) return majority(h, Math.min(9, h.length));
+      return (c[BIG]+smooth) >= (c[SMALL]+smooth) ? BIG : SMALL;
+    }
+    function markov(h, order) {
+      if (h.length < order+1) return last(h);
+      const key = h.slice(-order).join('');
+      const table = Object.create(null);
+      for (let i=order; i<h.length; i++) {
+        const ctx = h.slice(i-order,i).join(''); if (!table[ctx]) table[ctx]=[0,0]; table[ctx][h[i]]++;
+      }
+      const c = table[key]; if (!c) return last(h);
+      return (c[BIG]+1) >= (c[SMALL]+1) ? BIG : SMALL;
+    }
+
+    const engines = [
+      { name: "follow-last",       family: "streak",      min: 1,  fn: h => last(h) },
+      { name: "flip-last",         family: "anti-streak", min: 1,  fn: h => flip(last(h)) },
+      { name: "majority-5",        family: "frequency",   min: 5,  fn: h => majority(h,5) },
+      { name: "minority-5",        family: "contrarian",  min: 5,  fn: h => flip(majority(h,5)) },
+      { name: "majority-9",        family: "frequency",   min: 9,  fn: h => majority(h,9) },
+      { name: "least-freq-20",     family: "fallacy",     min: 20, fn: h => { const w=h.slice(-20),b=w.reduce((a,v)=>a+v,0); return b>=10?SMALL:BIG; } },
+      { name: "2-gram",            family: "ngram",       min: 4,  fn: h => ngram(h,2) },
+      { name: "3-gram (PAT#072)",  family: "ngram",       min: 6,  fn: h => ngram(h,3) },
+      { name: "5-gram",            family: "ngram",       min: 10, fn: h => ngram(h,5) },
+      { name: "7-gram (PAT#113)",  family: "ngram",       min: 12, fn: h => ngram(h,7) },
+      { name: "markov-1",          family: "markov",      min: 3,  fn: h => markov(h,1) },
+      { name: "markov-2",          family: "markov",      min: 4,  fn: h => markov(h,2) },
+      { name: "chop-detector",     family: "pattern",     min: 6,  fn: h => isChop(h) ? last(h) : majority(h,6) },
+      { name: "streak-breaker",    family: "pattern",     min: 4,  fn: h => { const [s,n]=streakLen(h); return n>=3 ? flip(s) : last(h); } },
+    ];
+
+    function predict(name, history) {
+      const h = toSeq(history);
+      const e = engines.find(x => x.name === name || x.name.includes(name));
+      if (!e) throw new Error("unknown engine: "+name);
+      if (h.length < e.min) return null;
+      return e.fn(h);
+    }
+
+    function predictAll(history) {
+      const h = toSeq(history);
+      const byEngine = {};
+      let big=0, small=0;
+      for (const e of engines) {
+        if (h.length < e.min) { byEngine[e.name] = null; continue; }
+        const v = e.fn(h); byEngine[e.name] = v;
+        v === BIG ? big++ : small++;
+      }
+      return { votes: { BIG: big, SMALL: small, total: big+small }, byEngine };
+    }
+
+    function strategy(history, opts={}) {
+      const h = toSeq(history);
+      const weights = opts.weights || {};
+      const confirm = opts.confirm ?? 0;
+      const reasons = [];
+      const byEngine = {};
+      let big=0, small=0;
+
+      for (const e of engines) {
+        if (h.length < e.min) continue;
+        const v = e.fn(h); const w = (weights[e.name] || 1);
+        byEngine[e.name] = { signal: v, weight: w };
+        v === BIG ? big += w : small += w;
+      }
+      const total = big + small;
+      const margin = Math.abs(big - small);
+      const signal = margin > confirm ? (big > small ? BIG : SMALL) : null;
+      const confidence = total ? Math.max(big, small) / total : 0;
+
+      if (opts.skipChop && isChop(h)) reasons.push("chop-detected");
+      if (margin <= confirm) reasons.push("no-margin");
+      if (h.length < 12) reasons.push("low-history");
+
+      return { signal, signalLabel: signal===null ? "SKIP" : (signal===BIG?"BIG":"SMALL"),
+               votes: {BIG:big, SMALL:small, total}, margin, confidence, reasons, byEngine };
+    }
+
+    function label(v){ return v===null||v===undefined ? "SKIP" : (v===BIG?"BIG":"SMALL"); }
+
+    const _wingoPack = { BIG, SMALL, engines, toSeq, predict, predictAll, strategy, label };
+    if (typeof window !== 'undefined') window.WingoEngines = _wingoPack;
+
     function generateEnsemblePrediction(history = []) {
         if (!history || history.length < 3) {
             const side = Math.random() > 0.5 ? 'BIG' : 'SMALL';
@@ -2447,37 +2549,44 @@
                 number: nums.primary,
                 secondaryNumber: nums.secondary,
                 color: cl.color.join(' + '),
-                pattern: '⚡ APEX 10K QUANTUM CALIBRATING...',
+                pattern: '⚡ 14-ENGINE SUITE CALIBRATING...',
                 conf: 88
             };
         }
 
         // Chronological order: [oldest ... newest]
         const chron = history.slice(0, 30).reverse();
-        const sizes = chron.map(h => (parseInt(h.number, 10) >= 5 ? 'B' : 'S'));
         const numbers = chron.map(h => parseInt(h.number, 10));
 
-        const evaluators = build10KPatternMatrix();
-        let bVotes = 0, sVotes = 0;
-        let topPattern = '10K MATRIX CONSENSUS';
-        let topWeight = 0;
+        // 14-Engine Weighted Strategy
+        const stratWeights = {
+            "3-gram (PAT#072)": 2.5,
+            "7-gram (PAT#113)": 2.5,
+            "chop-detector": 2.0,
+            "streak-breaker": 2.0,
+            "markov-2": 2.0,
+            "majority-5": 1.5,
+            "2-gram": 1.5
+        };
 
-        for (const ev of evaluators) {
-            try {
-                const vote = ev.evaluate(sizes, numbers);
-                if (vote === 'B') bVotes += ev.weight;
-                else sVotes += ev.weight;
-
-                if (ev.weight > topWeight) {
-                    topWeight = ev.weight;
-                    topPattern = ev.name;
-                }
-            } catch(e) {}
+        const stratRes = strategy(chron, { weights: stratWeights, confirm: 0 });
+        let finalSide = stratRes.signalLabel;
+        if (!finalSide || finalSide === 'SKIP') {
+            finalSide = stratRes.votes.BIG >= stratRes.votes.SMALL ? 'BIG' : 'SMALL';
         }
 
-        const finalSide = bVotes >= sVotes ? 'BIG' : 'SMALL';
-        const total = bVotes + sVotes;
-        const conf = Math.min(99, Math.max(86, Math.round((Math.max(bVotes, sVotes) / total) * 100)));
+        const sideCode = finalSide === 'BIG' ? BIG : SMALL;
+        let topEngineName = '14-ENGINE CONSENSUS';
+        let maxWeight = 0;
+        for (const [eName, info] of Object.entries(stratRes.byEngine)) {
+            if (info && info.signal === sideCode && info.weight > maxWeight) {
+                maxWeight = info.weight;
+                topEngineName = eName.toUpperCase();
+            }
+        }
+
+        const rawConf = stratRes.confidence || 0.5;
+        const conf = Math.min(99, Math.max(86, Math.round(rawConf * 100)));
 
         const nums = pickApexNumbers(finalSide, numbers.slice().reverse());
         const cl = classifyNumber(nums.primary);
@@ -2487,7 +2596,7 @@
             number: nums.primary,
             secondaryNumber: nums.secondary,
             color: cl.color.join(' + '),
-            pattern: '⚡ ' + topPattern + ' (' + finalSide + ')',
+            pattern: '⚡ ' + topEngineName + ' (' + finalSide + ')',
             conf: conf
         };
     }
@@ -2573,7 +2682,7 @@
 
             document.getElementById('metaConf').textContent = p.conf + '%';
             document.getElementById('metaPattern').textContent = p.pattern;
-        document.getElementById('metaEngine').textContent = 'APEX 10K-QUANTUM';
+            document.getElementById('metaEngine').textContent = 'WINGO 14-ENGINE SUITE';
 
             // Update Eagle HUD in viewer
             document.getElementById('eagleHudPeriod').textContent = '#' + String(p.period).slice(-4);
