@@ -533,21 +533,30 @@
 
         .matrix-grid {
             display: grid;
-            grid-template-columns: repeat(6, 1fr);
-            gap: 5px;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 6px;
+        }
+
+        @media (min-width: 600px) {
+            .matrix-grid {
+                grid-template-columns: repeat(3, 1fr);
+            }
         }
 
         .matrix-pill {
-            padding: 5px 2px;
+            padding: 6px 4px;
             border-radius: 6px;
             font-family: var(--mono);
-            font-size: 9px;
-            font-weight: 800;
+            font-size: 10px;
+            font-weight: 700;
             text-align: center;
             background: rgba(255, 255, 255, 0.04);
             border: 1px solid var(--ln);
             color: var(--tx);
             transition: all 0.2s ease;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
         }
 
         .matrix-pill.big {
@@ -560,10 +569,6 @@
             color: var(--a2);
             border-color: rgba(0, 229, 255, 0.35);
             background: rgba(0, 229, 255, 0.08);
-        }
-
-        .matrix-pill.span2 {
-            grid-column: span 2;
         }
 
         /* Quick Action Bar */
@@ -853,7 +858,7 @@
                 <div class="brand-icon">⚡</div>
                 <div>
                     <div class="brand-title">JASHVIP <span class="vip-chip">ULTIMATE</span></div>
-                    <div class="brand-sub">Master Multi-Model Ensemble</div>
+                    <div class="brand-sub">WINGO 14-ENGINE SUITE</div>
                 </div>
             </div>
             <div class="header-actions">
@@ -918,27 +923,27 @@
                 </div>
             </div>
 
-            <!-- Multi-Model Consensus Matrix (Titan + Radhe + Suresh + TGX + Markov + Nexa + Pain) -->
+            <!-- 14 WinGo Engines Multi-Model Consensus Matrix -->
             <div class="models-matrix">
                 <div class="matrix-head">
-                    <span>⚡ MULTI-MODEL CONSENSUS</span>
+                    <span>⚡ 14-ENGINE QUANTUM CONSENSUS</span>
                     <span class="matrix-status">SYNCHRONIZED</span>
                 </div>
-                <div class="matrix-grid">
-                    <div class="matrix-pill" id="mPillL1">L1: --</div>
-                    <div class="matrix-pill" id="mPillL2">L2: --</div>
-                    <div class="matrix-pill" id="mPillL3">L3: --</div>
-                    <div class="matrix-pill" id="mPillL4">L4: --</div>
-                    <div class="matrix-pill" id="mPillL5">L5: --</div>
-                    <div class="matrix-pill" id="mPillL6">L6: --</div>
-                    <div class="matrix-pill span2" id="mPillTitan">TITAN: --</div>
-                    <div class="matrix-pill span2" id="mPillRadhe">RADHE: --</div>
-                    <div class="matrix-pill span2" id="mPillSuresh">SURESH: --</div>
-                    <div class="matrix-pill span2" id="mPillMarkov">MARKOV: --</div>
-                    <div class="matrix-pill span2" id="mPillPain">PAIN: --</div>
-                    <div class="matrix-pill span2" id="mPillNexa">NEXA: 15R</div>
-                    <div class="matrix-pill span2" id="mPillAutocorr">AUTOCORR: --</div>
-                    <div class="matrix-pill span2" id="mPillTsx">TSX: --</div>
+                <div class="matrix-grid" id="matrixGrid">
+                    <div class="matrix-pill">follow-last: --</div>
+                    <div class="matrix-pill">flip-last: --</div>
+                    <div class="matrix-pill">majority-5: --</div>
+                    <div class="matrix-pill">minority-5: --</div>
+                    <div class="matrix-pill">majority-9: --</div>
+                    <div class="matrix-pill">least-freq-20: --</div>
+                    <div class="matrix-pill">2-gram: --</div>
+                    <div class="matrix-pill">3-gram (PAT#072): --</div>
+                    <div class="matrix-pill">5-gram: --</div>
+                    <div class="matrix-pill">7-gram (PAT#113): --</div>
+                    <div class="matrix-pill">markov-1: --</div>
+                    <div class="matrix-pill">markov-2: --</div>
+                    <div class="matrix-pill">chop-detector: --</div>
+                    <div class="matrix-pill">streak-breaker: --</div>
                 </div>
             </div>
         </main>
@@ -993,7 +998,7 @@
         </section>
 
         <footer>
-            ULTIMATE ENSEMBLE ENGINE • VORTEX NOVA x GHOST x DRAGO x REAL OM • <span>JASHVIP</span>
+            WINGO 14-ENGINE SUITE • STANDALONE STRATEGY PACK • <span>JASHVIP</span>
         </footer>
 
     </div>
@@ -1066,483 +1071,151 @@
             return runs;
         }
 
-        /* ---------------------------------------------------------
-           1. APEX TITAN V100 CADENCE ENGINE (TRUE CHRONOLOGICAL)
-           --------------------------------------------------------- */
-        function apexTitanEngine(sizes, lossStreak) {
-            const chron = sizes.slice().reverse(); // Chronological: [oldest ... newest]
-            const runs = getRuns(chron);
-            const cRun = runs[runs.length - 1]; // Current active run
-            const cSide = cRun ? cRun.size : sizes[0];
-            const cLen = cRun ? cRun.len : 1;
-            const pRun = runs.length >= 2 ? runs[runs.length - 2] : { size: opp(cSide), len: 0 };
-            const lastS = chron[chron.length - 1]; // Current newest draw
+        // ================= WINGO BIG/SMALL ENGINES + STRATEGY PACK =================
+        const BIG = 1, SMALL = 0;
 
-            let alt = 0;
-            for (let i = runs.length - 1; i >= 0; i--) {
-                if (runs[i].len === 1) alt++;
-                else break;
-            }
+        const toSeq = (input) => input.map(x =>
+          typeof x === 'number' ? (x >= 5 ? BIG : SMALL) : (x.size ? (x.size === 'BIG' ? BIG : SMALL) : (x.number >= 5 ? BIG : SMALL))
+        );
+        const last = (h) => h[h.length - 1];
+        const flip = (v) => v === BIG ? SMALL : BIG;
+        const majority = (h, k) => { const w = h.slice(-k); const b = w.reduce((a,v)=>a+v,0); return b === w.length-b ? last(h) : (b > w.length-b ? BIG : SMALL); };
+        const streakLen = (h) => { const s = last(h); let n=1; for(let i=h.length-2;i>=0&&h[i]===s;i--) n++; return [s,n]; };
+        const isChop = (h) => { const t=h.slice(-4); return t.length===4 && t.every((v,i)=> i===0 || v!==t[i-1]); };
 
-            if (lossStreak >= 2) {
-                if (cLen >= 3) return { vote: cSide, reg: '🛑 L3 DRAGON LOCK' };
-                if (cLen === 2 && pRun.len === 2) return { vote: opp(cSide), reg: '🛑 L3 2-2 CUT' };
-                if (alt >= 2) return { vote: opp(lastS), reg: '🛑 L3 CHOP FLIP' };
-                if (cLen === 1) return { vote: opp(cSide), reg: '🛑 L3 SINGLE CUT' };
-                return { vote: cSide, reg: '🛑 L3 DOUBLET' };
-            } else if (lossStreak === 1) {
-                if (cLen >= 3) return { vote: cSide, reg: '🛡️ L2 DRAGON RIDE' };
-                if (cLen === 2 && pRun.len === 2) return { vote: opp(cSide), reg: '🛡️ L2 2-2 CUT' };
-                if (alt >= 2) return { vote: opp(lastS), reg: '🛡️ L2 CHOP FLIP' };
-                if (cLen === 1) return { vote: opp(cSide), reg: '🛡️ L2 SINGLE CUT' };
-                return { vote: cSide, reg: '🛡️ L2 DOUBLET' };
-            } else {
-                if (cLen >= 3) return { vote: cSide, reg: '🌊 L1 DRAGON RIDE' };
-                if (cLen === 2 && pRun.len === 2) return { vote: opp(cSide), reg: '🌊 L1 2-2 CUT' };
-                if (cLen === 2) return { vote: cSide, reg: '🌊 L1 DOUBLET RIDE' };
-                if (alt >= 2) return { vote: opp(lastS), reg: '⚡ L1 CHOP OSC' };
-                if (cLen === 1) return { vote: opp(cSide), reg: '🌊 L1 SINGLE CUT' };
-                return { vote: cSide, reg: '🌊 L1 MOMENTUM' };
-            }
+        function ngram(h, k, smooth=0.5) {
+          if (h.length < k+1) return last(h);
+          const key = h.slice(-k).join('');
+          const table = Object.create(null);
+          for (let i=k; i<h.length; i++) {
+            const ctx = h.slice(i-k,i).join(''); if (!table[ctx]) table[ctx]=[0,0]; table[ctx][h[i]]++;
+          }
+          const c = table[key]; if (!c) return majority(h, Math.min(9, h.length));
+          return (c[BIG]+smooth) >= (c[SMALL]+smooth) ? BIG : SMALL;
+        }
+        function markov(h, order) {
+          if (h.length < order+1) return last(h);
+          const key = h.slice(-order).join('');
+          const table = Object.create(null);
+          for (let i=order; i<h.length; i++) {
+            const ctx = h.slice(i-order,i).join(''); if (!table[ctx]) table[ctx]=[0,0]; table[ctx][h[i]]++;
+          }
+          const c = table[key]; if (!c) return last(h);
+          return (c[BIG]+1) >= (c[SMALL]+1) ? BIG : SMALL;
         }
 
-        /* ---------------------------------------------------------
-           2. RADHE HACK 2-3 LEVEL FIX (WEIGHTED RECENCY & 4-FLIP)
-           --------------------------------------------------------- */
-        function radheEngine(list) {
-            let sizes = list.slice(0, 12).map(item => getSize(item.number));
-            let consecutiveCount = 1;
-            for (let i = 1; i < sizes.length; i++) {
-                if (sizes[i] === sizes[0]) consecutiveCount++; else break;
-            }
-            if (consecutiveCount >= 4) return sizes[0]; 
-            let isAlternating = true;
-            for (let i = 0; i < 4; i++) {
-                if (sizes[i] === sizes[i + 1]) { isAlternating = false; break; }
-            }
-            if (isAlternating) return sizes[0] === 'BIG' ? 'SMALL' : 'BIG';
-            let weightSum = 0;
-            for (let i = 0; i < Math.min(list.length, 6); i++) {
-                let num = parseInt(list[i].number, 10);
-                let pWeight = (6 - i) * 3;
-                weightSum += (num >= 5) ? pWeight : -pWeight;
-            }
-            return weightSum >= 0 ? 'BIG' : 'SMALL';
-        }
-
-        /* ---------------------------------------------------------
-           3. SURESH VIP SUPREME V15 (ANTI-STREAK 10-ROUND RECENCY)
-           --------------------------------------------------------- */
-        function sureshEngine(list) {
-            let bigs = 0, smalls = 0;
-            for (let i = 0; i < Math.min(10, list.length); i++) {
-                const num = parseInt(list[i].number, 10);
-                const weight = (10 - i);
-                if (num >= 5) bigs += weight; else smalls += weight;
-            }
-            const last3 = list.slice(0, 3).map(x => getSize(x.number));
-            if (last3[0] === last3[1] && last3[1] === last3[2]) {
-                return last3[0];
-            }
-            return bigs >= smalls ? 'BIG' : 'SMALL';
-        }
-
-        /* ---------------------------------------------------------
-           4. QUANTUM MARKOV 2-GRAM (TRUE FORWARD TIME PREDICTOR)
-           --------------------------------------------------------- */
-        function markovEngine(sizes) {
-            if (sizes.length < 5) return sizes[0];
-            const chron = sizes.slice().reverse(); // Chronological: [oldest ... newest]
-            const n = chron.length;
-            const s1 = chron[n - 2];
-            const s0 = chron[n - 1];
-            let nextB = 0, nextS = 0;
-            for (let i = 0; i < n - 2; i++) {
-                if (chron[i] === s1 && chron[i + 1] === s0) {
-                    if (chron[i + 2] === 'BIG') nextB++;
-                    else if (chron[i + 2] === 'SMALL') nextS++;
-                }
-            }
-            if (nextB > nextS) return 'BIG';
-            if (nextS > nextB) return 'SMALL';
-            return s0;
-        }
-
-        /* ---------------------------------------------------------
-           5. TGX 6-LOGIC ENGINE LAYER
-           --------------------------------------------------------- */
-        function tgxLogic1(nums, sizes) {
-            const n1 = nums[0], n2 = nums[1] || nums[0];
-            const n9 = nums[8] || nums[nums.length - 1], n10 = nums[9] || nums[nums.length - 1];
-            let total = Math.abs((n1 - n2) + (n9 - n10)) % 10;
-            let bigs = 0;
-            for (let i = 0; i < Math.min(5, sizes.length); i++) if (sizes[i] === 'BIG') bigs++;
-            if (bigs >= 4) return total >= 4 ? 'BIG' : 'SMALL';
-            if (bigs <= 1) return total >= 6 ? 'BIG' : 'SMALL';
-            return total >= 5 ? 'BIG' : 'SMALL';
-        }
-
-        function tgxLogic2(nums) {
-            const w = [3, 2, 1, 1, 1];
-            let sum = 0;
-            for (let i = 0; i < Math.min(5, nums.length); i++) sum += nums[i] * w[i];
-            sum += nums[0] * 2;
-            return (sum % 10) >= 5 ? 'BIG' : 'SMALL';
-        }
-
-        function tgxLogic3(nums, sizes) {
-            let vol = 0;
-            for (let i = 0; i < Math.min(5, nums.length - 1); i++) vol += Math.abs(nums[i] - nums[i + 1]);
-            vol = vol / 5;
-            let streak = 1;
-            for (let i = 1; i < Math.min(5, sizes.length); i++) if (sizes[i] === sizes[0]) streak++; else break;
-            let streakScore = streak >= 3 ? -25 : (streak === 2 ? -15 : (vol > 3 ? 10 : 5));
-            let bigCnt = sizes.slice(0, 8).filter(x => x === 'BIG').length;
-            let imbalance = ((bigCnt - 4) / 8) * 100;
-            let pattern = (sizes[0] === sizes[1] && sizes[1] === sizes[2]) ? -35 : (sizes[0] === sizes[1] ? -20 : 25);
-            let total = (streakScore * 0.3) + (imbalance * 0.4) + (pattern * 0.3);
-            return total >= 0 ? 'BIG' : 'SMALL';
-        }
-
-        function tgxLogic4(sizes) {
-            let streak = 1;
-            for (let i = 1; i < sizes.length; i++) if (sizes[i] === sizes[0]) streak++; else break;
-            if (streak >= 2) return sizes[0]; // Ride streak!
-            let changes = 0;
-            for (let i = 0; i < Math.min(5, sizes.length - 1); i++) if (sizes[i] !== sizes[i + 1]) changes++;
-            if (changes >= 3) return sizes[0] === 'BIG' ? 'SMALL' : 'BIG';
-            return sizes[0];
-        }
-
-        function tgxLogic5(nums) {
-            let ev = 0;
-            for (let i = 0; i < Math.min(6, nums.length); i++) if (nums[i] % 2 === 0) ev++;
-            return ev >= 3 ? 'BIG' : 'SMALL';
-        }
-
-        function tgxLogic6(sizes) {
-            if (sizes.length < 2) return sizes[0];
-            return sizes[0] === sizes[1] ? (sizes[0] === 'BIG' ? 'SMALL' : 'BIG') : sizes[0];
-        }
-
-        /* ---------------------------------------------------------
-           TSX MULTI-ORDER GEOMETRIC PATTERN ENGINE (FROM TSX CRACK MODZ)
-           --------------------------------------------------------- */
-        function tsxGeometricPattern(sizes) {
-            if (sizes.length < 3) return null;
-            const chron = sizes.slice(0, 8).reverse();
-            const n = chron.length;
-            if (n >= 4) {
-                const last4 = chron.slice(-4);
-                if (last4[0] === 'BIG' && last4[1] === 'BIG' && last4[2] === 'SMALL' && last4[3] === 'SMALL') return { pred: 'BIG', name: '2B+2S CYCLE' };
-                if (last4[0] === 'SMALL' && last4[1] === 'SMALL' && last4[2] === 'BIG' && last4[3] === 'BIG') return { pred: 'SMALL', name: '2S+2B CYCLE' };
-            }
-            if (n >= 3) {
-                const last3 = chron.slice(-3);
-                if (last3[0] === 'BIG' && last3[1] === 'BIG' && last3[2] === 'SMALL') return { pred: 'SMALL', name: '2B+2S FORMING' };
-                if (last3[0] === 'SMALL' && last3[1] === 'SMALL' && last3[2] === 'BIG') return { pred: 'BIG', name: '2S+2B FORMING' };
-                if (last3[0] === 'BIG' && last3[1] === 'SMALL' && last3[2] === 'SMALL') return { pred: 'BIG', name: '1B+2S COMPLETE' };
-                if (last3[0] === 'SMALL' && last3[1] === 'BIG' && last3[2] === 'BIG') return { pred: 'SMALL', name: '1S+2B COMPLETE' };
-            }
-            return null;
-        }
-
-        const VORTEX_SIGS = [
-            {n:"Triple Big Push",   s:"BBB",   x:"S", c:71, g:"STREAK"},
-            {n:"Triple Small Push", s:"SSS",   x:"B", c:71, g:"STREAK"},
-            {n:"Mirror Chain BSBSB",s:"BSBSB", x:"S", c:87, g:"MIRROR"},
-            {n:"Mirror Chain SBSBS",s:"SBSBS", x:"B", c:87, g:"MIRROR"},
-            {n:"Zigzag BSBS",       s:"BSBS",  x:"B", c:78, g:"MIRROR"},
-            {n:"Zigzag SBSB",       s:"SBSB",  x:"S", c:78, g:"MIRROR"},
-            {n:"Double Trend BBSS", s:"BBSS",  x:"B", c:76, g:"DOUBLE"},
-            {n:"Double Trend SSBB", s:"SSBB",  x:"S", c:76, g:"DOUBLE"},
-            {n:"Double Cycle BBSSB",s:"BBSSB", x:"B", c:80, g:"DOUBLE"},
-            {n:"Double Cycle SSBBS",s:"SSBBS", x:"S", c:80, g:"DOUBLE"},
-            {n:"Pair Open B",       s:"SBB",   x:"S", c:62, g:"DOUBLE"},
-            {n:"Pair Open S",       s:"BSS",   x:"B", c:62, g:"DOUBLE"},
-            {n:"Three in One B",    s:"BBBSB", x:"B", c:79, g:"GROUP"},
-            {n:"Three in One S",    s:"SSSBS", x:"S", c:79, g:"GROUP"},
-            {n:"Two in One B",      s:"BBSBB", x:"S", c:75, g:"GROUP"},
-            {n:"Two in One S",      s:"SSBSS", x:"B", c:75, g:"GROUP"},
-            {n:"Three in Two B",    s:"BBBSS", x:"B", c:77, g:"GROUP"},
-            {n:"Three in Two S",    s:"SSSBB", x:"S", c:77, g:"GROUP"},
-            {n:"Big Wall Break",    s:"BBBBS", x:"S", c:74, g:"BREAK"},
-            {n:"Small Wall Break",  s:"SSSSB", x:"B", c:74, g:"BREAK"},
-            {n:"Trap Reversal B",   s:"SBBBS", x:"B", c:72, g:"BREAK"},
-            {n:"Trap Reversal S",   s:"BSSSB", x:"S", c:72, g:"BREAK"},
-            {n:"Snap Back B",       s:"BSSB",  x:"S", c:68, g:"BREAK"},
-            {n:"Snap Back S",       s:"SBBS",  x:"B", c:68, g:"BREAK"},
-            {n:"Sandwich B-S-B",    s:"BBSBS", x:"B", c:73, g:"TRAP"},
-            {n:"Sandwich S-B-S",    s:"SSBSB", x:"S", c:73, g:"TRAP"},
-            {n:"Ladder Up",         s:"SSBBB", x:"S", c:70, g:"TRAP"},
-            {n:"Ladder Down",       s:"BBSSS", x:"B", c:70, g:"TRAP"},
-            {n:"Single Alternate",  s:"BSB",   x:"S", c:64, g:"MIRROR"},
-            {n:"Single Alternate R",s:"SBS",   x:"B", c:64, g:"MIRROR"}
+        const engines = [
+          { name: "follow-last",       family: "streak",      min: 1,  fn: h => last(h) },
+          { name: "flip-last",         family: "anti-streak", min: 1,  fn: h => flip(last(h)) },
+          { name: "majority-5",        family: "frequency",   min: 5,  fn: h => majority(h,5) },
+          { name: "minority-5",        family: "contrarian",  min: 5,  fn: h => flip(majority(h,5)) },
+          { name: "majority-9",        family: "frequency",   min: 9,  fn: h => majority(h,9) },
+          { name: "least-freq-20",     family: "fallacy",     min: 20, fn: h => { const w=h.slice(-20),b=w.reduce((a,v)=>a+v,0); return b>=10?SMALL:BIG; } },
+          { name: "2-gram",            family: "ngram",       min: 4,  fn: h => ngram(h,2) },
+          { name: "3-gram (PAT#072)",  family: "ngram",       min: 6,  fn: h => ngram(h,3) },
+          { name: "5-gram",            family: "ngram",       min: 10, fn: h => ngram(h,5) },
+          { name: "7-gram (PAT#113)",  family: "ngram",       min: 12, fn: h => ngram(h,7) },
+          { name: "markov-1",          family: "markov",      min: 3,  fn: h => markov(h,1) },
+          { name: "markov-2",          family: "markov",      min: 4,  fn: h => markov(h,2) },
+          { name: "chop-detector",     family: "pattern",     min: 6,  fn: h => isChop(h) ? last(h) : majority(h,6) },
+          { name: "streak-breaker",    family: "pattern",     min: 4,  fn: h => { const [s,n]=streakLen(h); return n>=3 ? flip(s) : last(h); } },
         ];
 
-        function scanVortexSignatures(sizes) {
-            const win = sizes.slice(0, 5).map(s => s[0]).reverse().join("");
-            for (const p of VORTEX_SIGS) {
-                if (win.endsWith(p.s)) {
-                    return { name: p.n, pred: p.x === "B" ? "BIG" : "SMALL", score: p.c, group: p.g };
-                }
-            }
-            return null;
+        function predict(name, history) {
+          const h = toSeq(history);
+          const e = engines.find(x => x.name === name || x.name.includes(name));
+          if (!e) throw new Error("unknown engine: "+name);
+          if (h.length < e.min) return null;
+          return e.fn(h);
         }
 
-        /* ---------------------------------------------------------
-           ULTIMATE MASTER MULTI-MODEL ENSEMBLE ENGINE
-           --------------------------------------------------------- */
+        function predictAll(history) {
+          const h = toSeq(history);
+          const byEngine = {};
+          let big=0, small=0;
+          for (const e of engines) {
+            if (h.length < e.min) { byEngine[e.name] = null; continue; }
+            const v = e.fn(h); byEngine[e.name] = v;
+            v === BIG ? big++ : small++;
+          }
+          return { votes: { BIG: big, SMALL: small, total: big+small }, byEngine };
+        }
+
+        function strategy(history, opts={}) {
+          const h = toSeq(history);
+          const weights = opts.weights || {};
+          const confirm = opts.confirm ?? 0;
+          const reasons = [];
+          const byEngine = {};
+          let big=0, small=0;
+
+          for (const e of engines) {
+            if (h.length < e.min) continue;
+            const v = e.fn(h); const w = (weights[e.name] || 1);
+            byEngine[e.name] = { signal: v, weight: w };
+            v === BIG ? big += w : small += w;
+          }
+          const total = big + small;
+          const margin = Math.abs(big - small);
+          const signal = margin > confirm ? (big > small ? BIG : SMALL) : null;
+          const confidence = total ? Math.max(big, small) / total : 0;
+
+          if (opts.skipChop && isChop(h)) reasons.push("chop-detected");
+          if (margin <= confirm) reasons.push("no-margin");
+          if (h.length < 12) reasons.push("low-history");
+
+          return { signal, signalLabel: signal===null ? "SKIP" : (signal===BIG?"BIG":"SMALL"),
+                   votes: {BIG:big, SMALL:small, total}, margin, confidence, reasons, byEngine };
+        }
+
+        function label(v){ return v===null||v===undefined ? "SKIP" : (v===BIG?"BIG":"SMALL"); }
+
+        if (typeof window !== 'undefined') {
+            window.WingoEngines = { BIG, SMALL, engines, toSeq, predict, predictAll, strategy, label };
+        }
+
         function calculateCombinedPrediction(list) {
             if (!list || list.length < 3) return null;
 
-            const sizes = list.slice(0, 15).map(item => getSize(item.number));
-            const nums = list.slice(0, 15).map(item => parseInt(item.number, 10));
+            // Chronological order: [oldest ... newest]
+            const chron = list.slice(0, 30).reverse();
 
-            // Streaks & Alternation
-            let alt = 1;
-            for (let i = 0; i < sizes.length - 1; i++) {
-                if (sizes[i] !== sizes[i + 1]) alt++;
-                else break;
+            // 14-Engine Strategy Execution
+            const stratWeights = {
+                "3-gram (PAT#072)": 2.5,
+                "7-gram (PAT#113)": 2.5,
+                "chop-detector": 2.0,
+                "streak-breaker": 2.0,
+                "markov-2": 2.0,
+                "majority-5": 1.5,
+                "2-gram": 1.5
+            };
+
+            const stratRes = strategy(chron, { weights: stratWeights, confirm: 0 });
+            let prediction = stratRes.signalLabel;
+            if (!prediction || prediction === 'SKIP') {
+                prediction = stratRes.votes.BIG >= stratRes.votes.SMALL ? 'BIG' : 'SMALL';
             }
 
-            let streak = 1;
-            for (let i = 0; i < sizes.length - 1; i++) {
-                if (sizes[i] === sizes[i + 1]) streak++;
-                else break;
-            }
-
-            const votes = { BIG: 0, SMALL: 0 };
-
-            // Layer 1: Apex Titan Cadence Engine (Jash Autobet)
-            const titan = apexTitanEngine(sizes, Math.max(0, currentLevel - 1));
-            votes[titan.vote] += 3.0;
-
-            // Layer 2: Radhe Hack 2-3 Level Fix
-            const radhe = radheEngine(list);
-            votes[radhe] += 2.0;
-
-            // Layer 3: Suresh VIP Supreme V15
-            const suresh = sureshEngine(list);
-            votes[suresh] += 1.8;
-
-            // Layer 4: Quantum Markov 2-Gram
-            const markov = markovEngine(sizes);
-            votes[markov] += 1.6;
-
-            // Layer 5: TGX 6-Logic Ensemble
-            const l1 = tgxLogic1(nums, sizes); votes[l1] += 1.0;
-            const l2 = tgxLogic2(nums);        votes[l2] += 1.0;
-            const l3 = tgxLogic3(nums, sizes); votes[l3] += 1.0;
-            const l4 = tgxLogic4(sizes);       votes[l4] += 1.0;
-            const l5 = tgxLogic5(nums);        votes[l5] += 0.8;
-            const l6 = tgxLogic6(sizes);       votes[l6] += 1.0;
-
-            // Layer 6: The Paid Pro 3-Round Window
-            const painPro = sizes.slice(0, 3).filter(x => x === 'BIG').length > 1 ? 'BIG' : 'SMALL';
-            votes[painPro] += 1.0;
-
-            // Layer 7: Nexa Pro 15-Round Skew Reversion (only in non-streak L1)
-            const big15 = sizes.slice(0, 15).filter(x => x === 'BIG').length;
-            let nexaVote = 'BALANCED';
-            if (streak < 2 && currentLevel === 1) {
-                if (big15 >= 10) {
-                    votes.SMALL += 1.6;
-                    nexaVote = 'REV-S';
-                } else if (big15 <= 5) {
-                    votes.BIG += 1.6;
-                    nexaVote = 'REV-B';
+            const sideCode = prediction === 'BIG' ? BIG : SMALL;
+            let topEngine = '14-ENGINE CONSENSUS';
+            let maxW = 0;
+            for (const [eName, info] of Object.entries(stratRes.byEngine)) {
+                if (info && info.signal === sideCode && info.weight > maxW) {
+                    maxW = info.weight;
+                    topEngine = eName.toUpperCase();
                 }
             }
 
-            // Layer 8: Harmonic Lag Cycle (from ITACHI PRO s2Cycle)
-            const lags = [1, 2, 3];
-            let bestLag = 0, bestRate = 0;
-            for (const lag of lags) {
-                let match = 0, tot = 0;
-                for (let i = lag; i < sizes.length; i++) {
-                    tot++;
-                    if (sizes[i] === sizes[i - lag]) match++;
-                }
-                if (tot >= 4 && (match / tot) > bestRate) {
-                    bestRate = match / tot;
-                    bestLag = lag;
-                }
+            const rawConf = stratRes.confidence || 0.5;
+            const confidence = Math.min(99, Math.max(82, Math.round(rawConf * 100)));
+            const patternLabel = '⚡ ' + topEngine + ' (' + prediction + ')';
+            const patternType = prediction === 'BIG' ? 'dragon' : 'zigzag';
+
+            const models = {};
+            for (const [eName, info] of Object.entries(stratRes.byEngine)) {
+                models[eName] = info.signal === BIG ? 'BIG' : (info.signal === SMALL ? 'SMALL' : '--');
             }
-            if (bestRate >= 0.58 && bestLag > 0) {
-                votes[sizes[bestLag - 1]] += 3.5;
-            }
-
-            // Layer 9: Time-Series Autocorrelation (from REAL ON FIN.html)
-            const acN = Math.min(sizes.length, 16);
-            let r1 = 0;
-            if (acN >= 4) {
-                const s = sizes.slice(0, acN).map(x => x === 'BIG' ? 1 : 0);
-                const mean = s.reduce((a, b) => a + b, 0) / acN;
-                let num = 0, den = 0;
-                for (let i = 0; i < acN - 1; i++) num += (s[i] - mean) * (s[i + 1] - mean);
-                for (let i = 0; i < acN; i++) den += (s[i] - mean) ** 2;
-                if (den > 0) r1 = num / den;
-            }
-            if (r1 < -0.15) {
-                votes[opp(sizes[0])] += 3.5; // Anti-persistent alternating chop detected
-            } else if (r1 > 0.20) {
-                votes[sizes[0]] += 3.5; // Persistent streak momentum detected
-            }
-
-            // Layer 10: Multi-Order Geometric Recognition (from TSX CRACK MODZ)
-            const tsx = tsxGeometricPattern(sizes);
-            if (tsx) {
-                votes[tsx.pred] += 4.2;
-            }
-
-            // Layer 11: N-Gram Context Memory (from cracked bt tgx.html)
-            for (const len of [4, 3, 2]) {
-                if (sizes.length > len + 2) {
-                    const key = sizes.slice(0, len).join(',');
-                    let b = 0, s = 0;
-                    for (let i = 1; i < sizes.length - len; i++) {
-                        if (sizes.slice(i, i + len).join(',') === key) {
-                            if (sizes[i - 1] === 'BIG') b++; else s++;
-                        }
-                    }
-                    if (b + s >= 2 && b !== s) {
-                        votes[b > s ? 'BIG' : 'SMALL'] += 3.2;
-                        break;
-                    }
-                }
-            }
-
-            // Layer 12: Recency-Weighted Momentum (from Diwali Brutal Max / Real Bhai 4)
-            let rwB = 0, rwS = 0;
-            for (let i = 0; i < Math.min(10, sizes.length); i++) {
-                const w = Math.pow(0.82, i);
-                if (sizes[i] === 'BIG') rwB += w; else rwS += w;
-            }
-            votes[rwB >= rwS ? 'BIG' : 'SMALL'] += 2.2;
-
-            // Layer 13: Empirical Streak Extension vs Break (from GHOST V45)
-            let extend = 0, break_ = 0, run = 1;
-            for (let i = sizes.length - 2; i >= 0; i--) {
-                if (sizes[i] === sizes[i + 1]) run++; else run = 1;
-                if (run === streak && sizes[i] === sizes[0]) {
-                    if (i - 1 >= 0) { (sizes[i - 1] === sizes[0]) ? extend++ : break_++; }
-                }
-            }
-            const tot = extend + break_;
-            const empiricalCont = tot >= 2 ? (extend / tot) : 0.40;
-
-            // Layer 14: Dynamic Live Alternation Frequency (GHOST V45 x REAL OM)
-            const lookback = Math.min(8, sizes.length - 1);
-            let flips = 0;
-            for (let i = 0; i < lookback; i++) {
-                if (sizes[i] !== sizes[i + 1]) flips++;
-            }
-            const altRate = flips / lookback;
-
-            // Layer 15: Vortex Nova Exact Structural Signatures
-            const vSig = scanVortexSignatures(sizes);
-
-            // Layer 16: Dynamic Live Strategy Auditor (Virtual Win-Rate Tracking)
-            let chopWins = 0, chopTests = 0;
-            for (let k = 1; k <= Math.min(10, sizes.length - 2); k++) {
-                const pastSlice = sizes.slice(k);
-                const actualNext = sizes[k - 1];
-                let pStreak = 1;
-                for (let m = 1; m < pastSlice.length; m++) {
-                    if (pastSlice[m] === pastSlice[0]) pStreak++; else break;
-                }
-                if (pStreak === 1) {
-                    chopTests++;
-                    if (opp(pastSlice[0]) === actualNext) chopWins++;
-                }
-            }
-            const chopAccuracy = chopTests > 0 ? (chopWins / chopTests) : 0.50;
-
-            // Consecutive Alternation Streak (for clean Zigzag identification)
-            let altStreak = 0;
-            for (let j = 0; j < sizes.length - 1; j++) {
-                if (sizes[j] !== sizes[j + 1]) altStreak++;
-                else break;
-            }
-
-            // ── DYNAMIC REGIME & ANTI-WHIPSAW ENGINE ─────────────────
-            // 1. Dominant Market Bias in Last 10 Rounds:
-            const recent10 = sizes.slice(0, 10);
-            const big10 = recent10.filter(x => x === 'BIG').length;
-            const small10 = 10 - big10;
-            const dominantSide = big10 >= 6 ? 'BIG' : (small10 >= 6 ? 'SMALL' : null);
-
-            // 2. Strict Zigzag Qualification: Requires 3+ true alternating transitions AND negative autocorrelation!
-            const isActiveZigzag = (altStreak >= 3 && r1 < -0.10);
-
-            // 3. Strict 2-2 Formation Signature:
-            // Requires exact doublet (YYX) where previous piece was NOT a 3+ streak!
-            const isPair22Forming = (streak === 1 && sizes.length >= 4 && sizes[1] === sizes[2] && sizes[1] !== sizes[0] && sizes[3] !== sizes[1]);
-            const isPair22Complete = (streak === 2 && sizes.length >= 5 && sizes[2] === sizes[3] && sizes[2] !== sizes[0] && sizes[4] !== sizes[2]);
-
-            let patternType = 'consensus';
-            let patternLabel = titan.reg;
-
-            // 4. Balanced Macro Weighting (Gentle bias +1.5 - +2.0 without overriding the 14 quant engines)
-            if (isActiveZigzag) {
-                // Verified active zigzag (3+ consecutive switches with negative autocorrelation)
-                votes[opp(sizes[0])] += 1.8;
-                patternType = 'zigzag';
-                patternLabel = `⚡ ACTIVE ZIGZAG (${altStreak}X)`;
-            } else if (isPair22Complete) {
-                // Complete 2-2: YYXX complete -> break cleanly
-                votes[opp(sizes[0])] += 1.6;
-                patternType = 'cycle';
-                patternLabel = `🛡️ 2-2 PAIR BREAK (${sizes[0]}➔${opp(sizes[0])})`;
-            } else if (isPair22Forming) {
-                // Verified 2-2 forming: YYX -> X
-                votes[sizes[0]] += 1.6;
-                patternType = 'cycle';
-                patternLabel = `🛡️ 2-2 PAIR FORMING (${sizes[0]})`;
-            } else if (streak >= 3) {
-                // Long streak / dragon: Follow dominant side or ride momentum
-                if (streak >= 5 || dominantSide === sizes[0]) {
-                    votes[sizes[0]] += 2.0;
-                    patternType = 'dragon';
-                    patternLabel = `⚡ DRAGON MOMENTUM (${streak}X)`;
-                } else {
-                    votes[opp(sizes[0])] += 1.6;
-                    patternType = 'cycle';
-                    patternLabel = `🛡️ STREAK-${streak} CUT (${sizes[0]}➔${opp(sizes[0])})`;
-                }
-            } else if (streak === 2) {
-                // Doublet: If dominant market side supports this doublet, ride it
-                if (dominantSide === sizes[0]) {
-                    votes[sizes[0]] += 1.6;
-                    patternType = 'cycle';
-                    patternLabel = `⚡ DOUBLET RIDE (${sizes[0]})`;
-                } else {
-                    patternType = 'consensus';
-                    patternLabel = `⚡ CONSENSUS MATRIX`;
-                }
-            } else {
-                // Streak === 1: Follow dominant market trend if strong, otherwise let quant models decide naturally
-                if (dominantSide) {
-                    votes[dominantSide] += 1.6;
-                    patternType = 'consensus';
-                    patternLabel = `⚡ TREND FOLLOW (${dominantSide} ${Math.max(big10, small10) * 10}%)`;
-                } else {
-                    patternType = 'consensus';
-                    patternLabel = `⚡ CONSENSUS MATRIX`;
-                }
-            }
-
-            // 5. Anti-Whipsaw Consecutive Loss Stabilizer:
-            // When the table has whipsawed the engine on consecutive losses, LOCK onto the dominant market trend!
-            if (currentLevel >= 3 && dominantSide) {
-                votes[dominantSide] += 2.5;
-                patternLabel = `🛡️ ANTI-WHIPSAW TREND LOCK (${dominantSide})`;
-            }
-
-            const prediction = votes.BIG >= votes.SMALL ? 'BIG' : 'SMALL';
-            const totalScore = votes.BIG + votes.SMALL;
-            const confidence = isChopZone ? 68 : Math.min(98, Math.max(82, Math.round((Math.max(votes.BIG, votes.SMALL) / totalScore) * 100)));
 
             return {
                 prediction,
@@ -1552,17 +1225,7 @@
                 latestIssue: list[0].issueNumber,
                 latestNumber: parseInt(list[0].number, 10),
                 nextPeriod: (BigInt(list[0].issueNumber) + 1n).toString(),
-                models: {
-                    l1, l2, l3, l4, l5, l6,
-                    titan: titan.vote,
-                    radhe,
-                    suresh,
-                    markov,
-                    painPro,
-                    nexaVote,
-                    autocorr: r1 < -0.12 ? opp(sizes[0]) : (r1 > 0.18 ? sizes[0] : 'NEUTRAL'),
-                    tsx: tsx ? tsx.pred : 'SCAN'
-                }
+                models
             };
         }
 
@@ -1651,21 +1314,12 @@
             patternBanner.textContent = data.patternLabel;
             patternBanner.className = `pattern-banner ${data.patternType}`;
 
-            if (data.models) {
-                updateMatrixPill('mPillL1', `L1: ${data.models.l1}`, data.models.l1);
-                updateMatrixPill('mPillL2', `L2: ${data.models.l2}`, data.models.l2);
-                updateMatrixPill('mPillL3', `L3: ${data.models.l3}`, data.models.l3);
-                updateMatrixPill('mPillL4', `L4: ${data.models.l4}`, data.models.l4);
-                updateMatrixPill('mPillL5', `L5: ${data.models.l5}`, data.models.l5);
-                updateMatrixPill('mPillL6', `L6: ${data.models.l6}`, data.models.l6);
-                updateMatrixPill('mPillTitan', `TITAN: ${data.models.titan}`, data.models.titan);
-                updateMatrixPill('mPillRadhe', `RADHE: ${data.models.radhe}`, data.models.radhe);
-                updateMatrixPill('mPillSuresh', `SURESH: ${data.models.suresh}`, data.models.suresh);
-                updateMatrixPill('mPillMarkov', `MARKOV: ${data.models.markov}`, data.models.markov);
-                updateMatrixPill('mPillPain', `PAIN: ${data.models.painPro}`, data.models.painPro);
-                updateMatrixPill('mPillNexa', `NEXA: ${data.models.nexaVote}`, data.models.nexaVote.includes('B') ? 'BIG' : (data.models.nexaVote.includes('S') ? 'SMALL' : ''));
-                updateMatrixPill('mPillAutocorr', `AUTOCORR: ${data.models.autocorr}`, data.models.autocorr);
-                updateMatrixPill('mPillTsx', `TSX: ${data.models.tsx}`, data.models.tsx);
+            const matrixGrid = document.getElementById('matrixGrid');
+            if (matrixGrid && data.models) {
+                matrixGrid.innerHTML = Object.entries(data.models).map(([name, vote]) => {
+                    const cls = vote === 'BIG' ? 'big' : (vote === 'SMALL' ? 'small' : '');
+                    return `<div class="matrix-pill ${cls}">${name}: ${vote}</div>`;
+                }).join('');
             }
         }
 
