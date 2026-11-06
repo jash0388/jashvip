@@ -1003,7 +1003,6 @@
 
     </div>
 
-    <script src="/wingo-engines.js"></script>
     <script>
         /* =========================================================
            JASHVIP ULTIMATE MASTER ENSEMBLE ENGINE
@@ -1232,28 +1231,53 @@
         // Persistent History Cache across polls
         let persistentHistory = [];
 
-        // Fetch WinGo History
+        // Fetch WinGo History with CORS proxy fallback
         async function fetchHistory() {
-            try {
-                const url = API_ENDPOINTS[currentMode] + '?t=' + Date.now();
-                const res = await fetch(url);
-                if (!res.ok) throw new Error('Network error');
-                const json = await res.json();
-                const incoming = json.data.list;
-                if (incoming && incoming.length) {
-                    for (const item of incoming) {
-                        if (!persistentHistory.some(x => x.issueNumber === item.issueNumber)) {
-                            persistentHistory.push(item);
-                        }
+            const targetUrl = API_ENDPOINTS[currentMode] + '?pageNo=1&pageSize=50&t=' + Date.now();
+            const proxies = [
+                targetUrl,
+                'https://api.allorigins.win/raw?url=' + encodeURIComponent(targetUrl),
+                'https://corsproxy.io/?' + encodeURIComponent(targetUrl),
+                'https://api.codetabs.com/v1/proxy?quest=' + encodeURIComponent(targetUrl)
+            ];
+
+            let incoming = null;
+            for (const u of proxies) {
+                try {
+                    const ctrl = new AbortController();
+                    const timer = setTimeout(() => ctrl.abort(), 5000);
+                    const res = await fetch(u, { signal: ctrl.signal, cache: 'no-store' });
+                    clearTimeout(timer);
+                    if (!res.ok) continue;
+                    let json = await res.json();
+                    if (typeof json === 'string') {
+                        try { json = JSON.parse(json); } catch (e) {}
                     }
-                    persistentHistory.sort((a, b) => (BigInt(b.issueNumber) > BigInt(a.issueNumber) ? 1 : -1));
-                    if (persistentHistory.length > 100) persistentHistory = persistentHistory.slice(0, 100);
-                }
-                return persistentHistory.length >= 3 ? persistentHistory : incoming;
-            } catch (err) {
-                console.error('Fetch error:', err);
-                return persistentHistory.length >= 3 ? persistentHistory : null;
+                    const raw = (json && json.data && json.data.list) || (json && json.list);
+                    if (raw && raw.length) {
+                        incoming = raw;
+                        break;
+                    }
+                } catch (e) {}
             }
+
+            if (incoming && incoming.length) {
+                for (const item of incoming) {
+                    const iss = String(item.issueNumber || item.issue);
+                    if (!persistentHistory.some(x => String(x.issueNumber || x.issue) === iss)) {
+                        persistentHistory.push({
+                            issueNumber: iss,
+                            number: String(item.number),
+                            color: item.color || item.colour || ''
+                        });
+                    }
+                }
+                persistentHistory.sort((a, b) => (BigInt(b.issueNumber) > BigInt(a.issueNumber) ? 1 : -1));
+                if (persistentHistory.length > 100) persistentHistory = persistentHistory.slice(0, 100);
+                return persistentHistory;
+            }
+
+            return persistentHistory.length >= 3 ? persistentHistory : null;
         }
 
         // Main Engine Execution Loop
