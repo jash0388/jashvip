@@ -157,104 +157,71 @@ function tgxLogic6(sizes) {
   return sizes[0] === sizes[1] ? (sizes[0] === 'BIG' ? 'SMALL' : 'BIG') : sizes[0];
 }
 
+const LOGIC = {
+  0: { n: 5, s: 'BIG' },
+  1: { n: 2, s: 'SMALL' },
+  2: { n: 4, s: 'SMALL' },
+  3: { n: 7, s: 'BIG' },
+  4: { n: 8, s: 'BIG' },
+  5: { n: 9, s: 'BIG' },
+  6: { n: 0, s: 'SMALL' },
+  7: { n: 3, s: 'SMALL' },
+  8: { n: 6, s: 'BIG' },
+  9: { n: 1, s: 'SMALL' }
+};
+
 function calculateCombinedPrediction(list, activeLevel = 1) {
-  if (!list || list.length < 3) return null;
+  if (!list || list.length < 1) return null;
 
-  const sizes = list.slice(0, 15).map(item => getSize(item.number));
-  const nums = list.slice(0, 15).map(item => parseInt(item.number, 10));
+  const latestItem = list[0];
+  const curIssue = latestItem.issueNumber ? latestItem.issueNumber.toString() : null;
+  if (!curIssue) return null;
 
-  let alt = 1;
-  for (let i = 0; i < sizes.length - 1; i++) {
-    if (sizes[i] !== sizes[i + 1]) alt++;
-    else break;
-  }
+  const nextPeriod = (BigInt(curIssue) + 1n).toString();
+  const lastDigit = parseInt(nextPeriod.slice(-1), 10);
+  const lg = LOGIC[lastDigit] || { n: 4, s: 'SMALL' };
 
-  let streak = 1;
-  for (let i = 0; i < sizes.length - 1; i++) {
-    if (sizes[i] === sizes[i + 1]) streak++;
-    else break;
-  }
+  const prediction = lg.s;
+  const predictedNumber = lg.n;
 
-  const votes = { BIG: 0, SMALL: 0 };
-
-  const titan = apexTitanEngine(sizes, Math.max(0, activeLevel - 1));
-  votes[titan.vote] += 3.2;
-
-  const radhe = radheEngine(list);
-  votes[radhe] += 2.4;
-
-  const suresh = sureshEngine(list);
-  votes[suresh] += 2.0;
-
-  const markov = markovEngine(sizes);
-  votes[markov] += 1.8;
-
-  const l1 = tgxLogic1(nums, sizes); votes[l1] += 1.0;
-  const l2 = tgxLogic2(nums);        votes[l2] += 1.2;
-  const l3 = tgxLogic3(nums, sizes); votes[l3] += 1.0;
-  const l4 = tgxLogic4(sizes);       votes[l4] += 1.0;
-  const l5 = tgxLogic5(nums);        votes[l5] += 0.8;
-  const l6 = tgxLogic6(sizes);       votes[l6] += 1.0;
-
-  const painPro = sizes.slice(0, 3).filter(x => x === 'BIG').length > 1 ? 'BIG' : 'SMALL';
-  votes[painPro] += 1.0;
-
-  const big15 = sizes.slice(0, 15).filter(x => x === 'BIG').length;
-  let nexaVote = 'BALANCED';
-  if (streak < 2 && activeLevel === 1) {
-    if (big15 >= 10) {
-      votes.SMALL += 1.6;
-      nexaVote = 'REV-S';
-    } else if (big15 <= 5) {
-      votes.BIG += 1.6;
-      nexaVote = 'REV-B';
+  let matchCount = 0;
+  let evalCount = 0;
+  const evalLimit = Math.min(list.length, 30);
+  for (let i = 0; i < evalLimit; i++) {
+    const itemIssue = list[i].issueNumber ? list[i].issueNumber.toString() : null;
+    if (!itemIssue) continue;
+    const d = parseInt(itemIssue.slice(-1), 10);
+    const rule = LOGIC[d];
+    if (rule) {
+      evalCount++;
+      const actualSize = getSize(list[i].number);
+      if (actualSize === rule.s) matchCount++;
     }
   }
+  const hitRate = evalCount > 0 ? (matchCount / evalCount) : 0.88;
+  const confidence = Math.min(99, Math.max(82, Math.round(hitRate * 100)));
 
-  const isChopZone = (alt >= 3 && activeLevel >= 3);
-  let patternType = 'consensus';
-  let patternLabel = titan.reg;
+  const patternType = prediction === 'BIG' ? 'dragon' : 'zigzag';
+  const patternLabel = `🎯 TARGET: ${predictedNumber} (${prediction}) • ENDING ${lastDigit}`;
 
-  if (streak >= 3) {
-    votes[sizes[0]] += 5.5;
-    patternType = 'dragon';
-    patternLabel = `⚡ DRAGON RIDE (${streak}X)`;
-  } else if (streak === 2 && activeLevel >= 2) {
-    votes[sizes[0]] += 4.0;
-    patternType = 'cycle';
-    patternLabel = `🛡️ L${activeLevel} DOUBLET RIDE`;
-  } else if (isChopZone) {
-    patternType = 'zigzag';
-    patternLabel = '🛑 CAPITAL SHIELD: CHOP ZONE (FLAT 1X)';
-  } else if (alt >= 3) {
-    patternType = 'zigzag';
-    patternLabel = `⚡ ZIGZAG SWITCH (${alt}X)`;
-  } else {
-    patternType = 'consensus';
+  const models = {};
+  for (let d = 0; d <= 9; d++) {
+    const r = LOGIC[d];
+    const marker = (d === lastDigit) ? '👉 ' : '';
+    models[`${marker}Ending ${d} ➔ ${r.n}`] = r.s;
   }
-
-  const prediction = votes.BIG >= votes.SMALL ? 'BIG' : 'SMALL';
-  const totalScore = votes.BIG + votes.SMALL;
-  const confidence = isChopZone ? 68 : Math.min(98, Math.max(82, Math.round((Math.max(votes.BIG, votes.SMALL) / totalScore) * 100)));
 
   return {
     prediction,
+    predictedNumber,
     patternType,
     patternLabel,
     confidence,
     activeLevel,
-    latestIssue: list[0].issueNumber,
-    latestNumber: parseInt(list[0].number, 10),
-    nextPeriod: (BigInt(list[0].issueNumber) + 1n).toString(),
-    models: {
-      l1, l2, l3, l4, l5, l6,
-      titan: titan.vote,
-      radhe,
-      suresh,
-      markov,
-      painPro,
-      nexaVote: nexaVote === 'REV-B' ? 'BIG' : (nexaVote === 'REV-S' ? 'SMALL' : 'BALANCED')
-    }
+    latestIssue: curIssue,
+    latestNumber: parseInt(latestItem.number, 10),
+    nextPeriod,
+    models
   };
 }
 

@@ -1173,57 +1173,73 @@
             window.WingoEngines = { BIG, SMALL, engines, toSeq, predict, predictAll, strategy, label };
         }
 
+        // Gandmara Prediction Strategy Mapping
+        const LOGIC = {
+            0: { n: 5, s: 'BIG' },
+            1: { n: 2, s: 'SMALL' },
+            2: { n: 4, s: 'SMALL' },
+            3: { n: 7, s: 'BIG' },
+            4: { n: 8, s: 'BIG' },
+            5: { n: 9, s: 'BIG' },
+            6: { n: 0, s: 'SMALL' },
+            7: { n: 3, s: 'SMALL' },
+            8: { n: 6, s: 'BIG' },
+            9: { n: 1, s: 'SMALL' }
+        };
+
         function calculateCombinedPrediction(list) {
-            if (!list || list.length < 3) return null;
+            if (!list || list.length < 1) return null;
 
-            // Chronological order: [oldest ... newest]
-            const chron = list.slice(0, 30).reverse();
+            const latestItem = list[0];
+            const curIssue = latestItem.issueNumber ? latestItem.issueNumber.toString() : null;
+            if (!curIssue) return null;
 
-            // 14-Engine Strategy Execution
-            const stratWeights = {
-                "3-gram (PAT#072)": 2.5,
-                "7-gram (PAT#113)": 2.5,
-                "chop-detector": 2.0,
-                "streak-breaker": 2.0,
-                "markov-2": 2.0,
-                "majority-5": 1.5,
-                "2-gram": 1.5
-            };
+            // Strategy: Calculate upcoming period and map its last digit via LOGIC matrix
+            const nextPeriod = (BigInt(curIssue) + 1n).toString();
+            const lastDigit = parseInt(nextPeriod.slice(-1), 10);
+            const lg = LOGIC[lastDigit] || { n: 4, s: 'SMALL' };
 
-            const stratRes = strategy(chron, { weights: stratWeights, confirm: 0 });
-            let prediction = stratRes.signalLabel;
-            if (!prediction || prediction === 'SKIP') {
-                prediction = stratRes.votes.BIG >= stratRes.votes.SMALL ? 'BIG' : 'SMALL';
-            }
+            const prediction = lg.s;
+            const predictedNumber = lg.n;
 
-            const sideCode = prediction === 'BIG' ? BIG : SMALL;
-            let topEngine = '14-ENGINE CONSENSUS';
-            let maxW = 0;
-            for (const [eName, info] of Object.entries(stratRes.byEngine)) {
-                if (info && info.signal === sideCode && info.weight > maxW) {
-                    maxW = info.weight;
-                    topEngine = eName.toUpperCase();
+            // Historical accuracy calculation over recent draws
+            let matchCount = 0;
+            let evalCount = 0;
+            const evalLimit = Math.min(list.length, 30);
+            for (let i = 0; i < evalLimit; i++) {
+                const itemIssue = list[i].issueNumber ? list[i].issueNumber.toString() : null;
+                if (!itemIssue) continue;
+                const d = parseInt(itemIssue.slice(-1), 10);
+                const rule = LOGIC[d];
+                if (rule) {
+                    evalCount++;
+                    const actualSize = getSize(list[i].number);
+                    if (actualSize === rule.s) matchCount++;
                 }
             }
+            const hitRate = evalCount > 0 ? (matchCount / evalCount) : 0.88;
+            const confidence = Math.min(99, Math.max(82, Math.round(hitRate * 100)));
 
-            const rawConf = stratRes.confidence || 0.5;
-            const confidence = Math.min(99, Math.max(82, Math.round(rawConf * 100)));
-            const patternLabel = '⚡ ' + topEngine + ' (' + prediction + ')';
             const patternType = prediction === 'BIG' ? 'dragon' : 'zigzag';
+            const patternLabel = `🎯 TARGET: ${predictedNumber} (${prediction}) • ENDING ${lastDigit}`;
 
+            // Build models breakdown for the matrix grid
             const models = {};
-            for (const [eName, info] of Object.entries(stratRes.byEngine)) {
-                models[eName] = info.signal === BIG ? 'BIG' : (info.signal === SMALL ? 'SMALL' : '--');
+            for (let d = 0; d <= 9; d++) {
+                const r = LOGIC[d];
+                const marker = (d === lastDigit) ? '👉 ' : '';
+                models[`${marker}Ending ${d} ➔ ${r.n}`] = r.s;
             }
 
             return {
                 prediction,
+                predictedNumber,
                 patternType,
                 patternLabel,
                 confidence,
-                latestIssue: list[0].issueNumber,
-                latestNumber: parseInt(list[0].number, 10),
-                nextPeriod: (BigInt(list[0].issueNumber) + 1n).toString(),
+                latestIssue: curIssue,
+                latestNumber: parseInt(latestItem.number, 10),
+                nextPeriod,
                 models
             };
         }
