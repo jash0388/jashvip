@@ -1187,6 +1187,30 @@
             9: { n: 1, s: 'SMALL' }
         };
 
+        // Real-time Wingo Period Clock Math
+        function getUpcomingPeriod(latestDrawIssue) {
+            const is30s = (currentMode === '30S');
+            const dur = is30s ? 30 : 60;
+            const base = is30s ? 50001 : 10001;
+            const now = new Date();
+            const sec = now.getUTCSeconds();
+
+            const dayStr = now.getUTCFullYear() +
+                String(now.getUTCMonth() + 1).padStart(2, '0') +
+                String(now.getUTCDate()).padStart(2, '0');
+            const secOfDay = (now.getUTCHours() * 3600) + (now.getUTCMinutes() * 60) + sec;
+            const idx = base + Math.floor(secOfDay / dur);
+            let activePeriod = dayStr + '1000' + String(idx);
+
+            if (latestDrawIssue) {
+                const latestBig = BigInt(latestDrawIssue);
+                if (latestBig >= BigInt(activePeriod)) {
+                    activePeriod = (latestBig + 1n).toString();
+                }
+            }
+            return activePeriod;
+        }
+
         function calculateCombinedPrediction(list) {
             if (!list || list.length < 1) return null;
 
@@ -1195,7 +1219,7 @@
             if (!curIssue) return null;
 
             // Strategy: Calculate upcoming period and map its last digit via LOGIC matrix
-            const nextPeriod = (BigInt(curIssue) + 1n).toString();
+            const nextPeriod = getUpcomingPeriod(curIssue);
             const lastDigit = parseInt(nextPeriod.slice(-1), 10);
             const lg = LOGIC[lastDigit] || { n: 4, s: 'SMALL' };
 
@@ -1244,15 +1268,14 @@
             };
         }
 
-        // Persistent History Cache across polls
-        let persistentHistory = [];
+        // Persistent History Cache across polls separated by mode
+        let persistentHistory = { '1M': [], '30S': [] };
 
         // Fetch WinGo History with CORS proxy fallback
         async function fetchHistory() {
             const targetUrl = API_ENDPOINTS[currentMode] + '?pageNo=1&pageSize=50&t=' + Date.now();
             const proxies = [
                 targetUrl,
-                'https://api.allorigins.win/raw?url=' + encodeURIComponent(targetUrl),
                 'https://corsproxy.io/?' + encodeURIComponent(targetUrl),
                 'https://api.codetabs.com/v1/proxy?quest=' + encodeURIComponent(targetUrl)
             ];
@@ -1261,7 +1284,7 @@
             for (const u of proxies) {
                 try {
                     const ctrl = new AbortController();
-                    const timer = setTimeout(() => ctrl.abort(), 5000);
+                    const timer = setTimeout(() => ctrl.abort(), 4000);
                     const res = await fetch(u, { signal: ctrl.signal, cache: 'no-store' });
                     clearTimeout(timer);
                     if (!res.ok) continue;
@@ -1277,60 +1300,113 @@
                 } catch (e) {}
             }
 
+            const matchTag = (currentMode === '30S' ? '10005' : '10001');
+            let store = persistentHistory[currentMode] || [];
+
             if (incoming && incoming.length) {
                 for (const item of incoming) {
-                    const iss = String(item.issueNumber || item.issue);
-                    if (!persistentHistory.some(x => String(x.issueNumber || x.issue) === iss)) {
-                        persistentHistory.push({
+                    const iss = String(item.issueNumber || item.issue || '');
+                    if (!iss.includes(matchTag)) continue;
+                    if (!store.some(x => String(x.issueNumber || x.issue) === iss)) {
+                        store.push({
                             issueNumber: iss,
                             number: String(item.number),
                             color: item.color || item.colour || ''
                         });
                     }
                 }
-                persistentHistory.sort((a, b) => (BigInt(b.issueNumber) > BigInt(a.issueNumber) ? 1 : -1));
-                if (persistentHistory.length > 100) persistentHistory = persistentHistory.slice(0, 100);
-                return persistentHistory;
+                store.sort((a, b) => (BigInt(b.issueNumber) > BigInt(a.issueNumber) ? 1 : -1));
+                if (store.length > 100) store = store.slice(0, 100);
+                persistentHistory[currentMode] = store;
+                return store;
             }
 
-            return persistentHistory.length >= 3 ? persistentHistory : null;
+            return store.length >= 1 ? store : null;
+        }
+
+        // Backfill and synchronize past official draws with Gandmara prediction strategy
+        function syncHistoryAndStats(list) {
+            if (!list || !list.length) return;
+
+            let changed = false;
+            for (let i = 0; i < Math.min(list.length, 35); i++) {
+                const item = list[i];
+                const iss = String(item.issueNumber);
+                if (historyLogs.some(h => String(h.period) === iss)) continue;
+
+                const lastD = parseInt(iss.slice(-1), 10);
+                const rule = LOGIC[lastD] || { n: 4, s: 'SMALL' };
+                const actualNum = parseInt(item.number, 10);
+                const actualCategory = getSize(item.number);
+                const isWin = (rule.s === actualCategory);
+
+                historyLogs.push({
+                    period: iss,
+                    predicted: rule.s,
+                    predictedNumber: rule.n,
+                    actualNum,
+                    actualCategory,
+                    patternLabel: `🎯 TARGET: ${rule.n} (${rule.s}) • ENDING ${lastD}`,
+                    isWin
+                });
+                changed = true;
+            }
+
+            if (changed) {
+                historyLogs.sort((a, b) => (BigInt(b.period) > BigInt(a.period) ? 1 : -1));
+                if (historyLogs.length > 200) historyLogs = historyLogs.slice(0, 200);
+                saveHistoryToStorage();
+                renderHistoryTable();
+                updateStats();
+            }
         }
 
         // Main Engine Execution Loop
         async function runEngine() {
             const list = await fetchHistory();
-            if (!list || list.length < 3) return;
+            if (!list || list.length < 1) return;
 
             const top = list[0];
             const actualCategory = getSize(top.number);
             const actualNum = parseInt(top.number, 10);
 
-            // Check if a previous round resolved
-            if (lastResolvedIssue !== top.issueNumber) {
-                if (currentPrediction && currentPrediction.nextPeriod === top.issueNumber) {
-                    const isWin = (currentPrediction.prediction === actualCategory);
-                    
-                    recordOutcome({
-                        period: top.issueNumber,
-                        predicted: currentPrediction.prediction,
-                        actualNum,
-                        actualCategory,
-                        patternLabel: currentPrediction.patternLabel,
-                        isWin
-                    });
+            // Synchronize past official draws into history immediately
+            syncHistoryAndStats(list);
 
-                    flashToast(isWin, currentPrediction.prediction, actualCategory, actualNum);
-                    playChime(isWin);
-                }
+            // Check if a round resolved live
+            if (lastResolvedIssue && lastResolvedIssue !== top.issueNumber) {
+                const lastD = parseInt(top.issueNumber.slice(-1), 10);
+                const expectedRule = LOGIC[lastD] || { n: 4, s: 'SMALL' };
+                const predictedSide = (currentPrediction && currentPrediction.nextPeriod === top.issueNumber)
+                    ? currentPrediction.prediction
+                    : expectedRule.s;
+                const predictedNum = (currentPrediction && currentPrediction.nextPeriod === top.issueNumber)
+                    ? currentPrediction.predictedNumber
+                    : expectedRule.n;
 
-                lastResolvedIssue = top.issueNumber;
+                const isWin = (predictedSide === actualCategory);
 
-                // Compute new prediction
-                const result = calculateCombinedPrediction(list);
-                if (result) {
-                    currentPrediction = result;
-                    renderPrediction(result);
-                }
+                recordOutcome({
+                    period: top.issueNumber,
+                    predicted: predictedSide,
+                    predictedNumber: predictedNum,
+                    actualNum,
+                    actualCategory,
+                    patternLabel: `🎯 TARGET: ${predictedNum} (${predictedSide}) • ENDING ${lastD}`,
+                    isWin
+                });
+
+                flashToast(isWin, predictedSide, actualCategory, actualNum);
+                playChime(isWin);
+            }
+
+            lastResolvedIssue = top.issueNumber;
+
+            // Compute new prediction
+            const result = calculateCombinedPrediction(list);
+            if (result) {
+                currentPrediction = result;
+                renderPrediction(result);
             }
         }
 
@@ -1382,6 +1458,28 @@
             }
         }
 
+        // Storage & History Synchronization
+        function saveHistoryToStorage() {
+            try {
+                localStorage.setItem('JASH_HIST_' + currentMode, JSON.stringify(historyLogs.slice(0, 200)));
+            } catch (e) {}
+        }
+
+        function loadHistoryFromStorage() {
+            try {
+                const saved = localStorage.getItem('JASH_HIST_' + currentMode);
+                if (saved) {
+                    historyLogs = JSON.parse(saved);
+                    renderHistoryTable();
+                    updateStats();
+                } else {
+                    historyLogs = [];
+                }
+            } catch (e) {
+                historyLogs = [];
+            }
+        }
+
         // Record round to history (unlimited session storage)
         function recordOutcome(item) {
             if (item.isWin) {
@@ -1394,14 +1492,18 @@
             }
             updateLevelUI();
 
-            historyLogs.unshift(item);
-            renderHistoryTable();
-            updateStats();
+            if (!historyLogs.some(h => String(h.period) === String(item.period))) {
+                historyLogs.unshift(item);
+                if (historyLogs.length > 200) historyLogs = historyLogs.slice(0, 200);
+                saveHistoryToStorage();
+                renderHistoryTable();
+                updateStats();
+            }
         }
 
         function renderHistoryTable() {
             if (!historyLogs.length) {
-                historyList.innerHTML = '<div class="empty-history">No rounds recorded yet.</div>';
+                historyList.innerHTML = '<div class="empty-history">Connecting to live feed... Completed rounds will appear here.</div>';
                 return;
             }
 
@@ -1409,7 +1511,7 @@
                 <div class="history-row ${item.isWin ? 'win' : 'loss'}">
                     <div>
                         <div class="h-period">#${item.period.slice(-5)}</div>
-                        <div class="h-sub">${item.patternLabel.split(' ')[0]} ${item.patternLabel.split(' ')[1] || ''}</div>
+                        <div class="h-sub">TARGET ${item.predictedNumber !== undefined ? item.predictedNumber : ''} (${item.predicted})</div>
                     </div>
                     <div class="h-center">
                         <span class="h-call ${item.predicted.toLowerCase()}">${item.predicted}</span>
@@ -1439,6 +1541,7 @@
 
         function clearHistoryRecords() {
             historyLogs = [];
+            try { localStorage.removeItem('JASH_HIST_' + currentMode); } catch (e) {}
             currentLevel = 1;
             updateLevelUI();
             renderHistoryTable();
@@ -1491,8 +1594,9 @@
 
             predDisplay.textContent = 'ANALYZING...';
             predDisplay.className = 'pred-display loading';
-            patternBanner.textContent = 'SWITCHING ENGINE...';
+            patternBanner.textContent = 'SWITCHING TO ' + (mode === '30S' ? '30 SEC' : '1 MIN') + '...';
 
+            loadHistoryFromStorage();
             startTimer();
             runEngine();
         }
@@ -1586,6 +1690,7 @@
         } catch (e) {}
 
         // Boot
+        loadHistoryFromStorage();
         updateLevelUI();
         startTimer();
         runEngine();
