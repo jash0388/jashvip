@@ -1,0 +1,166 @@
+/* KALI AI 4.0 — additions for the live (wired) build.
+   Same palette, radii and type scale as styles.css; nothing here redesigns a
+   screen, it only gives the wired controls a place to sit. */
+
+.status-dot[data-state="online"]{background:#0e9a63;box-shadow:0 0 0 3px rgba(14,154,99,.16)}
+.status-dot[data-state="checking"]{background:#c98a12;box-shadow:0 0 0 3px rgba(201,138,18,.16)}
+.status-dot[data-state="offline"]{background:#d3464b}
+.mobile-status:has(.status-dot[data-state="online"]){border-color:#cfe8d8;background:#f1fbf4;color:#12684a}
+
+.entry-note[data-tone="ok"]{border-color:#cfe8d8;background:#f1fbf4;color:#146046}
+.entry-note[data-tone="warn"]{border-color:#f2d7d6;background:#fff4f2;color:#8d3a3c}
+.entry-note[data-tone="info"]{border-color:#dfe9e1;background:#f7faf8;color:#4d6557}
+
+.plans-notice[data-tone="ok"]{border-color:#cfe8d8;background:#f1fbf4;color:#146046}
+.plans-notice[data-tone="warn"]{border-color:#f2d7d6;background:#fff4f2;color:#8d3a3c}
+
+.plan-strip{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;margin-top:16px;padding:12px 14px;border:1px solid #dfece2;border-radius:14px;background:linear-gradient(110deg,#f2fbf5,#fff7f8);color:#2f5b41;font-size:10px;font-weight:900;letter-spacing:.5px}
+.strip-button{min-height:38px;padding:0 14px;border:1px solid #f0d7d6;border-radius:11px;background:#fff5f3;color:#98374a;font:700 11px Fredoka,Manrope,sans-serif;letter-spacing:.4px;transition:filter .2s,transform .2s}
+.strip-button:hover{filter:brightness(.98);transform:translateY(-1px)}
+.strip-button:disabled{opacity:.6}
+
+.prediction-actions{display:flex;gap:10px;margin-top:16px}
+.prediction-actions .entry-login{flex:1;border-color:#0a6f4a;background:linear-gradient(110deg,#087b4f,#065d3d);color:#fff;box-shadow:0 8px 18px rgba(5,100,57,.2);transition:transform .2s,filter .2s,box-shadow .2s}
+.prediction-actions .entry-login:hover:not(:disabled){transform:translateY(-2px);filter:brightness(1.07);box-shadow:0 11px 23px rgba(5,100,57,.27)}
+.prediction-actions .entry-login:disabled{opacity:.62}
+
+#prediction-value[data-call="BIG"]{color:#0b7d52}
+#prediction-value[data-call="SMALL"]{color:#bd2a44}
+.no-data-badge[data-state="live"]{border-color:#bfe6cf;background:#e9fbf0;color:#0d6b47}
+.no-data-badge[data-state="warn"]{border-color:#f2d7d6;background:#fff4f2;color:#98374a}
+
+.history-table td[data-call="BIG"]{color:#0b7d52;font-weight:900}
+.history-table td[data-call="SMALL"]{color:#bd2a44;font-weight:900}
+.history-table td[data-result="WIN"]{color:#0b7d52;font-weight:900;background:#e9fbf0;border-radius:8px}
+.history-table td[data-result="LOSS"]{color:#bd2a44;font-weight:900;background:#fff4f2;border-radius:8px}
+.history-table td[data-result="PENDING"]{color:#6b8073;font-weight:900}
+.history-empty{padding:18px;text-align:center;color:#6b8073;font-size:11px;font-weight:900;letter-spacing:.3px}
+
+.checkout-panel{display:grid;gap:10px;margin:14px 0 4px;padding:14px;border:1px solid #dfece2;border-radius:16px;background:linear-gradient(140deg,#f3fbf6,#fff);color:#2c5340}
+.checkout-panel strong{font:700 14px/1.3 Fredoka,Manrope,sans-serif;letter-spacing:.2px;color:#163a29}
+.checkout-panel small{color:#526e5d;font-size:10px;font-weight:900;letter-spacing:.3px}
+.checkout-panel label{display:grid;gap:7px;font-size:10px;font-weight:900;letter-spacing:.5px;color:#3d614b}
+.checkout-panel input{min-height:48px;padding:0 12px;border:1px solid #d8eadc;border-radius:12px;background:#fff;color:#1e3a2a;font-size:13px;font-weight:900;letter-spacing:1px}
+.checkout-panel a.entry-button{min-height:48px}
+.checkout-note{margin:0;color:#54695c;font-size:10px;font-weight:850;line-height:1.55}
+.checkout-disabled.is-disabled{opacity:.85}
+
+@media (max-width:640px){
+  .plan-strip{font-size:9px}
+  .entry-input input{font-size:11px;letter-spacing:.2px}
+  .prediction-actions .entry-login{min-height:52px}
+}
+
+/* Fredoka renders some word gaps very tight at small sizes; keep the approved
+   look but guarantee the gap is visible in headings and notices. */
+.access-plan h3,.plans-notice,.checkout-panel strong{word-spacing:.05em}
+
+/* PROOF GALLERY — same cards, same palette as the rest of 4.0 */
+.proof-section{margin-top:22px;padding:18px;border:1px solid #e1ece3;border-radius:22px;background:linear-gradient(150deg,#fff,#f6fbf7);box-shadow:0 14px 36px rgba(12,64,37,.07)}
+.proof-head{display:flex;align-items:flex-end;justify-content:space-between;gap:14px;flex-wrap:wrap;margin-bottom:14px}
+.proof-head h2{margin:4px 0 0;color:#1b2e24;font-size:clamp(22px,3vw,30px);line-height:1.05}
+.proof-head h2 em{color:#0a7d51;font-style:normal}
+.proof-note{padding:7px 10px;border:1px solid #e4ece5;border-radius:9px;background:#f4faf6;color:#55705f;font-size:9px;font-weight:900;letter-spacing:.5px}
+.proof-track{display:grid;grid-auto-flow:column;grid-auto-columns:minmax(150px,44%);gap:12px;overflow-x:auto;padding-bottom:8px;scroll-snap-type:x mandatory;scrollbar-width:thin}
+.proof-card{position:relative;display:block;padding:0;overflow:hidden;border:1px solid #e0ebe2;border-radius:16px;background:#fff;box-shadow:0 8px 20px rgba(12,64,37,.08);scroll-snap-align:start;text-align:left}
+.proof-card img{display:block;width:100%;height:auto;aspect-ratio:9/13;object-fit:cover;background:#eef4ef}
+.proof-card span{position:absolute;left:8px;right:8px;bottom:8px;display:flex;align-items:center;justify-content:space-between;gap:6px;padding:7px 9px;border-radius:10px;background:rgba(4,44,31,.82);color:#fff;font-size:9px;font-weight:900;letter-spacing:.4px}
+.proof-card small{color:#d5f4e2;font-size:8px}
+.proof-legal{margin:12px 0 0;color:#6b8073;font-size:9px;font-weight:850;line-height:1.6;letter-spacing:.2px}
+.proof-dialog{width:min(560px,94vw);padding:0;border:0;border-radius:18px;background:#04241a;box-shadow:0 30px 80px rgba(0,0,0,.45)}
+.proof-dialog::backdrop{background:rgba(3,22,16,.75)}
+.proof-dialog img{display:block;width:100%;height:auto}
+.proof-close{position:absolute;top:8px;right:8px;display:grid;place-items:center;width:40px;height:40px;border:1px solid rgba(255,255,255,.3);border-radius:12px;background:rgba(4,36,26,.8);color:#fff}
+
+/* --- login: single action (no duplicate VIEW PLANS button) --- */
+.entry-actions.single{grid-template-columns:1fr}
+.entry-actions.single .entry-login{border:1px solid #0a6f4a;background:linear-gradient(110deg,#087b4f,#065d3d);color:#fff;box-shadow:0 8px 18px rgba(5,100,57,.22);transition:transform .2s,filter .2s,box-shadow .2s}
+.entry-actions.single .entry-login:hover{transform:translateY(-2px);filter:brightness(1.07);box-shadow:0 11px 23px rgba(5,100,57,.28)}
+.entry-actions.single .entry-login:disabled{opacity:.6}
+
+/* --- payment page --- */
+.pay-card{display:grid;gap:12px;margin:0 0 16px;padding:18px;border:1px solid #e1ece3;border-radius:22px;background:#fff;box-shadow:0 14px 36px rgba(12,64,37,.08)}
+.pay-card h3{margin:0;color:#1b3024;font-size:19px}
+.pay-row{display:flex;align-items:center;justify-content:space-between;gap:14px;flex-wrap:wrap}
+.pay-row strong{display:block;color:#1b3024;font:700 17px Fredoka,Manrope,sans-serif}
+.pay-row small{display:block;margin-top:5px;color:#5b7365;font-size:9px;font-weight:900;letter-spacing:.5px}
+.pay-price{color:#0a7d51;font:700 26px Fredoka,Manrope,sans-serif}
+.pay-line{height:1px;background:#e6efe8}
+.pay-generate{width:100%;min-height:54px;border:1px solid #0a6f4a;background:linear-gradient(110deg,#087b4f,#065d3d);color:#fff;font:700 13px Fredoka,Manrope,sans-serif;letter-spacing:.3px;border-radius:14px;box-shadow:0 8px 18px rgba(5,100,57,.2)}
+.pay-generate:disabled{opacity:.55;box-shadow:none}
+.pay-cancel{justify-self:start;border-color:#f0d7d6;background:#fff5f3;color:#98374a}
+.pay-timer{justify-self:center;margin:0;padding:8px 14px;border:1px solid #dbe9de;border-radius:11px;background:#f4fbf6;color:#1d5b3c;font-size:11px;font-weight:900;letter-spacing:.6px}
+.pay-timer[data-state="expired"]{border-color:#f2d7d6;background:#fff4f2;color:#98374a}
+.pay-qr{display:grid;place-items:center;min-height:236px;padding:10px;border:1px solid #e6efe8;border-radius:18px;background:#fbfdfb}
+.pay-qr svg{width:min(240px,72vw);height:auto}
+.pay-amount{justify-self:center;margin:0;color:#153c2b;font:700 15px Fredoka,Manrope,sans-serif;letter-spacing:.3px}
+.pay-upi{width:100%;min-height:50px}
+.pay-field{display:grid;gap:7px;color:#3d614b;font-size:10px;font-weight:900;letter-spacing:.5px}
+.pay-field input{min-height:50px;padding:0 12px;border:1px solid #d8eadc;border-radius:12px;background:#fbfdfb;color:#1e3a2a;font-size:14px;font-weight:900;letter-spacing:1.5px}
+.pay-key{padding:14px;border:1px dashed #0a7d51;border-radius:14px;background:#f2fbf5;color:#0b5f40;font:700 14px/1.5 ui-monospace,monospace;word-break:break-all;text-align:center;letter-spacing:.5px}
+.pay-note{margin:0;color:#5c7264;font-size:10px;font-weight:850;line-height:1.6}
+.pay-notice{margin:6px 0 14px;padding:12px 14px;border:1px solid #dfe9e1;border-radius:12px;background:#f7faf8;color:#47604f;font-size:10px;font-weight:900;letter-spacing:.3px;line-height:1.6}
+.pay-notice[data-tone="ok"]{border-color:#cfe8d8;background:#f1fbf4;color:#146046}
+.pay-notice[data-tone="warn"]{border-color:#f2d7d6;background:#fff4f2;color:#8d3a3c}
+
+/* guest (not signed in): the panel is hidden, only plans + payment are reachable */
+body.is-guest .menu-trigger,
+body.is-guest .mobile-bottom-nav,
+body.is-guest .desktop-nav{display:none!important}
+body.is-guest .mobile-top-actions{gap:8px}
+/* Guest pages never link into the panel: hide any footer/brand overview
+   link that survives HTML stripping, so refresh can never reveal it. */
+body.is-guest .page-footer a[href="overview.html"],
+body.is-guest a.brand[href="overview.html"]{display:none!important}
+/* QR download button on the payment page */
+.pay-download{width:100%;min-height:48px;border:1px solid #d8eadc;border-radius:12px;background:#f4fbf6;color:#0b5f40;font:700 12px Fredoka,Manrope,sans-serif;letter-spacing:.3px}
+.pay-download:disabled{opacity:.55}
+
+/* LAST RESULTS strip on the BIG/SMALL page */
+.result-strip{margin-top:18px;padding:16px}
+.result-row{display:grid;grid-auto-flow:column;grid-auto-columns:minmax(64px,1fr);gap:8px;overflow-x:auto;padding-bottom:4px}
+.result-chip{display:grid;gap:3px;justify-items:center;padding:9px 6px;border:1px solid #e4ece5;border-radius:12px;background:#fbfdfb}
+.result-chip b{font:700 20px/1 Fredoka,Manrope,sans-serif;color:#1b3024}
+.result-chip b[data-call="BIG"]{color:#0b7d52}
+.result-chip b[data-call="SMALL"]{color:#bd2a44}
+.result-chip small{color:#6b8073;font-size:8px;font-weight:900;letter-spacing:.3px}
+.result-chip span{font-size:8px;font-weight:900;letter-spacing:.4px;color:#54705f}
+.result-chip span[data-call="BIG"]{color:#0b7d52}
+.result-chip span[data-call="SMALL"]{color:#bd2a44}
+.result-empty{margin:0;color:#6b8073;font-size:10px;font-weight:900;letter-spacing:.3px}
+
+/* --- History actions: clear on this device, back to plans, payment help --- */
+.history-actions{display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap;margin-top:14px;padding-top:14px;border-top:1px solid #eef4ef}
+.history-actions .history-count{color:#5d7666;font:900 9.5px Manrope,sans-serif;letter-spacing:.6px}
+.history-action-row{display:flex;gap:9px;flex-wrap:wrap}
+.clear-history{min-height:38px;padding:0 14px;border:1px solid #f0d7d6;border-radius:11px;background:#fff5f3;color:#98374a;font:700 11px Fredoka,Manrope,sans-serif;letter-spacing:.4px;transition:filter .2s,transform .2s}
+.clear-history:hover:not(:disabled){filter:brightness(.98);transform:translateY(-1px)}
+.clear-history:disabled{opacity:.55}
+.history-actions .history-note{margin:0;flex-basis:100%;color:#8d3a3c;font:900 9px Manrope,sans-serif;letter-spacing:.5px}
+
+/* --- Shared bottom action bars (plans / support / back) --- */
+.page-actions{display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap;margin-top:18px;padding:13px 14px;border:1px solid #dfece2;border-radius:14px;background:linear-gradient(110deg,#f2fbf5,#fff7f8);color:#2f5b41;font-size:10px;font-weight:900;letter-spacing:.5px}
+.page-actions .page-actions-row{display:flex;gap:9px;flex-wrap:wrap}
+.action-link{display:inline-flex;align-items:center;gap:7px;min-height:38px;padding:0 14px;border:1px solid #d9e9de;border-radius:11px;background:#fff;color:#0a6f4a;font:700 11px Fredoka,Manrope,sans-serif;letter-spacing:.4px;transition:filter .2s,transform .2s,box-shadow .2s}
+.action-link:hover{transform:translateY(-1px);filter:brightness(.99);box-shadow:0 6px 14px rgba(9,100,56,.1)}
+.action-link.support{border-color:#f0d7d6;background:#fff5f3;color:#98374a}
+.action-link svg{width:15px;height:15px}
+
+/* --- Plans screen: support block under the plan cards --- */
+.plans-help{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;margin-top:16px;padding:14px;border:1px solid #f0d7d6;border-radius:14px;background:linear-gradient(110deg,#fff7f6,#f4fbf6);color:#8d3a3c;font:900 10px Manrope,sans-serif;letter-spacing:.5px}
+.plans-help p{margin:0}
+.plans-help .action-link{flex:none}
+
+/* --- Payment / pay4 page links (previously unstyled) --- */
+.support-link{display:inline-flex;align-items:center;gap:7px;min-height:38px;padding:0 14px;border:1px solid #f0d7d6;border-radius:11px;background:#fff5f3;color:#98374a;font:700 11px Fredoka,Manrope,sans-serif;letter-spacing:.4px;transition:filter .2s,transform .2s}
+.support-link:hover{transform:translateY(-1px);filter:brightness(.99)}
+.pay-help{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;margin-top:16px;padding:14px;border:1px solid #f0d7d6;border-radius:14px;background:#fff7f6;color:#8d3a3c;font-size:10px;font-weight:900;letter-spacing:.5px}
+.pay-download{display:inline-flex;align-items:center;justify-content:center;min-height:44px;padding:0 18px;border:1px solid #096344;border-radius:12px;background:linear-gradient(110deg,#006b43,#07583d);color:#fff;font:700 12px Fredoka,Manrope,sans-serif;letter-spacing:.5px;box-shadow:0 6px 15px rgba(5,91,57,.18)}
+.pay-download:hover:not(:disabled){transform:translateY(-1px);filter:brightness(1.07)}
+.pay-download:disabled{opacity:.55}
+
+@media(max-width:600px){
+  .history-actions,.page-actions,.plans-help,.pay-help{flex-direction:column;align-items:stretch;text-align:center}
+  .history-action-row,.page-actions .page-actions-row{flex-direction:column}
+  .action-link,.clear-history,.support-link,.pay-download{justify-content:center;width:100%}
+}
